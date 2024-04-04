@@ -14,6 +14,7 @@ r = 0.25; % Distance between center of quad and propeller in m
 I_x = 0.0196; % Moment of inertia around x axis kgm^2
 I_y = 0.0196; % Moment of inertia around y axis kgm^2
 I_z = 0.0264; % Moment of inertia around z axis kgm^2
+I_p = 0.0001; % Moment of inertia of propeller
 c = 0.1; % Force to moment scaling facto in m^-1
 g = 9.81; % Acceleration due to gravity m/s^2
 
