@@ -9,11 +9,15 @@
 
 % Mechanical Parameters
 % (tempory until actual come in)
-m = 0.5; % Mass of entire drone in kg
+%m = 0.5; % Mass of entire drone in kg
+m= 0.8; % Mass of entire drone in kg from Table 1 (LQvsHinf paper)
 r = 0.25; % Distance between center of quad and propeller in m
-I_x = 0.0196; % Moment of inertia around x axis kgm^2
-I_y = 0.0196; % Moment of inertia around y axis kgm^2
-I_z = 0.0264; % Moment of inertia around z axis kgm^2
+%I_x = 0.0196; % Moment of inertia around x axis kgm^2
+%I_y = 0.0196; % Moment of inertia around y axis kgm^2
+%I_z = 0.0264; % Moment of inertia around z axis kgm^2
+I_x = 5.17e-3; % Moment of inertia around x axis kgm^2
+I_y = 5.17e-3; % Moment of inertia around y axis kgm^2
+I_z = 1.7e-2; % Moment of inertia around z axis kgm^2
 I_p = 0.0001; % Moment of inertia of propeller
 c = 0.1; % Force to moment scaling facto in m^-1
 g = 9.81; % Acceleration due to gravity m/s^2
@@ -33,7 +37,7 @@ A = [0 0 0 1 0 0 0 0 0 0 0 0;
     0 0 0 0 0 0 0 0 0 0 0 0;
     0 0 0 0 0 0 0 0 0 0 0 0];
 
-B = [0 0 0 0;
+ B = [0 0 0 0;
      0 0 0 0;
      0 0 0 0;
      0 0 0 0;
@@ -44,15 +48,28 @@ B = [0 0 0 0;
      0 0 0 0;
      0 r/I_x 0 -r/I_x;
      r/I_y 0 -r/I_y 0;
-     -c/I_z c/I_z -c/I_z c/I_z];
+    -c/I_z c/I_z -c/I_z c/I_z];
+
 % ... for Output Equation C & D
+
+%C = [1 0 0 0 0 0 0 0 0 0 0 0;
+     %0 1 0 0 0 0 0 0 0 0 0 0;
+     %0 0 1 0 0 0 0 0 0 0 0 0;
+     %0 0 0 0 0 0 1 0 0 0 0 0;
+     %0 0 0 0 0 0 0 1 0 0 0 0;
+     %0 0 0 0 0 0 0 0 1 0 0 0];
 
 C = [1 0 0 0 0 0 0 0 0 0 0 0;
      0 1 0 0 0 0 0 0 0 0 0 0;
      0 0 1 0 0 0 0 0 0 0 0 0;
+     0 0 0 0 0 0 0 0 0 0 0 0;
+     0 0 0 0 0 0 0 0 0 0 0 0;
+     0 0 0 0 0 0 0 0 0 0 0 0;
      0 0 0 0 0 0 1 0 0 0 0 0;
      0 0 0 0 0 0 0 1 0 0 0 0;
-     0 0 0 0 0 0 0 0 1 0 0 0];
+     0 0 0 0 0 0 0 0 1 0 0 0;
+     0 0 0 0 0 0 0 0 0 0 0 0;
+     0 0 0 0 0 0 0 0 0 0 0 0];
 
 D = [0 0 0 0;
      0 0 0 0;
