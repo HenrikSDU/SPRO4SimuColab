@@ -22,6 +22,9 @@ I_p = 0.0001; % Moment of inertia of propeller
 c = 0.1; % Force to moment scaling facto in m^-1
 g = 9.81; % Acceleration due to gravity m/s^2
 
+Inertia_Mat = [I_x    0    0; % Used in 6DOF-block
+                 0  I_y    0;
+                 0    0  I_z];
 % Matrixes for state space
 % ... for State Equation A & B
 
