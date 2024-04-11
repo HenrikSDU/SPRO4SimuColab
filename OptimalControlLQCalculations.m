@@ -22,4 +22,5 @@ C_e = [C zeros(6,6)];
 
 D_e = D;
 
-C_r_lqi = ctr
+C_r_lqi = ctrb(A_e, B_e)
+rank(C_r_lqi)
