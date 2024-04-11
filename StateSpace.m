@@ -63,7 +63,9 @@ C = [1 0 0 0 0 0 0 0 0 0 0 0;
      
 D = zeros(6,4);
 
-% Initial conditions
+%% System Definition
+
+%% Initial conditions
 x0 = [0;0;0;0;0;0;0;0;0;0;0;0;];
 
 
