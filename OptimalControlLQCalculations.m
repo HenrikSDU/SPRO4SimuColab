@@ -3,7 +3,13 @@
 %% Controlability & Reachability
 
 C_r = ctrb(A,B);
-rank(C_r);
+if rank(C_r) == 12
+    fprintf("System is reachable and controlable!")
+else
+    fprintf("System is not reachable!")
+end
+
+
 %% LQR Section
 
 
@@ -22,5 +28,5 @@ C_e = [C zeros(6,6)];
 
 D_e = D;
 
-C_r_lqi = ctrb(A_e, B_e)
-rank(C_r_lqi)
+C_r_lqi = ctrb(A_e, B_e);
+rank(C_r_lqi);
