@@ -63,6 +63,8 @@ C = [1 0 0 0 0 0 0 0 0 0 0 0;
      
 D = zeros(6,4);
 
+glb_state_space = ss(A, B, C, D);
+
 %% System Definition
 
 %% Initial conditions
