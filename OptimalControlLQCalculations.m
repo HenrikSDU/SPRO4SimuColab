@@ -11,6 +11,7 @@ end
 
 
 %% LQR Section
+
 Q = [ 1 0 0 0 0 0 0 0 0 0 0 0;
       0 1 0 0 0 0 0 0 0 0 0 0;
       0 0 1 0 0 0 0 0 0 0 0 0;
@@ -22,15 +23,18 @@ Q = [ 1 0 0 0 0 0 0 0 0 0 0 0;
       0 0 0 0 0 0 0 0 1 0 0 0;
       0 0 0 0 0 0 0 0 0 1 0 0;
       0 0 0 0 0 0 0 0 0 0 1 0;
-      0 0 0 0 0 0 0 0 0 0 0 1;]
-R = [ 1 0 0 0 0 0;
-      0 1 0 0 0 0;
-      0 0 1 0 0 0;
-      0 0 0 1 0 0;
-      0 0 0 0 1 0;
-      0 0 0 0 0 1;]
-
-
+      0 0 0 0 0 0 0 0 0 0 0 1;];
+%penalizes actuators
+R = [ 1 0 0 0;
+      0 1 0 0;
+      0 0 1 0;
+      0 0 0 1;];
+%find K
+K = lqr(A, B, Q, R);
+%closed loop system
+sys = ss((A-B*K),B,C,D);
+fprintf('done')
+%% plotting the system response with K
 
 
 %% LQI Section
