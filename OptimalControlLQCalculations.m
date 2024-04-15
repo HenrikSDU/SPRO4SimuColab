@@ -9,6 +9,8 @@ else
     fprintf("System is not reachable!")
 end
 
+%step(glb_state_space)
+%pzmap(glb_state_space)
 
 %% LQR Section
 
@@ -30,9 +32,11 @@ R = [ 1 0 0 0;
       0 0 1 0;
       0 0 0 1;];
 %find K
-K = lqr(A, B, Q, R);
+K_LQR = lqr(A, B, Q, R);
 %closed loop system
-sys = ss((A-B*K),B,C,D);
+sys_LQR = ss((A-B*K_LQR),B,C,D);
+step(sys_LQR)
+%pzmap(sys_LQR)
 fprintf('done')
 %% plotting the system response with K
 
