@@ -30,12 +30,12 @@ R = [ 1 0 0 0;
       0 0 1 0;
       0 0 0 1;];
 %find K
-K = lqr(A, B, Q, R);
+[K,~,~] = lqr(A, B, Q, R)
 %closed loop system
-sys = ss((A-B*K),B,C,D);
+
 fprintf('done')
 %% plotting the system response with K
-
+states_timeseries = simout.States
 
 %% LQI Section
 
