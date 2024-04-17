@@ -65,6 +65,12 @@ D = zeros(6,4);
 
 glb_state_space = ss(A, B, C, D);
 
+%% LQI State Space --> More see OptimalControlLQCalculations.m
+C_lqi = [1 0 0 0 0 0 0 0 0 0 0 0;
+         0 1 0 0 0 0 0 0 0 0 0 0;
+         0 0 1 0 0 0 0 0 0 0 0 0;
+         0 0 0 0 0 1 0 0 0 0 0 0;];
+D_lqi = zeros(4,4);
 %% System Definition
 
 %% Initial conditions
