@@ -14,7 +14,19 @@ end
 %pzmap(glb_state_space)
 
 %% LQR Section
+Max_x = 0.1 %max distance allowed on the x_axis(m)
+Max_y = 0.1 %max distance allowed on y-axis
+Max_z = 0.35 %max distance allowed on z _axis
+Max_r = 2 %max roll allowed
+Max_p = 2 %max pitch allowed
+Max_y = 2 %max yaw allowed
 
+Max_x_dot = 0.135 %maximum allowed velocity on the x-axis
+Max_y_dot = 0.135 %maximum allowed velocity on the y -axis
+Max_z_dot = 0.135 %maximum allowed velocity on the z - axis
+Max_r_dot = 0.01 %maximum allowed roll rate
+Max_p_dot = 0.01 %maximum allowed picth rate
+Max_y_dot = 0.01 %maximum allowed yaw rate
 Q = [ 1 0 0 0 0 0 0 0 0 0 0 0;
       0 1 0 0 0 0 0 0 0 0 0 0;
       0 0 1 0 0 0 0 0 0 0 0 0;
@@ -37,11 +49,13 @@ R = [ 1 0 0 0;
 
 %closed loop system
 
-K_LQR = lqr(A, B, Q, R);
+K_LQR = lqr(A, B, Q, R, 0);
+
 %closed loop system
 sys_LQR = ss((A-B*K_LQR),B,C,D);
 figure;
-step(sys_LQR)
+t = 0:0.01:5;
+step(sys_LQR,10);
 title('Step Response of LQR Controlled System'); 
 %pzmap(sys_LQR)
 
