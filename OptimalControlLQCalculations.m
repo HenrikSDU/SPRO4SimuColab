@@ -38,7 +38,7 @@ Max_U = 2.324 %Maximum thrust - maximum allowable current to esc is 60A ==> 15A 
 
 Q = [ 3/(Max_x)^2 0 0 0 0 0 0 0 0 0 0 0;
       0 3/(Max_y)^2 0 0 0 0 0 0 0 0 0 0;
-      0 0 6/(Max_z)^2 0 0 0 0 0 0 0 0 0;
+      0 0 5/(Max_z)^2 0 0 0 0 0 0 0 0 0;
       0 0 0 1/(Max_r)^2 0 0 0 0 0 0 0 0;
       0 0 0 0 1/(Max_p)^2 0 0 0 0 0 0 0;
       0 0 0 0 0 1/(Max_y)^2 0 0 0 0 0 0;
@@ -49,7 +49,7 @@ Q = [ 3/(Max_x)^2 0 0 0 0 0 0 0 0 0 0 0;
       0 0 0 0 0 0 0 0 0 0 1/(Max_p_dot)^2 0;
       0 0 0 0 0 0 0 0 0 0 0 1/(Max_ya_dot)^2;];
 %penalizes actuators
-R = [ 2/(Max_U)^2 0 0 0;
+R = [ 5/(Max_U)^2 0 0 0;
       0 1/(Max_Ix)^2 0 0;
       0 0 1/(Max_Iy)^2 0;
       0 0 0 1/(Max_Iz)^2;];
@@ -64,7 +64,7 @@ K_LQR = lqr(A, B, Q, R, 0);
 %pzmap(sys_LQR)
 
 fprintf('////////////////////DONE///////////////////////////')
-%% plotting the system response with K
+%% plotting the system response with K_LQR
 file_type=".emf";
 
 font_size=18;
@@ -84,9 +84,27 @@ save_files=true;
 fprintf('done')
 % End of settings
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
+%% Plot for X
 simout=sim("DroneModel.slx", "StopTime", "20");
-states_out=out.states
+states_out=out.x
+refs_out = out.refs
+position_fig=figure;
+
+plot(states_out.Time, states_out.Data(:, 1), ...
+     refs_out.Time, refs_out.Data(:, 1), "--", "LineWidth", lin_width)
+xlabel('Time [s]', 'FontSize', font_size)
+ylabel('Position [m]', 'FontSize', font_size)
+title("Plot for x", 'FontSize', font_size)
+grid on;
+%Xlim
+ylim padded;
+legend({'Position', 'Reference'}, 'FontSize', font_size-4, 'Location', 'northeast')
+if(save_files)
+    exportgraphics(position_fig, append(final_directory, "\LQR_X_position_gain", file_type))
+end
+%% Plot for y
+simout=sim("DroneModel.slx", "StopTime", "20");
+states_out=out.y
 refs_out = out.refs
 position_fig=figure;
 
@@ -101,6 +119,78 @@ ylim padded;
 legend({'Position', 'Reference'}, 'FontSize', font_size-4, 'Location', 'northeast')
 if(save_files)
     exportgraphics(position_fig, append(final_directory, "\LQR_Y_position_gain", file_type))
+end
+%% Plot fo z
+simout=sim("DroneModel.slx", "StopTime", "20");
+states_out=out.z
+refs_out = out.refs
+position_fig=figure;
+
+plot(states_out.Time, states_out.Data(:, 1), ...
+     refs_out.Time, refs_out.Data(:, 1), "--", "LineWidth", lin_width)
+xlabel('Time [s]', 'FontSize', font_size)
+ylabel('Position [m]', 'FontSize', font_size)
+title("Plot for z", 'FontSize', font_size)
+grid on;
+%Xlim
+ylim padded;
+legend({'Position', 'Reference'}, 'FontSize', font_size-4, 'Location', 'northeast')
+if(save_files)
+    exportgraphics(position_fig, append(final_directory, "\LQR_Z_position_gain", file_type))
+end
+%% Plot for roll
+simout=sim("DroneModel.slx", "StopTime", "20");
+states_out=out.roll
+refs_out = out.refs
+position_fig=figure;
+
+plot(states_out.Time, states_out.Data(:, 1), ...
+     refs_out.Time, refs_out.Data(:, 1), "--", "LineWidth", lin_width)
+xlabel('Time [s]', 'FontSize', font_size)
+ylabel('Degree [°]', 'FontSize', font_size)
+title("Plot for roll", 'FontSize', font_size)
+grid on;
+%Xlim
+ylim padded;
+legend({'Position', 'Reference'}, 'FontSize', font_size-4, 'Location', 'northeast')
+if(save_files)
+    exportgraphics(position_fig, append(final_directory, "\LQR_roll_angle_gain", file_type))
+end
+%% Plot for pitch
+simout=sim("DroneModel.slx", "StopTime", "20");
+states_out=out.pitch
+refs_out = out.refs
+position_fig=figure;
+
+plot(states_out.Time, states_out.Data(:, 1), ...
+     refs_out.Time, refs_out.Data(:, 1), "--", "LineWidth", lin_width)
+xlabel('Time [s]', 'FontSize', font_size)
+ylabel('Degree [°]', 'FontSize', font_size)
+title("Plot for picth", 'FontSize', font_size)
+grid on;
+%Xlim
+ylim padded;
+legend({'Position', 'Reference'}, 'FontSize', font_size-4, 'Location', 'northeast')
+if(save_files)
+    exportgraphics(position_fig, append(final_directory, "\LQR_pitch_angle_gain", file_type))
+end
+%% Plot for yaw
+simout=sim("DroneModel.slx", "StopTime", "20");
+states_out=out.yaw
+refs_out = out.refs
+position_fig=figure;
+
+plot(states_out.Time, states_out.Data(:, 1), ...
+     refs_out.Time, refs_out.Data(:, 1), "--", "LineWidth", lin_width)
+xlabel('Time [s]', 'FontSize', font_size)
+ylabel('Degree [°]', 'FontSize', font_size)
+title("Plot for yaw", 'FontSize', font_size)
+grid on;
+%Xlim
+ylim padded;
+legend({'Position', 'Reference'}, 'FontSize', font_size-4, 'Location', 'northeast')
+if(save_files)
+    exportgraphics(position_fig, append(final_directory, "\LQR_pitch_angle_gain", file_type))
 end
 %% LQI Section
 
