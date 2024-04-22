@@ -1,7 +1,7 @@
 %% LQR Section
-Max_x = 0.05 %max distance allowed on the x_axis(m)
-Max_y = 0.05 %max distance allowed on y-axis (m)
-Max_z = 0.35 %max distance allowed on z _axis (m)
+Max_x = 0.1 %max distance allowed on the x_axis(m)
+Max_y = 0.1 %max distance allowed on y-axis (m)
+Max_z = 0.4 %max distance allowed on z _axis (m)
 Max_r = 2*(pi/180) %max roll allowed (°)
 Max_p = 2 *(pi/180)%max pitch allowed (°)
 Max_ya = 2 *(pi/180)%max yaw allowed (°)
@@ -21,9 +21,9 @@ Max_U = 2.364 %Maximum thrust - maximum allowable current to esc is 60A ==> 15A 
               % motor with less that 15A has 581g of thrust at 13.28A
               % (581*4)/1000 to get kg
 
-Q = [ 3/(Max_x)^2 0 0 0 0 0 0 0 0 0 0 0;
-      0 50/(Max_y)^2 0 0 0 0 0 0 0 0 0 0;
-      0 0 200/(Max_z)^2 0 0 0 0 0 0 0 0 0;
+Q = [ 4/(Max_x)^2 0 0 0 0 0 0 0 0 0 0 0;
+      0 5/(Max_y)^2 0 0 0 0 0 0 0 0 0 0;
+      0 0 5/(Max_z)^2 0 0 0 0 0 0 0 0 0;
       0 0 0 1/(Max_r)^2 0 0 0 0 0 0 0 0;
       0 0 0 0 1/(Max_p)^2 0 0 0 0 0 0 0;
       0 0 0 0 0 1/(Max_ya)^2 0 0 0 0 0 0;
@@ -34,7 +34,7 @@ Q = [ 3/(Max_x)^2 0 0 0 0 0 0 0 0 0 0 0;
       0 0 0 0 0 0 0 0 0 0 1/(Max_p_dot)^2 0;
       0 0 0 0 0 0 0 0 0 0 0 1/(Max_ya_dot)^2;];
 %penalizes actuators
-R = [ 100/(Max_U)^2 0 0 0;
+R = [ 10/(Max_U)^2 0 0 0;
       0 1/(Max_Mx)^2 0 0;
       0 0 1/(Max_My)^2 0;
       0 0 0 1/(Max_Mz)^2;];
