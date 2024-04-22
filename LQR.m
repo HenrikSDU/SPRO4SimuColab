@@ -1,23 +1,23 @@
 %% LQR Section
-Max_x = 0.1 %max distance allowed on the x_axis(m)
-Max_y = 0.1 %max distance allowed on y-axis (m)
+Max_x = 0.05 %max distance allowed on the x_axis(m)
+Max_y = 0.05 %max distance allowed on y-axis (m)
 Max_z = 0.35 %max distance allowed on z _axis (m)
-Max_r = 2 %max roll allowed (°)
-Max_p = 2 %max pitch allowed (°)
-Max_ya = 2 %max yaw allowed (°)
+Max_r = 2*(pi/180) %max roll allowed (°)
+Max_p = 2 *(pi/180)%max pitch allowed (°)
+Max_ya = 2 *(pi/180)%max yaw allowed (°)
 
-Max_x_dot = 0.135 %maximum allowed velocity on the x-axis (m/s)
-Max_y_dot = 0.135 %maximum allowed velocity on the y -axis (m/s)
+Max_x_dot = 0.05 %maximum allowed velocity on the x-axis (m/s)
+Max_y_dot = 0.05 %maximum allowed velocity on the y -axis (m/s)
 Max_z_dot = 0.135 %maximum allowed velocity on the z - axis (m/s)
 Max_r_dot = 0.57 %maximum allowed roll rate (degree/s)
 Max_p_dot = 0.57 %maximum allowed picth rate (degree/s)
 Max_ya_dot = 0.57 %maximum allowed yaw rate (degree/s)
 
-Max_Ix = 5.17e-3 %Max inertia on x - axis kgm^2
-Max_Iy = 5.17e-3 %Max inertia on x - axis kgm^2
-Max_Iz = 1.7e-2  %Max inertia on x - axis kgm^2
+Max_Mx = 5.17e-3 %Max moment on x - axis kgm^2
+Max_My = 5.17e-3 %Max moment on x - axis kgm^2
+Max_Mz = 1.7e-2  %Max moment on x - axis kgm^2
 
-Max_U = 2.000 %Maximum thrust - maximum allowable current to esc is 60A ==> 15A per motor
+Max_U = 2.364 %Maximum thrust - maximum allowable current to esc is 60A ==> 15A per motor
               % motor with less that 15A has 581g of thrust at 13.28A
               % (581*4)/1000 to get kg
 
@@ -35,9 +35,9 @@ Q = [ 3/(Max_x)^2 0 0 0 0 0 0 0 0 0 0 0;
       0 0 0 0 0 0 0 0 0 0 0 1/(Max_ya_dot)^2;];
 %penalizes actuators
 R = [ 100/(Max_U)^2 0 0 0;
-      0 1/(Max_Ix)^2 0 0;
-      0 0 1/(Max_Iy)^2 0;
-      0 0 0 1/(Max_Iz)^2;];
+      0 1/(Max_Mx)^2 0 0;
+      0 0 1/(Max_My)^2 0;
+      0 0 0 1/(Max_Mz)^2;];
 %find K
 
 
