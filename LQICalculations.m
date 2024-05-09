@@ -1,5 +1,14 @@
 %% LQI Section
 
+%% LQI State Space 
+C_lqi = [1 0 0 0 0 0 0 0 0 0 0 0;
+         0 1 0 0 0 0 0 0 0 0 0 0;
+         0 0 1 0 0 0 0 0 0 0 0 0;
+         0 0 0 0 0 1 0 0 0 0 0 0;];
+
+D_lqi = zeros(4,4);
+
+
 % Define Extended State Space
 A_e = [A zeros(12,4);
        -C_lqi zeros(4,4);];
