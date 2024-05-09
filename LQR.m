@@ -34,10 +34,10 @@ Q = [ 4/(Max_x)^2 0 0 0 0 0 0 0 0 0 0 0;
       0 0 0 0 0 0 0 0 0 0 8/(Max_p_dot)^2 0;
       0 0 0 0 0 0 0 0 0 0 0 1/(Max_ya_dot)^2;];
 %penalizes actuators
-R = [ 10/(Max_U)^2 0 0 0;
+R = [ 100/(Max_U)^2 0 0 0;
       0 1/(Max_Mx)^2 0 0;
       0 0 1/(Max_My)^2 0;
-      0 0 0 1/(Max_Mz)^2;];
+      0 0 0 10/(Max_Mz)^2;];
 %find K
 
 

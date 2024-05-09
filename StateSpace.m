@@ -94,7 +94,7 @@ else
 end
 %% pz plot 
 LQR_contr_sys = ss(A - B * K_LQR, B, C, D);
-pzmap(LQR_contr_sys)
+pzmap(sys_lqi_controlled)
 
 %% alternative state space, no x and y
 A_al= [
