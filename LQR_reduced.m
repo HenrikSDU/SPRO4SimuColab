@@ -59,8 +59,8 @@ save_files_reduced=true;
 fprintf('done')
 %% Plot for z
 simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
-states_out_reduced=out.z
-refs_out_reduced = out.refs
+states_out_reduced=out.z_r
+refs_out_reduced = out.refs_r
 position_fig_reduced=figure;
 
 plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
@@ -77,8 +77,8 @@ if(save_files_reduced)
 end
 %% plot for roll with reduced state - space
 simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
-states_out_reduced=out.roll
-refs_out_reduced = out.refs
+states_out_reduced=out.roll1_r
+refs_out_reduced = out.refs_r
 position_fig_reduced=figure;
 
 plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
@@ -95,8 +95,8 @@ if(save_files_reduced)
 end
 %% plot for pitch with reduced state - space
 simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
-states_out_reduced=out.roll
-refs_out_reduced = out.refs
+states_out_reduced=out.roll_r
+refs_out_reduced = out.refs_r
 position_fig_reduced=figure;
 
 plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
@@ -113,8 +113,8 @@ if(save_files_reduced)
 end
 %% plot for yaw with reduced state - space
 simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
-states_out_reduced=out.yaw
-refs_out_reduced = out.refs
+states_out_reduced=out.yaw_r
+refs_out_reduced = out.refs_r
 position_fig_reduced=figure;
 
 plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
@@ -129,77 +129,3 @@ legend({'Position', 'Reference'}, 'FontSize', font_size_reduced-4, 'Location', '
 if(save_files_reduced)
     exportgraphics(position_fig_reduced, append(final_directory_reduced, "\LQR_X_position_gain", file_type_reduced))
 end
-%% plot for velocity in Z
-simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
-states_out_reduced=out.z_dot
-refs_out_reduced = out.refs
-position_fig_reduced=figure;
-
-plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
-     refs_out_reduced.Time, refs_out_reduced.Data(:, 1), "--", "LineWidth", lin_width_reduced)
-xlabel('Time [s]', 'FontSize', font_size_reduced)
-ylabel('Position [m]', 'FontSize', font_size_reduced)
-title("Plot for z_dot", 'FontSize', font_size_reduced)
-grid on;
-%Xlim
-ylim padded;
-legend({'Position', 'Reference'}, 'FontSize', font_size_reduced-4, 'Location', 'northeast')
-if(save_files_reduced)
-    exportgraphics(position_fig_reduced, append(final_directory_reduced, "\LQR_X_position_gain", file_type_reduced))
-end
-%% plot for roll_dot
-simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
-states_out_reduced=out.roll_dot
-refs_out_reduced = out.refs
-position_fig_reduced=figure;
-
-plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
-     refs_out_reduced.Time, refs_out_reduced.Data(:, 1), "--", "LineWidth", lin_width_reduced)
-xlabel('Time [s]', 'FontSize', font_size_reduced)
-ylabel('Position [m]', 'FontSize', font_size_reduced)
-title("Plot for roll dot", 'FontSize', font_size_reduced)
-grid on;
-%Xlim
-ylim padded;
-legend({'Position', 'Reference'}, 'FontSize', font_size_reduced-4, 'Location', 'northeast')
-if(save_files_reduced)
-    exportgraphics(position_fig_reduced, append(final_directory_reduced, "\LQR_X_position_gain", file_type_reduced))
-end
-%% plot for pitch_dot
-roll_dot
-simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
-states_out_reduced=out.pitch_dot
-refs_out_reduced = out.refs
-position_fig_reduced=figure;
-
-plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
-     refs_out_reduced.Time, refs_out_reduced.Data(:, 1), "--", "LineWidth", lin_width_reduced)
-xlabel('Time [s]', 'FontSize', font_size_reduced)
-ylabel('Position [m]', 'FontSize', font_size_reduced)
-title("Plot for picth dot", 'FontSize', font_size_reduced)
-grid on;
-%Xlim
-ylim padded;
-legend({'Position', 'Reference'}, 'FontSize', font_size_reduced-4, 'Location', 'northeast')
-if(save_files_reduced)
-    exportgraphics(position_fig_reduced, append(final_directory_reduced, "\LQR_X_position_gain", file_type_reduced))
-end
-%% plot for yaw rate
-simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
-states_out_reduced=out.yaw_rate
-refs_out_reduced = out.refs
-position_fig_reduced=figure;
-
-plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
-     refs_out_reduced.Time, refs_out_reduced.Data(:, 1), "--", "LineWidth", lin_width_reduced)
-xlabel('Time [s]', 'FontSize', font_size_reduced)
-ylabel('Position [m]', 'FontSize', font_size_reduced)
-title("Plot for yaw rate", 'FontSize', font_size_reduced)
-grid on;
-%Xlim
-ylim padded;
-legend({'Position', 'Reference'}, 'FontSize', font_size_reduced-4, 'Location', 'northeast')
-if(save_files_reduced)
-    exportgraphics(position_fig_reduced, append(final_directory_reduced, "\LQR_X_position_gain", file_type_reduced))
-end
-
