@@ -27,18 +27,22 @@ Q_reduced = [1/(Max_z)^2 0 0 0 0 0 0 0;
              0 0 0 0 0 1/(Max_r_dot)^2 0 0;
              0 0 0 0 0 0 1/(Max_p_dot^2) 0;
              0 0 0 0 0 0 0 1/(Max_ya_dot)^2;];
-R_reduced = [1/(Max_U)^2 0 0 0;
-             0 1/(Max_Mx)^2 0 0;
+R_reduced = [2/(Max_U)^2 0 0 0;
+             0 5/(Max_Mx)^2 0 0;
              0 0 1/(Max_My)^2 0;
-             0 0 0 1/(Max_Mz)^2;];
+             0 0 0 2/(Max_Mz)^2;];
 
-K_LQR_reduced = lqr(A_r, B_r, Q_reduced, R_reduced, 0)
+K_LQR_reduced = lqr(A_r, B_r, Q_reduced, R_reduced, 0);
 
 
 sys_LQR_reduced_contr = ss(A_r - B_r * K_LQR_reduced, B_r, C_r, D_r);
 
-step(sys_LQR_reduced_contr)
-
+C_red = ctrb(A_r,B_r);
+if rank(C_red) == 8
+    fprintf("\nSystem is reachable and controlable!")
+else
+    fprintf("\nSystem is not reachable!")
+end
 %%  %% plotting the system response with K_LQR
 file_type_reduced=".emf";
 
@@ -58,7 +62,7 @@ end
 save_files_reduced=true;
 fprintf('done')
 %% Plot for z
-simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
+simout_reduced=sim("DroneModel.slx", "StopTime", "20");
 states_out_reduced=out.z_r
 refs_out_reduced = out.refs_r
 position_fig_reduced=figure;
@@ -76,7 +80,7 @@ if(save_files_reduced)
     exportgraphics(position_fig_reduced, append(final_directory_reduced, "\LQR_X_position_gain", file_type_reduced))
 end
 %% plot for roll with reduced state - space
-simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
+simout_reduced=sim("DroneModel.slx", "StopTime", "20");
 states_out_reduced=out.roll1_r
 refs_out_reduced = out.refs_r
 position_fig_reduced=figure;

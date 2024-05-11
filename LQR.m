@@ -17,7 +17,7 @@ Max_Mx = 5.17e-3; %Max moment on x - axis kgm^2
 Max_My = 5.17e-3; %Max moment on x - axis kgm^2
 Max_Mz = 1.7e-2;  %Max moment on x - axis kgm^2
 
-Max_U = 1.2 * 9.81 %Maximum thrust = 11.772 N  - maximum allowable current to esc is 60A ==> 15A per motor
+Max_U = 1.2 * 9.81; %Maximum thrust = 11.772 N  - maximum allowable current to esc is 60A ==> 15A per motor
                    % motor with less that 15A has 581g of thrust at 13.28A
                    % (581*4)/1000 to get kg
 
@@ -32,18 +32,18 @@ Q = [ 4/(Max_x)^2 0 0 0 0 0 0 0 0 0 0 0;
       0 0 0 0 0 0 0 0 0.46/(Max_z_dot)^2 0 0 0;
       0 0 0 0 0 0 0 0 0 1/(Max_r_dot)^2 0 0;
       0 0 0 0 0 0 0 0 0 0 8/(Max_p_dot)^2 0;
-      0 0 0 0 0 0 0 0 0 0 0 1/(Max_ya_dot)^2;]
+      0 0 0 0 0 0 0 0 0 0 0 1/(Max_ya_dot)^2;];
 %penalizes actuators
 R = [ 100/(Max_U)^2 0 0 0;
       0 1/(Max_Mx)^2 0 0;
       0 0 1/(Max_My)^2 0;
-      0 0 0 10/(Max_Mz)^2;]
+      0 0 0 10/(Max_Mz)^2;];
 %find K
 
 
 %closed loop system
 
-K_LQR = lqr(A, B, Q, R, 0);
+K_LQR = lqr(A, B, Q, R, 0)
 
 %closed loop system
 %pzmap(sys_LQR)
