@@ -2,6 +2,8 @@
 
 % Inertia (Mass, Moment of Inertia etc.)
 
+% so far in state space file but I would suggest to move it
+
 
 % Measures (Radius etc.)
 
