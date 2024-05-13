@@ -19,18 +19,18 @@
               % (581*4)/1000 to get kg
 
 
-Q_reduced = [1/(Max_z)^2 0 0 0 0 0 0 0;
-             0 1/(Max_r)^2 0 0 0 0 0 0;
+Q_reduced = [0.9/(Max_z)^2 0 0 0 0 0 0 0;
+             0 0.6/(Max_r)^2 0 0 0 0 0 0;
              0 0 1/(Max_p)^2 0 0 0 0 0;
              0 0 0 1/(Max_ya)^2 0 0 0 0;
-             0 0 0 0 1/(Max_z_dot)^2 0 0 0;
-             0 0 0 0 0 1/(Max_r_dot)^2 0 0;
-             0 0 0 0 0 0 1/(Max_p_dot^2) 0;
-             0 0 0 0 0 0 0 1/(Max_ya_dot)^2;];
-R_reduced = [2/(Max_U)^2 0 0 0;
+             0 0 0 0 0.105/(Max_z_dot)^2 0 0 0;
+             0 0 0 0 0 225/(Max_r_dot)^2 0 0;
+             0 0 0 0 0 0 156/(Max_p_dot^2) 0;
+             0 0 0 0 0 0 0 156/(Max_ya_dot)^2;];
+R_reduced = [12.5/(Max_U)^2 0 0 0;
              0 5/(Max_Mx)^2 0 0;
-             0 0 1/(Max_My)^2 0;
-             0 0 0 2/(Max_Mz)^2;];
+             0 0 35/(Max_My)^2 0;
+             0 0 0 35/(Max_Mz)^2;];
 
 K_LQR_reduced = lqr(A_r, B_r, Q_reduced, R_reduced, 0);
 
@@ -64,7 +64,7 @@ fprintf('done')
 %% Plot for z
 simout_reduced=sim("DroneModel.slx", "StopTime", "20");
 states_out_reduced=out.z_r
-refs_out_reduced = out.refs_r
+refs_out_reduced = out.ref_z
 position_fig_reduced=figure;
 
 plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
@@ -81,8 +81,8 @@ if(save_files_reduced)
 end
 %% plot for roll with reduced state - space
 simout_reduced=sim("DroneModel.slx", "StopTime", "20");
-states_out_reduced=out.roll1_r
-refs_out_reduced = out.refs_r
+states_out_reduced=out.roll_r
+refs_out_reduced = out.ref_r
 position_fig_reduced=figure;
 
 plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
@@ -98,9 +98,9 @@ if(save_files_reduced)
     exportgraphics(position_fig_reduced, append(final_directory_reduced, "\LQR_X_position_gain", file_type_reduced))
 end
 %% plot for pitch with reduced state - space
-simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
-states_out_reduced=out.roll_r
-refs_out_reduced = out.refs_r
+simout_reduced=sim("DroneModel.slx", "StopTime", "20");
+states_out_reduced=out.picth_r
+refs_out_reduced = out.ref_p
 position_fig_reduced=figure;
 
 plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
@@ -116,9 +116,9 @@ if(save_files_reduced)
     exportgraphics(position_fig_reduced, append(final_directory_reduced, "\LQR_X_position_gain", file_type_reduced))
 end
 %% plot for yaw with reduced state - space
-simout_reduced=sim("DroneModelV2.slx", "StopTime", "20");
+simout_reduced=sim("DroneModel.slx", "StopTime", "20");
 states_out_reduced=out.yaw_r
-refs_out_reduced = out.refs_r
+refs_out_reduced = out.ref_y
 position_fig_reduced=figure;
 
 plot(states_out_reduced.Time, states_out_reduced.Data(:, 1), ...
