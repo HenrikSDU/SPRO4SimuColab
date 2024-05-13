@@ -71,5 +71,27 @@ glb_state_space = ss(A, B, C, D);
 %% Initial conditions
 x0 = [0;0;0;0;0;0;0;0;0;0;0;0;];
 
+%% reachability, stability and observability
+C_r = ctrb(A,B);
+if rank(C_r) == 12
+    fprintf("\nSystem is reachable and controlable!")
+else
+    fprintf("\nSystem is not reachable!")
+end
+
+Ob = obsv(LQR_contr_sys);
+unobsv = length(A) - rank(Ob);
+
+if unobsv==0
+    fprintf("\nState space is observable, %d", unobsv)
+else
+    fprintf("\nSystem is un-observable and number of unobservable states is %d",unobsv)
+end
+%% pz plot 
+LQR_contr_sys = ss(A - B * K_LQR, B, C, D);
+pzmap(sys_lqi_controlled)
+
+
+
 
 
