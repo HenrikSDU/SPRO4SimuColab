@@ -5,7 +5,7 @@ dr = drag_co / lift_co;
 
 K_mm = [   1    1    1    1;
          dis  dis -dis -dis;
-        -did  dis  dis -dis;
+        -dis  dis  dis -dis;
           dr   dr  -dr  -dr;
         ];
 
