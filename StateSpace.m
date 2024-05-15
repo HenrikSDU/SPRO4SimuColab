@@ -65,6 +65,9 @@ D = zeros(6,4);
 
 glb_state_space = ss(A, B, C, D);
 
+%% Discretize State Space
+
+
 
 %% System Definition
 
