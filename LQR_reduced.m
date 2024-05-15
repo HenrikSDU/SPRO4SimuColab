@@ -11,8 +11,8 @@
 % Max_ya_dot = 0.57 %maximum allowed yaw rate (degree/s)
 % 
 % Max_Mx = 5.17e-3 %Max moment on x - axis kgm^2
-% Max_My = 5.17e-3 %Max moment on x - axis kgm^2
-% Max_Mz = 1.7e-2  %Max moment on x - axis kgm^2
+% Max_My = 5.17e-3 %Max moment on y - axis kgm^2
+% Max_Mz = 1.7e-2  %Max moment on z - axis kgm^2
 
 %Max_U = 1.2 * 9.81 %Maximum thrust - maximum allowable current to esc is 60A ==> 15A per motor
               % motor with less that 15A has 581g of thrust at 13.28A
