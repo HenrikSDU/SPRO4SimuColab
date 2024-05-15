@@ -74,7 +74,7 @@ x0 = [0;0;0;0;0;0;0;0;0;0;0;0;];
 %% reachability, stability and observability
 %% pz plot 
 LQR_contr_sys = ss(A - B * K_LQR, B, C, D);
-pzmap(sys_lqi_controlled)
+pzmap(LQR_contr_sys)
 C_r = ctrb(A,B);
 if rank(C_r) == 12
     fprintf("\nSystem is reachable and controlable!")
