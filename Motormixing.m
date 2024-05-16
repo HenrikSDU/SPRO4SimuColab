@@ -10,5 +10,5 @@ K_mm_FtoU = [   1    1    1    1;
                  -dr   dr  -dr  dr;];
 % we need it like this
 % [F1,F2,F3,F4] = [Thurst,Mx,My,Mz]*K_mm^(-1)
-K_mm = inv(K_mm_FtoU);
+K_mm = inv(K_mm_FtoU)
 

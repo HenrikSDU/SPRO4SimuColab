@@ -40,7 +40,7 @@ Max_p = 2 *(pi/180); % Max pitch allowed (°)
 Max_ya = 2 *(pi/180); % Max yaw allowed (°)
  
 
-Max_z_dot = 0.135; % Maximum allowed velocity on the z - axis (m/s)
+Max_z_dot = 0.05; % Maximum allowed velocity on the z - axis (m/s)
 Max_r_dot = 0.57; % Maximum allowed roll rate (degree/s)
 Max_p_dot = 0.57; % Maximum allowed picth rate (degree/s)
 Max_ya_dot = 0.57; % Maximum allowed yaw rate (degree/s)
@@ -62,12 +62,12 @@ Q_reduced = [0.9/(Max_z)^2 0 0 0 0 0 0 0;
              0 0 0 0 0 225/(Max_r_dot)^2 0 0;
              0 0 0 0 0 0 156/(Max_p_dot^2) 0;
              0 0 0 0 0 0 0 156/(Max_ya_dot)^2;];
-R_reduced = [12.5/(Max_U)^2 0 0 0;
+R_reduced = [0.5/(Max_U)^2 0 0 0;
              0 5/(Max_Mx)^2 0 0;
              0 0 35/(Max_My)^2 0;
              0 0 0 35/(Max_Mz)^2;];
 
-K_LQR_reduced = lqr(A_r, B_r, Q_reduced, R_reduced, 0);
+K_LQR_reduced = lqr(A_r, B_r, Q_reduced, R_reduced, 0)
 
 
 
@@ -83,7 +83,7 @@ end
 %% Check robustness
 Lo = sys_reduced * K_LQR_reduced;
 %diskmargin(Lo)
+%% 
+step(sys_LQR_reduced_contr)
 
 
-
-    
