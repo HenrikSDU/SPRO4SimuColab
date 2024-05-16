@@ -75,25 +75,6 @@ glb_state_space = ss(A, B, C, D);
 x0 = [0;0;0;0;0;0;0;0;0;0;0;0;];
 
 %% reachability, stability and observability
-%% pz plot 
-LQR_contr_sys = ss(A - B * K_LQR, B, C, D);
-pzmap(LQR_contr_sys)
-C_r = ctrb(A,B);
-if rank(C_r) == 12
-    fprintf("\nSystem is reachable and controlable!")
-else
-    fprintf("\nSystem is not reachable!")
-end
-
-Ob = obsv(LQR_contr_sys);
-unobsv = length(A) - rank(Ob);
-
-if unobsv==0
-    fprintf("\nState space is observable, %d", unobsv)
-else
-    fprintf("\nSystem is un-observable and number of unobservable states is %d",unobsv)
-end
-
 %% LQR gain calculations
 %% LQR Section
 Max_x = 0.1; %max distance allowed on the x_axis(m)
@@ -147,6 +128,24 @@ K_LQR = lqr(A, B, Q, R, 0)
 
 fprintf('////////////////////DONE///////////////////////////')
 
+%% %% pz plot 
+LQR_contr_sys = ss(A - B * K_LQR, B, C, D);
+pzmap(LQR_contr_sys)
+C_r = ctrb(A,B);
+if rank(C_r) == 12
+    fprintf("\nSystem is reachable and controlable!")
+else
+    fprintf("\nSystem is not reachable!")
+end
+
+Ob = obsv(LQR_contr_sys);
+unobsv = length(A) - rank(Ob);
+
+if unobsv==0
+    fprintf("\nState space is observable, %d", unobsv)
+else
+    fprintf("\nSystem is un-observable and number of unobservable states is %d",unobsv)
+end
 
 
 
