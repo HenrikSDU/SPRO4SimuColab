@@ -10,7 +10,7 @@
 % Mechanical Parameters
 % (tempory until actual come in)
 %m = 0.5; % Mass of entire drone in kg
-m= 0.8; % Mass of entire drone in kg from Table 1 (LQvsHinf paper)
+m= 0.5; % Mass of entire drone in kg from Table 1 (LQvsHinf paper)
 r = 0.25; % Distance between center of quad and propeller in m
 %I_x = 0.0196; % Moment of inertia around x axis kgm^2
 %I_y = 0.0196; % Moment of inertia around y axis kgm^2

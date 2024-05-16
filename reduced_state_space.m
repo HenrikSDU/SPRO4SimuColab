@@ -18,11 +18,18 @@ B_r =[0 0 0 0;
 C_r = [1 0 0 0 0 0 0 0;
        0 1 0 0 0 0 0 0;
        0 0 1 0 0 0 0 0;
-       0 0 0 1 0 0 0 0;];
-
-D_r = zeros(4,4);
+       0 0 0 1 0 0 0 0;
+       0 0 0 0 0 1 0 0;
+       0 0 0 0 0 0 1 0;
+       0 0 0 0 0 0 0 1;      
+       ];
+D_r = zeros(7,4);
 
 sys_reduced = ss(A_r, B_r, C_r, D_r);
+
+if 8 == rank(obsv(A_r,C_r))
+    disp('System is observable!')
+end
 
 
 x0_r = [0;0;0;0;0;0;0;0;];%initial condition
