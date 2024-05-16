@@ -74,8 +74,8 @@ else
 end
 
 %% Check robustness
-
-% diskmargin(sys_reduced,K_LQR_reduced)
+Lo = sys_reduced * K_LQR_reduced;
+%diskmargin(Lo)
 
 
 
