@@ -1,5 +1,5 @@
 
- %% plotting the system response with K_LQR
+%% plotting the system response with K_LQR
 file_type=".emf";
 
 font_size=18;
