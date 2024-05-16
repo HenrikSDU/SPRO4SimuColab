@@ -67,7 +67,7 @@ R_reduced = [0.5/(Max_U)^2 0 0 0;
              0 0 35/(Max_My)^2 0;
              0 0 0 35/(Max_Mz)^2;];
 
-K_LQR_reduced = lqr(A_r, B_r, Q_reduced, R_reduced, 0)
+K_LQR_reduced = lqr(A_r, B_r, Q_reduced, R_reduced, 0);
 
 
 
