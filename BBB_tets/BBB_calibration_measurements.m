@@ -1,3 +1,3 @@
-simout_bbb=sim("BBB_calibration.slx", "StopTime", "65");
-out_bar = out.barometer
-plot(out_bar.Time, out_bar.Data(:, 1))
+%simout_bbb=sim("C:\Users\Dario\Desktop\semester 4\Project\matlab & simulink\Drone simulink\SPRO4SimuColab\BBB_tets\BBB_calibration.slx", "StopTime", "10");
+
+ScopeData.signals.values
