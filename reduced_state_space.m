@@ -83,7 +83,16 @@ end
 %% Check robustness
 Lo = sys_reduced * K_LQR_reduced;
 %diskmargin(Lo)
-%% 
-step(sys_LQR_reduced_contr)
+%% Observability without z_dot and yaw
 
+C_y = [1 0 0 0 0 0 0 0;
+       0 1 0 0 0 0 0 0;
+       0 0 1 0 0 0 0 0;
+       0 0 0 0 0 1 0 0;
+       0 0 0 0 0 0 1 0;
+       0 0 0 0 0 0 0 1;      
+       ];
+observ = obsv(A_r,C_y);
+rank(observ);
+%Dont remove YAW, we gotta figure out how to measure yaw
 
