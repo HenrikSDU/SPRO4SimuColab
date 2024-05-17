@@ -29,9 +29,21 @@ Max_r_dot_error = 1;
 Max_p_dot_error = 1;
 Max_yaw_dot_error = 1;
 
-Q_lqi_reduced = eye(9);
-R_lqi_reduced = eye(4);
-%{
+Q_lqi_reduced = [0.9/(Max_z)^2 0 0 0 0 0 0 0 0;
+                 0 0.6/(Max_r)^2 0 0 0 0 0 0 0;
+                 0 0 1/(Max_p)^2 0 0 0 0 0 0;
+                 0 0 0 1/(Max_ya)^2 0 0 0 0 0;
+                 0 0 0 0 0.105/(Max_z_dot)^2 0 0 0 0;
+                 0 0 0 0 0 225/(Max_r_dot)^2 0 0 0;
+                 0 0 0 0 0 0 156/(Max_p_dot^2) 0 0;
+                 0 0 0 0 0 0 0 156/(Max_ya_dot)^2 0;
+                 0 0 0 0 0 0 0 0 1/(0.05)^2;
+                 ];
+R_lqi_reduced = [0.5/(Max_U)^2 0 0 0;
+                 0 5/(Max_Mx)^2 0 0;
+                 0 0 35/(Max_My)^2 0;
+                 0 0 0 35/(Max_Mz)^2;];
+%{  
 Q_lqi_reduced = [1/(Max_z)^2 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
                  0 1/(Max_r)^2 0 0 0 0 0 0 0 0 0 0 0 0 0;
                  0 0 1/(Max_p)^2 0 0 0 0 0 0 0 0 0 0 0 0;
