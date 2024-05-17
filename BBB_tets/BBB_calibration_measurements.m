@@ -11,3 +11,16 @@ system(bbblue,'cat BBB_calibration.log')
 
 %getFiule saves a file to a current matlab directory
 %getFile(bbblue,'BBB_calibration.log')
+
+% Load the saved Simulink data
+load('BBB_calibration.slx'); % Replace 'simulink_data.mat' with the actual filename
+
+% Access the Scope data
+time = ScopeData1.time;
+output = ScopeData1.signals.values;
+
+% Print out each data point
+fprintf('Time \t Output\n');
+for i = 1:length(time)
+    fprintf('%.4f \t %.4f\n', time(i), output(i));
+end
