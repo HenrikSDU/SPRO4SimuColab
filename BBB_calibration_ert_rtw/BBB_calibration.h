@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'BBB_calibration'.
  *
- * Model version                  : 1.7
+ * Model version                  : 1.8
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Fri May 17 16:15:37 2024
+ * C/C++ source code generated on : Sat May 18 12:01:52 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -84,8 +84,8 @@
 
 /* Block signals (default storage) */
 typedef struct {
-  real_T MPU9250_o1[3];                /* '<Root>/MPU9250' */
-  real_T angle;                        /* '<Root>/MATLAB Function1' */
+  real_T pitch;                        /* '<Root>/MATLAB Function2' */
+  real_T roll;                         /* '<Root>/MATLAB Function1' */
 } B_BBB_calibration_T;
 
 /* Block states (default storage) for system '<Root>' */
@@ -178,6 +178,7 @@ extern volatile boolean_T runModel;
  * '<Root>' : 'BBB_calibration'
  * '<S1>'   : 'BBB_calibration/MATLAB Function'
  * '<S2>'   : 'BBB_calibration/MATLAB Function1'
+ * '<S3>'   : 'BBB_calibration/MATLAB Function2'
  */
 #endif                                 /* BBB_calibration_h_ */
 

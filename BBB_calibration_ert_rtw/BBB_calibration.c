@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'BBB_calibration'.
  *
- * Model version                  : 1.7
+ * Model version                  : 1.8
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Fri May 17 16:15:37 2024
+ * C/C++ source code generated on : Sat May 18 12:01:52 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -60,6 +60,7 @@ static void BBB_calibratio_SystemCore_setup(beagleboneblue_bbblueMPU9250__T *obj
 void BBB_calibration_step(void)
 {
   real_T mdata[3];
+  real_T rtb_MPU9250_o1_0[3];
 
   /* MATLABSystem: '<Root>/MPU9250' */
   if (BBB_calibration_DW.obj.SampleTime != BBB_calibration_P.MPU9250_SampleTime)
@@ -71,7 +72,7 @@ void BBB_calibration_step(void)
     BBB_calibration_DW.obj.TunablePropsChanged = false;
   }
 
-  MW_Read_Accel(&BBB_calibration_B.MPU9250_o1[0]);
+  MW_Read_Accel(&rtb_MPU9250_o1_0[0]);
   mdata[0] = 0.0;
   mdata[1] = 0.0;
   mdata[2] = 0.0;
@@ -81,11 +82,17 @@ void BBB_calibration_step(void)
   mdata[2] = 0.0;
   MW_Read_Mag(&mdata[0]);
 
-  /* End of MATLABSystem: '<Root>/MPU9250' */
+  /* MATLAB Function: '<Root>/MATLAB Function1' incorporates:
+   *  MATLABSystem: '<Root>/MPU9250'
+   */
+  BBB_calibration_B.roll = atan(rtb_MPU9250_o1_0[0] / rtb_MPU9250_o1_0[2]) *
+    180.0 / 3.1415926535897931;
 
-  /* MATLAB Function: '<Root>/MATLAB Function1' */
-  BBB_calibration_B.angle = asin(BBB_calibration_B.MPU9250_o1[0]) * 180.0 /
-    3.1415926535897931;
+  /* MATLAB Function: '<Root>/MATLAB Function2' incorporates:
+   *  MATLABSystem: '<Root>/MPU9250'
+   */
+  BBB_calibration_B.pitch = atan(rtb_MPU9250_o1_0[1] / rtb_MPU9250_o1_0[2]) *
+    180.0 / 3.1415926535897931;
 
   /* Scope: '<Root>/Scope1' */
   {
@@ -102,17 +109,15 @@ void BBB_calibration_step(void)
 
     /* signals */
     {
-      real_T up0[3];
-      up0[0] = BBB_calibration_B.MPU9250_o1[0];
-      up0[1] = BBB_calibration_B.MPU9250_o1[1];
-      up0[2] = BBB_calibration_B.MPU9250_o1[2];
+      real_T up0[1];
+      up0[0] = BBB_calibration_B.roll;
       rt_UpdateLogVar((LogVar *)var, up0, 0);
       var = var->next;
     }
 
     {
       real_T up1[1];
-      up1[0] = BBB_calibration_B.angle;
+      up1[0] = BBB_calibration_B.pitch;
       rt_UpdateLogVar((LogVar *)var, up1, 0);
     }
   }
@@ -159,7 +164,7 @@ void BBB_calibration_initialize(void)
 
   /* initialize non-finites */
   rt_InitInfAndNaN(sizeof(real_T));
-  rtmSetTFinal(BBB_calibration_M, 30.0);
+  rtmSetTFinal(BBB_calibration_M, -1);
   BBB_calibration_M->Timing.stepSize0 = 0.1;
 
   /* Setup for data logging */
@@ -186,21 +191,22 @@ void BBB_calibration_initialize(void)
   }
 
   /* External mode info */
-  BBB_calibration_M->Sizes.checksums[0] = (3275474174U);
-  BBB_calibration_M->Sizes.checksums[1] = (2984381400U);
-  BBB_calibration_M->Sizes.checksums[2] = (3437897695U);
-  BBB_calibration_M->Sizes.checksums[3] = (4239441233U);
+  BBB_calibration_M->Sizes.checksums[0] = (3747075690U);
+  BBB_calibration_M->Sizes.checksums[1] = (402568789U);
+  BBB_calibration_M->Sizes.checksums[2] = (2580906137U);
+  BBB_calibration_M->Sizes.checksums[3] = (1293872274U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
     static RTWExtModeInfo rt_ExtModeInfo;
-    static const sysRanDType *systemRan[4];
+    static const sysRanDType *systemRan[5];
     BBB_calibration_M->extModeInfo = (&rt_ExtModeInfo);
     rteiSetSubSystemActiveVectorAddresses(&rt_ExtModeInfo, systemRan);
     systemRan[0] = &rtAlwaysEnabled;
     systemRan[1] = &rtAlwaysEnabled;
     systemRan[2] = &rtAlwaysEnabled;
     systemRan[3] = &rtAlwaysEnabled;
+    systemRan[4] = &rtAlwaysEnabled;
     rteiSetModelMappingInfoPtr(BBB_calibration_M->extModeInfo,
       &BBB_calibration_M->SpecialInfo.mappingInfo);
     rteiSetChecksumsPtr(BBB_calibration_M->extModeInfo,
@@ -233,25 +239,25 @@ void BBB_calibration_initialize(void)
   /* SetupRuntimeResources for Scope: '<Root>/Scope1' */
   {
     RTWLogSignalInfo rt_ScopeSignalInfo;
-    static int_T rt_ScopeSignalWidths[] = { 3, 1 };
+    static int_T rt_ScopeSignalWidths[] = { 1, 1 };
 
-    static int_T rt_ScopeSignalNumDimensions[] = { 2, 1 };
+    static int_T rt_ScopeSignalNumDimensions[] = { 1, 1 };
 
-    static int_T rt_ScopeSignalDimensions[] = { 3, 1, 1 };
+    static int_T rt_ScopeSignalDimensions[] = { 1, 1 };
 
-    static void *rt_ScopeCurrSigDims[] = { (NULL), (NULL), (NULL) };
+    static void *rt_ScopeCurrSigDims[] = { (NULL), (NULL) };
 
-    static int_T rt_ScopeCurrSigDimsSize[] = { 4, 4, 4 };
+    static int_T rt_ScopeCurrSigDimsSize[] = { 4, 4 };
 
-    static const char_T *rt_ScopeSignalLabels[] = { "",
-      "" };
+    static const char_T *rt_ScopeSignalLabels[] = { "roll",
+      "pitch" };
 
-    static char_T rt_ScopeSignalTitles[] = "";
-    static int_T rt_ScopeSignalTitleLengths[] = { 0, 0 };
+    static char_T rt_ScopeSignalTitles[] = "rollpitch";
+    static int_T rt_ScopeSignalTitleLengths[] = { 4, 5 };
 
     static boolean_T rt_ScopeSignalIsVarDims[] = { 0, 0 };
 
-    static int_T rt_ScopeSignalPlotStyles[] = { 1, 1, 1, 1 };
+    static int_T rt_ScopeSignalPlotStyles[] = { 1, 1 };
 
     BuiltInDTypeId dTypes[2] = { SS_DOUBLE, SS_DOUBLE };
 
@@ -260,7 +266,7 @@ void BBB_calibration_initialize(void)
 
     static RTWPreprocessingFcnPtr rt_ScopeSignalLoggingPreprocessingFcnPtrs[] =
       {
-      (NULL), (NULL), (NULL)
+      (NULL), (NULL)
     };
 
     rt_ScopeSignalInfo.numSignals = 2;

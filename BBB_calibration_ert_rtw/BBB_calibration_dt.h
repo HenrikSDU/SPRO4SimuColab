@@ -7,9 +7,9 @@
  *
  * Code generation for model "BBB_calibration".
  *
- * Model version              : 1.7
+ * Model version              : 1.8
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Fri May 17 16:15:37 2024
+ * C source code generated on : Sat May 18 12:01:52 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -69,7 +69,7 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&BBB_calibration_B.MPU9250_o1[0]), 0, 0, 4 }
+  { (char_T *)(&BBB_calibration_B.pitch), 0, 0, 2 }
   ,
 
   { (char_T *)(&BBB_calibration_DW.obj), 15, 0, 1 },
