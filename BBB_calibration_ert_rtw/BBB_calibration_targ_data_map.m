@@ -83,13 +83,13 @@
             section.nData     = 2;
             section.data(2)  = dumData; %prealloc
 
-                    ;% BBB_calibration_B.pitch
+                    ;% BBB_calibration_B.MPU9250_o3
                     section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
 
                     ;% BBB_calibration_B.roll
-                    section.data(2).logicalSrcIdx = 1;
-                    section.data(2).dtTransOffset = 1;
+                    section.data(2).logicalSrcIdx = 2;
+                    section.data(2).dtTransOffset = 3;
 
             nTotData = nTotData + section.nData;
             sigMap.sections(1) = section;
@@ -184,8 +184,8 @@
     ;%
 
 
-    targMap.checksum0 = 3747075690;
-    targMap.checksum1 = 402568789;
-    targMap.checksum2 = 2580906137;
-    targMap.checksum3 = 1293872274;
+    targMap.checksum0 = 3355735933;
+    targMap.checksum1 = 460389100;
+    targMap.checksum2 = 2162751714;
+    targMap.checksum3 = 568709380;
 
