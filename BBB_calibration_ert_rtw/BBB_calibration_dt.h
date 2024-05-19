@@ -7,9 +7,9 @@
  *
  * Code generation for model "BBB_calibration".
  *
- * Model version              : 1.15
+ * Model version              : 1.17
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Sun May 19 11:17:38 2024
+ * C source code generated on : Sun May 19 15:46:22 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -36,8 +36,7 @@ static uint_T rtDataTypeSizes[] = {
   sizeof(action_T),
   2*sizeof(uint32_T),
   sizeof(int32_T),
-  sizeof(beagleboneblue_bbblueBaromete_T),
-  sizeof(beagleboneblue_bbblueMPU9250__T),
+  sizeof(beagleboneblue_bbblueServo_BB_T),
   sizeof(uint_T),
   sizeof(char_T),
   sizeof(uchar_T),
@@ -61,8 +60,7 @@ static const char_T * rtDataTypeNames[] = {
   "action_T",
   "timer_uint32_pair_T",
   "physical_connection",
-  "beagleboneblue_bbblueBaromete_T",
-  "beagleboneblue_bbblueMPU9250__T",
+  "beagleboneblue_bbblueServo_BB_T",
   "uint_T",
   "char_T",
   "uchar_T",
@@ -71,25 +69,18 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&BBB_calibration_B.Subtract), 0, 0, 3 }
-  ,
-
-  { (char_T *)(&BBB_calibration_DW.obj), 15, 0, 1 },
-
-  { (char_T *)(&BBB_calibration_DW.obj_h), 16, 0, 1 },
-
-  { (char_T *)(&BBB_calibration_DW.Scope2_PWORK.LoggedData), 11, 0, 4 }
+  { (char_T *)(&BBB_calibration_DW.obj), 15, 0, 1 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  4U,
+  1U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&BBB_calibration_P.Barometer1_SampleTime), 0, 0, 3 }
+  { (char_T *)(&BBB_calibration_P.motorin_Value), 0, 0, 2 }
 };
 
 /* data type transition table for Parameters structure */

@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'BBB_calibration'.
  *
- * Model version                  : 1.15
+ * Model version                  : 1.17
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sun May 19 11:17:38 2024
+ * C/C++ source code generated on : Sun May 19 15:46:22 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -27,14 +27,10 @@
 #include "rt_logging.h"
 #include "dt_info.h"
 #include "ext_work.h"
-#include "MW_I2C.h"
 #include "MW_bbblue_driver.h"
-#include "MW_MPU9250.h"
 #endif                                 /* BBB_calibration_COMMON_INCLUDES_ */
 
 #include "BBB_calibration_types.h"
-#include "multiword_types.h"
-#include <math.h>
 #include <float.h>
 #include <stddef.h>
 #include <string.h>
@@ -85,105 +81,18 @@
 #define rtmGetTPtr(rtm)                (&(rtm)->Timing.taskTime0)
 #endif
 
-/* Block signals (default storage) */
-typedef struct {
-  real_T rtb_MPU9250_o1_m[3];
-  real_T mdata[3];
-  int128m_T r;
-  int128m_T r1;
-  int128m_T r2;
-  uint128m_T r3;
-  uint128m_T r4;
-  int96m_T r5;
-  int96m_T r6;
-  int96m_T r7;
-  int96m_T r8;
-  int96m_T r9;
-  int96m_T r10;
-  int96m_T r11;
-  int96m_T r12;
-  real_T Subtract;                     /* '<Root>/Subtract' */
-  real_T pitch;                        /* '<Root>/MATLAB Function1' */
-  real_T roll;                         /* '<Root>/MATLAB Function' */
-  real_T rtb_Barometer1_c;
-  real_T x_unsgn;
-  real_T yd;
-  uint32_T ux[2];
-  int64m_T val1;
-  int64m_T val4;
-  int64m_T r13;
-  int64m_T r14;
-  int64m_T r15;
-  int64m_T r16;
-  int64m_T r17;
-  int64m_T r18;
-  int64m_T r19;
-  int64m_T r20;
-  int64m_T r21;
-  int64m_T r22;
-  int64m_T r23;
-  int64m_T r24;
-  int64m_T r25;
-  int64m_T r39;
-  int64m_T r40;
-  uint64m_T nk_unsgn;
-  uint64m_T xint;
-  uint64m_T res;
-  uint64m_T nIsOdd;
-  uint64m_T r26;
-  uint64m_T r27;
-  uint64m_T r28;
-  uint64m_T r29;
-  uint64m_T r30;
-  uint64m_T r31;
-  uint64m_T r32;
-  uint64m_T r33;
-  uint64m_T r34;
-  uint64m_T r35;
-  uint64m_T r36;
-  uint64m_T r37;
-  uint64m_T r38;
-  uint64m_T n_unsgn;
-  uint64m_T yint;
-  uint64m_T b_y1;
-  uint64m_T b_y0;
-  uint64m_T n1;
-  uint64m_T ldword;
-  uint64m_T temp0;
-  uint64m_T r41;
-} B_BBB_calibration_T;
-
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  beagleboneblue_bbblueBaromete_T obj; /* '<Root>/Barometer1' */
-  beagleboneblue_bbblueMPU9250__T obj_h;/* '<Root>/MPU9250' */
-  struct {
-    void *LoggedData;
-  } Scope2_PWORK;                      /* '<Root>/Scope2' */
-
-  struct {
-    void *LoggedData;
-  } Scope3_PWORK;                      /* '<Root>/Scope3' */
-
-  struct {
-    void *LoggedData;
-  } Scope12_PWORK;                     /* '<Root>/Scope12' */
-
-  struct {
-    void *LoggedData;
-  } Scope11_PWORK;                     /* '<Root>/Scope11' */
+  beagleboneblue_bbblueServo_BB_T obj; /* '<Root>/Servo Motor' */
 } DW_BBB_calibration_T;
 
 /* Parameters (default storage) */
 struct P_BBB_calibration_T_ {
-  real_T Barometer1_SampleTime;        /* Expression: 0.1
-                                        * Referenced by: '<Root>/Barometer1'
+  real_T motorin_Value;                /* Expression: 91.02167182662538
+                                        * Referenced by: '<Root>/motor in'
                                         */
-  real_T MPU9250_SampleTime;           /* Expression: 0.1
-                                        * Referenced by: '<Root>/MPU9250'
-                                        */
-  real_T Constant_Value;               /* Expression: 10^5
-                                        * Referenced by: '<Root>/Constant'
+  real_T Gain_Gain;                    /* Expression: 1
+                                        * Referenced by: '<Root>/Gain'
                                         */
 };
 
@@ -229,9 +138,6 @@ struct tag_RTM_BBB_calibration_T {
 /* Block parameters (default storage) */
 extern P_BBB_calibration_T BBB_calibration_P;
 
-/* Block signals (default storage) */
-extern B_BBB_calibration_T BBB_calibration_B;
-
 /* Block states (default storage) */
 extern DW_BBB_calibration_T BBB_calibration_DW;
 
@@ -260,8 +166,6 @@ extern volatile boolean_T runModel;
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'BBB_calibration'
- * '<S1>'   : 'BBB_calibration/MATLAB Function'
- * '<S2>'   : 'BBB_calibration/MATLAB Function1'
  */
 #endif                                 /* BBB_calibration_h_ */
 

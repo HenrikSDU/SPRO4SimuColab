@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'BBB_calibration'.
  *
- * Model version                  : 1.15
+ * Model version                  : 1.17
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sun May 19 11:17:38 2024
+ * C/C++ source code generated on : Sun May 19 15:46:22 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
   rtERTExtModeStartMsg();
 
   /* Call RTOS Initialization function */
-  myRTOSInit(0.1, 0);
+  myRTOSInit(0.0025, 0);
 
   /* Wait for stop semaphore */
   sem_wait(&stopSem);

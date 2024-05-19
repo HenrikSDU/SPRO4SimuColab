@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'BBB_calibration'.
  *
- * Model version                  : 1.15
+ * Model version                  : 1.17
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sun May 19 11:17:38 2024
+ * C/C++ source code generated on : Sun May 19 15:46:22 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -23,70 +23,11 @@
 #include "builtin_typeid_types.h"
 #include "multiword_types.h"
 #include "BBB_calibration_types.h"
-#include "BBB_calibration.h"
 
 /* Private macros used by the generated code to access rtModel */
 #ifndef rtmSetTFinal
 #define rtmSetTFinal(rtm, val)         ((rtm)->Timing.tFinal = (val))
 #endif
-
-extern real_T rt_roundd_snf(real_T u);
-extern void sMultiWord2sMultiWordSat(const uint32_T u1[], int32_T n1, uint32_T
-  y[], int32_T n);
-extern void MultiWordSub(const uint32_T u1[], const uint32_T u2[], uint32_T y[],
-  int32_T n);
-extern void sMultiWord2MultiWord(const uint32_T u1[], int32_T n1, uint32_T y[],
-  int32_T n);
-extern void MultiWordAdd(const uint32_T u1[], const uint32_T u2[], uint32_T y[],
-  int32_T n);
-extern void sMultiWordShr(const uint32_T u1[], int32_T n1, uint32_T n2, uint32_T
-  y[], int32_T n);
-extern void sMultiWordMul(const uint32_T u1[], int32_T n1, const uint32_T u2[],
-  int32_T n2, uint32_T y[], int32_T n);
-extern void sLong2MultiWord(int32_T u, uint32_T y[], int32_T n);
-extern void sMultiWordShl(const uint32_T u1[], int32_T n1, uint32_T n2, uint32_T
-  y[], int32_T n);
-extern void uLong2MultiWord(uint32_T u, uint32_T y[], int32_T n);
-extern boolean_T sMultiWordEq(const uint32_T u1[], const uint32_T u2[], int32_T
-  n);
-extern int32_T sMultiWordCmp(const uint32_T u1[], const uint32_T u2[], int32_T n);
-extern real_T sMultiWord2Double(const uint32_T u1[], int32_T n1, int32_T e1);
-extern boolean_T sMultiWordLt(const uint32_T u1[], const uint32_T u2[], int32_T
-  n);
-extern boolean_T sMultiWordGt(const uint32_T u1[], const uint32_T u2[], int32_T
-  n);
-extern void MultiWordNeg(const uint32_T u1[], uint32_T y[], int32_T n);
-extern boolean_T uMultiWordEq(const uint32_T u1[], const uint32_T u2[], int32_T
-  n);
-extern int32_T uMultiWordCmp(const uint32_T u1[], const uint32_T u2[], int32_T n);
-extern void Double2MultiWord(real_T u1, uint32_T y[], int32_T n);
-extern boolean_T uMultiWordLe(const uint32_T u1[], const uint32_T u2[], int32_T
-  n);
-extern void uMultiWordShr(const uint32_T u1[], int32_T n1, uint32_T n2, uint32_T
-  y[], int32_T n);
-extern void uMultiWordShl(const uint32_T u1[], int32_T n1, uint32_T n2, uint32_T
-  y[], int32_T n);
-extern void MultiWordAnd(const uint32_T u1[], const uint32_T u2[], uint32_T y[],
-  int32_T n);
-extern boolean_T uMultiWordGe(const uint32_T u1[], const uint32_T u2[], int32_T
-  n);
-extern boolean_T uMultiWordNe(const uint32_T u1[], const uint32_T u2[], int32_T
-  n);
-extern boolean_T uMultiWordGt(const uint32_T u1[], const uint32_T u2[], int32_T
-  n);
-extern void uMultiWordDivZero(const uint32_T u1[], int32_T n1, const uint32_T
-  u2[], int32_T n2, uint32_T y1[], int32_T m1, uint32_T y2[], int32_T m2,
-  uint32_T t1[], int32_T l1, uint32_T t2[], int32_T l2);
-extern void uMultiWord2MultiWord(const uint32_T u1[], int32_T n1, uint32_T y[],
-  int32_T n);
-extern void MultiWordSetUnsignedMax(uint32_T y[], int32_T n);
-extern int32_T uMultiWordDiv(uint32_T a[], int32_T na, uint32_T b[], int32_T nb,
-  uint32_T q[], int32_T nq, uint32_T r[], int32_T nr);
-extern void uMultiWordMul(const uint32_T u1[], int32_T n1, const uint32_T u2[],
-  int32_T n2, uint32_T y[], int32_T n);
-extern boolean_T sMultiWordGe(const uint32_T u1[], const uint32_T u2[], int32_T
-  n);
-
 #endif                                 /* BBB_calibration_private_h_ */
 
 /*

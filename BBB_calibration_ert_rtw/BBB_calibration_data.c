@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'BBB_calibration'.
  *
- * Model version                  : 1.15
+ * Model version                  : 1.17
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sun May 19 11:17:38 2024
+ * C/C++ source code generated on : Sun May 19 15:46:22 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -21,20 +21,15 @@
 
 /* Block parameters (default storage) */
 P_BBB_calibration_T BBB_calibration_P = {
-  /* Expression: 0.1
-   * Referenced by: '<Root>/Barometer1'
+  /* Expression: 91.02167182662538
+   * Referenced by: '<Root>/motor in'
    */
-  0.1,
+  91.021671826625379,
 
-  /* Expression: 0.1
-   * Referenced by: '<Root>/MPU9250'
+  /* Expression: 1
+   * Referenced by: '<Root>/Gain'
    */
-  0.1,
-
-  /* Expression: 10^5
-   * Referenced by: '<Root>/Constant'
-   */
-  100000.0
+  1.0
 };
 
 /*

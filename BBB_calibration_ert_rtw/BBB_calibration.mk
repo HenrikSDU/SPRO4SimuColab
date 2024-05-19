@@ -2,7 +2,7 @@
 ## Makefile generated for component 'BBB_calibration'. 
 ## 
 ## Makefile     : BBB_calibration.mk
-## Generated on : Sun May 19 11:17:53 2024
+## Generated on : Sun May 19 15:45:15 2024
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/BBB_calibration.elf
 ## Product type : executable
 ## 
@@ -165,7 +165,7 @@ INCLUDES = $(INCLUDES_BUILDINFO)
 ## DEFINES
 ###########################################################################
 
-DEFINES_ = -D_roboticscape_in_use_ -D__MW_TARGET_USE_HARDWARE_RESOURCES_H__ -DMAT_FILE_LOC=/home/debian -DMAX_MATFILE_NAME_LEN=128
+DEFINES_ = -D_roboticscape_in_use_ -D_RTT_SERVOMOTOR_INUSE_ -D__MW_TARGET_USE_HARDWARE_RESOURCES_H__ -DMAT_FILE_LOC=/home/debian -DMAX_MATFILE_NAME_LEN=128
 DEFINES_BUILD_ARGS = -DCLASSIC_INTERFACE=0 -DALLOCATIONFCN=0 -DTERMFCN=1 -DONESTEPFCN=1 -DMAT_FILE=1 -DMULTI_INSTANCE_CODE=0 -DEXT_MODE=1 -DINTEGER_CODE=0 -DMT=0
 DEFINES_CUSTOM = 
 DEFINES_OPTS = -DON_TARGET_WAIT_FOR_START=1 -DTID01EQ=0
@@ -178,7 +178,7 @@ DEFINES = $(DEFINES_) $(DEFINES_BUILD_ARGS) $(DEFINES_CUSTOM) $(DEFINES_OPTS) $(
 ## SOURCE FILES
 ###########################################################################
 
-SRCS = MW_I2C.c MW_MPU9250.c BBB_calibration.c BBB_calibration_data.c rtGetInf.c rtGetNaN.c rt_nonfinite.c ext_svr.c updown.c ext_work.c rtiostream_utils.c MW_bbblue_init.c linuxinitialize.c rtiostream_interface.c rtiostream_tcpip.c ert_targets_logging.c bbblue_file_logging.c
+SRCS = BBB_calibration.c BBB_calibration_data.c rtGetInf.c rtGetNaN.c rt_nonfinite.c ext_svr.c updown.c ext_work.c rtiostream_utils.c MW_bbblue_init.c linuxinitialize.c rtiostream_interface.c rtiostream_tcpip.c ert_targets_logging.c bbblue_file_logging.c
 
 MAIN_SRC = ert_main.c
 
@@ -188,7 +188,7 @@ ALL_SRCS = $(SRCS) $(MAIN_SRC)
 ## OBJECTS
 ###########################################################################
 
-OBJS = MW_I2C.c.o MW_MPU9250.c.o BBB_calibration.c.o BBB_calibration_data.c.o rtGetInf.c.o rtGetNaN.c.o rt_nonfinite.c.o ext_svr.c.o updown.c.o ext_work.c.o rtiostream_utils.c.o MW_bbblue_init.c.o linuxinitialize.c.o rtiostream_interface.c.o rtiostream_tcpip.c.o ert_targets_logging.c.o bbblue_file_logging.c.o
+OBJS = BBB_calibration.c.o BBB_calibration_data.c.o rtGetInf.c.o rtGetNaN.c.o rt_nonfinite.c.o ext_svr.c.o updown.c.o ext_work.c.o rtiostream_utils.c.o MW_bbblue_init.c.o linuxinitialize.c.o rtiostream_interface.c.o rtiostream_tcpip.c.o ert_targets_logging.c.o bbblue_file_logging.c.o
 
 MAIN_OBJ = ert_main.c.o
 
@@ -445,26 +445,6 @@ $(PRODUCT) : $(OBJS) $(PREBUILT_OBJS) $(LIBS) $(MAIN_OBJ)
 
 %.cpp.o : %.cpp
 	$(CPP) $(CPPFLAGS) -o "$@" "$<"
-
-
-%.c.o : %.c
-	$(CC) $(CFLAGS) -o "$@" "$<"
-
-
-%.s.o : %.s
-	$(AS) $(ASFLAGS) -o "$@" "$<"
-
-
-%.cpp.o : %.cpp
-	$(CPP) $(CPPFLAGS) -o "$@" "$<"
-
-
-MW_I2C.c.o : MW_I2C.c
-	$(CC) $(CFLAGS) -o "$@" "$<"
-
-
-MW_MPU9250.c.o : MW_MPU9250.c
-	$(CC) $(CFLAGS) -o "$@" "$<"
 
 
 ert_main.c.o : ert_main.c
