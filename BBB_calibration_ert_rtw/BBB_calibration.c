@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.15
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sat May 18 13:59:17 2024
+ * C/C++ source code generated on : Sun May 19 11:17:38 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -2300,10 +2300,10 @@ void BBB_calibration_initialize(void)
   }
 
   /* External mode info */
-  BBB_calibration_M->Sizes.checksums[0] = (656797509U);
-  BBB_calibration_M->Sizes.checksums[1] = (4047475739U);
-  BBB_calibration_M->Sizes.checksums[2] = (1666128813U);
-  BBB_calibration_M->Sizes.checksums[3] = (2752616412U);
+  BBB_calibration_M->Sizes.checksums[0] = (2678338411U);
+  BBB_calibration_M->Sizes.checksums[1] = (3813090570U);
+  BBB_calibration_M->Sizes.checksums[2] = (3051192441U);
+  BBB_calibration_M->Sizes.checksums[3] = (4052309329U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
