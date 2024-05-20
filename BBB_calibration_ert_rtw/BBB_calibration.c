@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'BBB_calibration'.
  *
- * Model version                  : 1.17
+ * Model version                  : 1.18
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sun May 19 15:46:22 2024
+ * C/C++ source code generated on : Mon May 20 15:49:33 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -36,7 +36,7 @@ void BBB_calibration_step(void)
    *  Constant: '<Root>/motor in'
    *  Gain: '<Root>/Gain'
    */
-  rc_servo_send_pulse_normalized(1, (BBB_calibration_P.Gain_Gain *
+  rc_servo_send_pulse_normalized(2, (BBB_calibration_P.Gain_Gain *
     BBB_calibration_P.motorin_Value - 90.0) / 60.0);
 
   /* Matfile logging */
@@ -108,10 +108,10 @@ void BBB_calibration_initialize(void)
   }
 
   /* External mode info */
-  BBB_calibration_M->Sizes.checksums[0] = (2878624834U);
-  BBB_calibration_M->Sizes.checksums[1] = (948786945U);
-  BBB_calibration_M->Sizes.checksums[2] = (2502373552U);
-  BBB_calibration_M->Sizes.checksums[3] = (605058127U);
+  BBB_calibration_M->Sizes.checksums[0] = (2773184411U);
+  BBB_calibration_M->Sizes.checksums[1] = (482380914U);
+  BBB_calibration_M->Sizes.checksums[2] = (2960748123U);
+  BBB_calibration_M->Sizes.checksums[3] = (4053198652U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -164,7 +164,7 @@ void BBB_calibration_terminate(void)
     BBB_calibration_DW.obj.matlabCodegenIsDeleted = true;
     if ((BBB_calibration_DW.obj.isInitialized == 1) &&
         BBB_calibration_DW.obj.isSetupComplete) {
-      rc_servo_send_pulse_normalized(1, 0.0);
+      rc_servo_send_pulse_normalized(2, 0.0);
     }
   }
 

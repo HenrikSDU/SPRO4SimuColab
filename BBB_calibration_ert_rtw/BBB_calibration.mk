@@ -2,7 +2,7 @@
 ## Makefile generated for component 'BBB_calibration'. 
 ## 
 ## Makefile     : BBB_calibration.mk
-## Generated on : Sun May 19 15:45:15 2024
+## Generated on : Mon May 20 15:25:47 2024
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/BBB_calibration.elf
 ## Product type : executable
 ## 
