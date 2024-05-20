@@ -9,7 +9,11 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
+<<<<<<< Updated upstream
  * C/C++ source code generated on : Mon May 20 11:12:51 2024
+=======
+ * C/C++ source code generated on : Sun May 19 15:03:49 2024
+>>>>>>> Stashed changes
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -22,6 +26,7 @@
 /* Block parameters (default storage) */
 P_untitled_T untitled_P = {
   /* Expression: 0.1
+<<<<<<< Updated upstream
    * Referenced by: '<Root>/Barometer'
    */
   0.1,
@@ -50,6 +55,11 @@ P_untitled_T untitled_P = {
    * Referenced by: '<Root>/Step3'
    */
   1.0
+=======
+   * Referenced by: '<Root>/MPU9250'
+   */
+  0.1
+>>>>>>> Stashed changes
 };
 
 /*

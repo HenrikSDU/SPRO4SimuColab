@@ -9,7 +9,11 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
+<<<<<<< Updated upstream
  * C/C++ source code generated on : Mon May 20 11:12:51 2024
+=======
+ * C/C++ source code generated on : Sun May 19 15:03:49 2024
+>>>>>>> Stashed changes
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -19,6 +23,7 @@
 
 #include "untitled.h"
 #include "untitled_types.h"
+<<<<<<< Updated upstream
 #include "rtwtypes.h"
 #include "multiword_types.h"
 #include <string.h>
@@ -27,6 +32,11 @@
 #include <math.h>
 #include "untitled_private.h"
 #include "zero_crossing_types.h"
+=======
+#include <math.h>
+#include "rtwtypes.h"
+#include "untitled_private.h"
+>>>>>>> Stashed changes
 #include "untitled_dt.h"
 
 /* Block signals (default storage) */
@@ -35,14 +45,18 @@ B_untitled_T untitled_B;
 /* Block states (default storage) */
 DW_untitled_T untitled_DW;
 
+<<<<<<< Updated upstream
 /* Previous zero-crossings (trigger) states */
 PrevZCX_untitled_T untitled_PrevZCX;
 
+=======
+>>>>>>> Stashed changes
 /* Real-time model */
 static RT_MODEL_untitled_T untitled_M_;
 RT_MODEL_untitled_T *const untitled_M = &untitled_M_;
 
 /* Forward declaration for local functions */
+<<<<<<< Updated upstream
 static void bbblueBarometer_BMP_ReadRegiste(const
   beagleboneblue_bbblueBaromete_T *obj, uint8_T RegisterValue[6], uint8_T
   *varargout_1);
@@ -2135,12 +2149,32 @@ static void untitled_SystemCore_setup_b(dsp_simulink_MovingAverage_un_T *obj)
   obj->_pobj0.ForgettingFactor = varargin_2;
   obj->pStatistic = &obj->_pobj0;
   obj->isSetupComplete = true;
+=======
+static void untitled_SystemCore_setup(beagleboneblue_bbblueMPU9250__T *obj);
+static void untitled_SystemCore_setup(beagleboneblue_bbblueMPU9250__T *obj)
+{
+  /* Start for MATLABSystem: '<Root>/MPU9250' */
+  obj->isInitialized = 1;
+  MW_IMU_DMP_isAccel_Calibrated();
+  MW_IMU_DMP_isGyro_Calibrated();
+  MW_IMU_DMP_isMag_Calibrated();
+
+  /* Start for MATLABSystem: '<Root>/MPU9250' */
+  obj->i2cObjmpu.MW_I2C_HANDLE = MW_I2C_Open(2, MW_I2C_MASTER);
+  obj->i2cObjmpu.BusSpeed = 100000U;
+  MW_I2C_SetBusSpeed(obj->i2cObjmpu.MW_I2C_HANDLE, obj->i2cObjmpu.BusSpeed);
+  obj->i2cObjak8963.MW_I2C_HANDLE = MW_I2C_Open(2, MW_I2C_MASTER);
+  obj->i2cObjak8963.BusSpeed = 100000U;
+  MW_I2C_SetBusSpeed(obj->i2cObjak8963.MW_I2C_HANDLE, obj->i2cObjak8963.BusSpeed);
+  MW_Init_IMU_DMP(200);
+>>>>>>> Stashed changes
   obj->TunablePropsChanged = false;
 }
 
 /* Model step function */
 void untitled_step(void)
 {
+<<<<<<< Updated upstream
   boolean_T flag;
   ZCEventType zcEvent;
 
@@ -2164,10 +2198,18 @@ void untitled_step(void)
     }
 
     untitled_DW.obj.ForgettingFactor = untitled_P.MovingAverage_ForgettingFactor;
+=======
+  real_T mdata[3];
+
+  /* MATLABSystem: '<Root>/MPU9250' */
+  if (untitled_DW.obj.SampleTime != untitled_P.MPU9250_SampleTime) {
+    untitled_DW.obj.SampleTime = untitled_P.MPU9250_SampleTime;
+>>>>>>> Stashed changes
   }
 
   if (untitled_DW.obj.TunablePropsChanged) {
     untitled_DW.obj.TunablePropsChanged = false;
+<<<<<<< Updated upstream
     flag = (untitled_DW.obj.pStatistic->isInitialized == 1);
     if (flag) {
       untitled_DW.obj.pStatistic->TunablePropsChanged = true;
@@ -2253,6 +2295,53 @@ void untitled_step(void)
     if ((rtmGetTFinal(untitled_M)!=-1) &&
         !((rtmGetTFinal(untitled_M)-untitled_M->Timing.t[0]) >
           untitled_M->Timing.t[0] * (DBL_EPSILON))) {
+=======
+  }
+
+  MW_Read_Accel(&mdata[0]);
+  mdata[0] = 0.0;
+  mdata[1] = 0.0;
+  mdata[2] = 0.0;
+  MW_Read_Gyro(&mdata[0]);
+  mdata[0] = 0.0;
+  mdata[1] = 0.0;
+  mdata[2] = 0.0;
+  MW_Read_Mag(&mdata[0]);
+
+  /* MATLABSystem: '<Root>/MPU9250' */
+  untitled_B.MPU9250_o3[0] = mdata[0];
+  untitled_B.MPU9250_o3[1] = mdata[1];
+  untitled_B.MPU9250_o3[2] = mdata[2];
+
+  /* MATLAB Function: '<Root>/MATLAB Function' incorporates:
+   *  MATLABSystem: '<Root>/MPU9250'
+   */
+  if (untitled_B.MPU9250_o3[1] != 0.0) {
+    untitled_B.yaw = atan(untitled_B.MPU9250_o3[0] / untitled_B.MPU9250_o3[1]) *
+      57.2958;
+  } else {
+    untitled_B.yaw = 0.0;
+  }
+
+  if (untitled_B.yaw < 0.0) {
+    untitled_B.yaw = -untitled_B.yaw;
+  }
+
+  /* End of MATLAB Function: '<Root>/MATLAB Function' */
+
+  /* External mode */
+  rtExtModeUploadCheckTrigger(1);
+
+  {                                    /* Sample time: [0.1s, 0.0s] */
+    rtExtModeUpload(0, (real_T)untitled_M->Timing.taskTime0);
+  }
+
+  /* signal main to stop simulation */
+  {                                    /* Sample time: [0.1s, 0.0s] */
+    if ((rtmGetTFinal(untitled_M)!=-1) &&
+        !((rtmGetTFinal(untitled_M)-untitled_M->Timing.taskTime0) >
+          untitled_M->Timing.taskTime0 * (DBL_EPSILON))) {
+>>>>>>> Stashed changes
       rtmSetErrorStatus(untitled_M, "Simulation finished");
     }
 
@@ -2267,6 +2356,7 @@ void untitled_step(void)
    * and "Timing.stepSize0". Size of "clockTick0" ensures timer will not
    * overflow during the application lifespan selected.
    */
+<<<<<<< Updated upstream
   untitled_M->Timing.t[0] =
     ((time_T)(++untitled_M->Timing.clockTick0)) * untitled_M->Timing.stepSize0;
 
@@ -2279,12 +2369,17 @@ void untitled_step(void)
      */
     untitled_M->Timing.clockTick1++;
   }
+=======
+  untitled_M->Timing.taskTime0 =
+    ((time_T)(++untitled_M->Timing.clockTick0)) * untitled_M->Timing.stepSize0;
+>>>>>>> Stashed changes
 }
 
 /* Model initialize function */
 void untitled_initialize(void)
 {
   /* Registration code */
+<<<<<<< Updated upstream
 
   /* initialize non-finites */
   rt_InitInfAndNaN(sizeof(real_T));
@@ -2313,18 +2408,35 @@ void untitled_initialize(void)
   untitled_M->Sizes.checksums[1] = (562653173U);
   untitled_M->Sizes.checksums[2] = (55111515U);
   untitled_M->Sizes.checksums[3] = (2687092507U);
+=======
+  rtmSetTFinal(untitled_M, -1);
+  untitled_M->Timing.stepSize0 = 0.1;
+
+  /* External mode info */
+  untitled_M->Sizes.checksums[0] = (2832103378U);
+  untitled_M->Sizes.checksums[1] = (3787077988U);
+  untitled_M->Sizes.checksums[2] = (4049721387U);
+  untitled_M->Sizes.checksums[3] = (4003714039U);
+>>>>>>> Stashed changes
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
     static RTWExtModeInfo rt_ExtModeInfo;
+<<<<<<< Updated upstream
     static const sysRanDType *systemRan[5];
+=======
+    static const sysRanDType *systemRan[3];
+>>>>>>> Stashed changes
     untitled_M->extModeInfo = (&rt_ExtModeInfo);
     rteiSetSubSystemActiveVectorAddresses(&rt_ExtModeInfo, systemRan);
     systemRan[0] = &rtAlwaysEnabled;
     systemRan[1] = &rtAlwaysEnabled;
     systemRan[2] = &rtAlwaysEnabled;
+<<<<<<< Updated upstream
     systemRan[3] = (sysRanDType *)&untitled_DW.SampleandHold3_SubsysRanBC;
     systemRan[4] = &rtAlwaysEnabled;
+=======
+>>>>>>> Stashed changes
     rteiSetModelMappingInfoPtr(untitled_M->extModeInfo,
       &untitled_M->SpecialInfo.mappingInfo);
     rteiSetChecksumsPtr(untitled_M->extModeInfo, untitled_M->Sizes.checksums);
@@ -2337,7 +2449,11 @@ void untitled_initialize(void)
     (void) memset((char_T *) &dtInfo, 0,
                   sizeof(dtInfo));
     untitled_M->SpecialInfo.mappingInfo = (&dtInfo);
+<<<<<<< Updated upstream
     dtInfo.numDataTypes = 21;
+=======
+    dtInfo.numDataTypes = 20;
+>>>>>>> Stashed changes
     dtInfo.dataTypeSizes = &rtDataTypeSizes[0];
     dtInfo.dataTypeNames = &rtDataTypeNames[0];
 
@@ -2348,6 +2464,7 @@ void untitled_initialize(void)
     dtInfo.PTransTable = &rtPTransTable;
   }
 
+<<<<<<< Updated upstream
   {
     boolean_T flag;
     untitled_PrevZCX.SampleandHold3_Trig_ZCE = UNINITIALIZED_ZCSIG;
@@ -2388,11 +2505,25 @@ void untitled_initialize(void)
 
     /* End of InitializeConditions for MATLABSystem: '<Root>/Moving Average' */
   }
+=======
+  /* Start for MATLABSystem: '<Root>/MPU9250' */
+  untitled_DW.obj.isInitialized = 0;
+  untitled_DW.obj.i2cObjmpu.DefaultMaximumBusSpeedInHz = 400000.0;
+  untitled_DW.obj.i2cObjmpu.isInitialized = 0;
+  untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted = false;
+  untitled_DW.obj.i2cObjak8963.DefaultMaximumBusSpeedInHz = 400000.0;
+  untitled_DW.obj.i2cObjak8963.isInitialized = 0;
+  untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted = false;
+  untitled_DW.obj.matlabCodegenIsDeleted = false;
+  untitled_DW.obj.SampleTime = untitled_P.MPU9250_SampleTime;
+  untitled_SystemCore_setup(&untitled_DW.obj);
+>>>>>>> Stashed changes
 }
 
 /* Model terminate function */
 void untitled_terminate(void)
 {
+<<<<<<< Updated upstream
   /* Terminate for MATLABSystem: '<Root>/Barometer' */
   if (!untitled_DW.obj_n.matlabCodegenIsDeleted) {
     untitled_DW.obj_n.matlabCodegenIsDeleted = true;
@@ -2422,6 +2553,28 @@ void untitled_terminate(void)
   }
 
   /* End of Terminate for MATLABSystem: '<Root>/Moving Average' */
+=======
+  /* Terminate for MATLABSystem: '<Root>/MPU9250' */
+  if (!untitled_DW.obj.matlabCodegenIsDeleted) {
+    untitled_DW.obj.matlabCodegenIsDeleted = true;
+  }
+
+  if (!untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted) {
+    untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted = true;
+    if (untitled_DW.obj.i2cObjak8963.isInitialized == 1) {
+      untitled_DW.obj.i2cObjak8963.isInitialized = 2;
+    }
+  }
+
+  if (!untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted) {
+    untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted = true;
+    if (untitled_DW.obj.i2cObjmpu.isInitialized == 1) {
+      untitled_DW.obj.i2cObjmpu.isInitialized = 2;
+    }
+  }
+
+  /* End of Terminate for MATLABSystem: '<Root>/MPU9250' */
+>>>>>>> Stashed changes
 }
 
 /*

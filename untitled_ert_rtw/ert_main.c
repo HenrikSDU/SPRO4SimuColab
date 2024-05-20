@@ -9,7 +9,11 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
+<<<<<<< Updated upstream
  * C/C++ source code generated on : Mon May 20 11:12:51 2024
+=======
+ * C/C++ source code generated on : Sun May 19 15:03:49 2024
+>>>>>>> Stashed changes
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -23,7 +27,10 @@
 #include "untitled_private.h"
 #include "rtwtypes.h"
 #include "limits.h"
+<<<<<<< Updated upstream
 #include "rt_nonfinite.h"
+=======
+>>>>>>> Stashed changes
 #include "ext_work.h"
 #include "MW_bbblue_init.h"
 #include "linuxinitialize.h"
@@ -53,7 +60,11 @@ void *baseRateTask(void *arg)
     /* External mode */
     {
       boolean_T rtmStopReq = false;
+<<<<<<< Updated upstream
       rtExtModePauseIfNeeded(untitled_M->extModeInfo, 2, &rtmStopReq);
+=======
+      rtExtModePauseIfNeeded(untitled_M->extModeInfo, 1, &rtmStopReq);
+>>>>>>> Stashed changes
       if (rtmStopReq) {
         rtmSetStopRequested(untitled_M, true);
       }
@@ -67,7 +78,11 @@ void *baseRateTask(void *arg)
     /* External mode */
     {
       boolean_T rtmStopReq = false;
+<<<<<<< Updated upstream
       rtExtModeOneStep(untitled_M->extModeInfo, 2, &rtmStopReq);
+=======
+      rtExtModeOneStep(untitled_M->extModeInfo, 1, &rtmStopReq);
+>>>>>>> Stashed changes
       if (rtmStopReq) {
         rtmSetStopRequested(untitled_M, true);
       }
@@ -108,7 +123,11 @@ void *terminateTask(void *arg)
 
   /* Terminate model */
   untitled_terminate();
+<<<<<<< Updated upstream
   rtExtModeShutdown(2);
+=======
+  rtExtModeShutdown(1);
+>>>>>>> Stashed changes
   sem_post(&stopSem);
   return NULL;
 }
@@ -126,11 +145,19 @@ int main(int argc, char **argv)
 
   /* External mode */
   rtSetTFinalForExtMode(&rtmGetTFinal(untitled_M));
+<<<<<<< Updated upstream
   rtExtModeCheckInit(2);
 
   {
     boolean_T rtmStopReq = false;
     rtExtModeWaitForStartPkt(untitled_M->extModeInfo, 2, &rtmStopReq);
+=======
+  rtExtModeCheckInit(1);
+
+  {
+    boolean_T rtmStopReq = false;
+    rtExtModeWaitForStartPkt(untitled_M->extModeInfo, 1, &rtmStopReq);
+>>>>>>> Stashed changes
     if (rtmStopReq) {
       rtmSetStopRequested(untitled_M, true);
     }

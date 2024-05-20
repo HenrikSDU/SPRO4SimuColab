@@ -9,7 +9,11 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
+<<<<<<< Updated upstream
  * C/C++ source code generated on : Mon May 20 11:12:51 2024
+=======
+ * C/C++ source code generated on : Sun May 19 15:03:49 2024
+>>>>>>> Stashed changes
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -27,6 +31,7 @@
 typedef int32_T chunk_T;
 typedef uint32_T uchunk_T;
 
+<<<<<<< Updated upstream
 /*
  * MultiWord supporting definitions
  */
@@ -89,6 +94,8 @@ typedef struct {
   uint128m_T im;
 } cuint128m_T;
 
+=======
+>>>>>>> Stashed changes
 #endif                                 /* MULTIWORD_TYPES_H */
 
 /*

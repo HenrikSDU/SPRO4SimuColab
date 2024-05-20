@@ -9,7 +9,11 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
+<<<<<<< Updated upstream
  * C/C++ source code generated on : Mon May 20 11:12:51 2024
+=======
+ * C/C++ source code generated on : Sun May 19 15:03:49 2024
+>>>>>>> Stashed changes
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -22,7 +26,11 @@
 #include "rtwtypes.h"
 #include "MW_SVD.h"
 
+<<<<<<< Updated upstream
 /* Custom Type definition for MATLABSystem: '<Root>/Barometer' */
+=======
+/* Custom Type definition for MATLABSystem: '<Root>/MPU9250' */
+>>>>>>> Stashed changes
 #include "MW_SVD.h"
 #ifndef struct_tag_oH2PxaXVLCzd6lwdaSR6p
 #define struct_tag_oH2PxaXVLCzd6lwdaSR6p
@@ -38,6 +46,7 @@ struct tag_oH2PxaXVLCzd6lwdaSR6p
 
 #endif                                 /* struct_tag_oH2PxaXVLCzd6lwdaSR6p */
 
+<<<<<<< Updated upstream
 #ifndef typedef_g_beagleboneblue_bbblueI2CMas_T
 #define typedef_g_beagleboneblue_bbblueI2CMas_T
 
@@ -143,6 +152,57 @@ struct tag_V9i0BeISxaZywwPOT5PprG
 typedef struct tag_V9i0BeISxaZywwPOT5PprG dsp_simulink_MovingAverage_un_T;
 
 #endif                             /* typedef_dsp_simulink_MovingAverage_un_T */
+=======
+#ifndef typedef_i_beagleboneblue_bbblueI2CMas_T
+#define typedef_i_beagleboneblue_bbblueI2CMas_T
+
+typedef struct tag_oH2PxaXVLCzd6lwdaSR6p i_beagleboneblue_bbblueI2CMas_T;
+
+#endif                             /* typedef_i_beagleboneblue_bbblueI2CMas_T */
+
+#ifndef struct_tag_s0kXae1yCOw6kF09CPTiMB
+#define struct_tag_s0kXae1yCOw6kF09CPTiMB
+
+struct tag_s0kXae1yCOw6kF09CPTiMB
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  uint32_T BusSpeed;
+  real_T DefaultMaximumBusSpeedInHz;
+  MW_Handle_Type MW_I2C_HANDLE;
+};
+
+#endif                                 /* struct_tag_s0kXae1yCOw6kF09CPTiMB */
+
+#ifndef typedef_j_beagleboneblue_bbblueI2CMas_T
+#define typedef_j_beagleboneblue_bbblueI2CMas_T
+
+typedef struct tag_s0kXae1yCOw6kF09CPTiMB j_beagleboneblue_bbblueI2CMas_T;
+
+#endif                             /* typedef_j_beagleboneblue_bbblueI2CMas_T */
+
+#ifndef struct_tag_A4EdOul8eEsRYmBAaIUDRF
+#define struct_tag_A4EdOul8eEsRYmBAaIUDRF
+
+struct tag_A4EdOul8eEsRYmBAaIUDRF
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  boolean_T TunablePropsChanged;
+  real_T SampleTime;
+  i_beagleboneblue_bbblueI2CMas_T i2cObjmpu;
+  j_beagleboneblue_bbblueI2CMas_T i2cObjak8963;
+};
+
+#endif                                 /* struct_tag_A4EdOul8eEsRYmBAaIUDRF */
+
+#ifndef typedef_beagleboneblue_bbblueMPU9250__T
+#define typedef_beagleboneblue_bbblueMPU9250__T
+
+typedef struct tag_A4EdOul8eEsRYmBAaIUDRF beagleboneblue_bbblueMPU9250__T;
+
+#endif                             /* typedef_beagleboneblue_bbblueMPU9250__T */
+>>>>>>> Stashed changes
 
 /* Parameters (default storage) */
 typedef struct P_untitled_T_ P_untitled_T;

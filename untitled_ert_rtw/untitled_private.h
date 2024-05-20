@@ -9,7 +9,11 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
+<<<<<<< Updated upstream
  * C/C++ source code generated on : Mon May 20 11:12:51 2024
+=======
+ * C/C++ source code generated on : Sun May 19 15:03:49 2024
+>>>>>>> Stashed changes
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -21,6 +25,7 @@
 #define untitled_private_h_
 #include "rtwtypes.h"
 #include "multiword_types.h"
+<<<<<<< Updated upstream
 #include "zero_crossing_types.h"
 #include "untitled_types.h"
 #include "untitled.h"
@@ -101,6 +106,14 @@ extern void uMultiWordMul(const uint32_T u1[], int32_T n1, const uint32_T u2[],
 extern boolean_T sMultiWordGe(const uint32_T u1[], const uint32_T u2[], int32_T
   n);
 
+=======
+#include "untitled_types.h"
+
+/* Private macros used by the generated code to access rtModel */
+#ifndef rtmSetTFinal
+#define rtmSetTFinal(rtm, val)         ((rtm)->Timing.tFinal = (val))
+#endif
+>>>>>>> Stashed changes
 #endif                                 /* untitled_private_h_ */
 
 /*
