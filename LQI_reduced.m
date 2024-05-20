@@ -84,3 +84,22 @@ title('Closed loop poles & zeros LQI Controlled System');
 figure; % Create a new figure window
 step(sys_lqi_controlled); 
 title('Step Response of LQI Controlled System'); 
+
+%% Alternative
+
+F = [1 0 0 0 0 0 0 0;
+     0 1 0 0 0 0 0 0;
+     0 0 1 0 0 0 0 0;
+     0 0 0 1 0 0 0 0;];
+
+A_e_r_a = [A_r zeros(8,1);
+            -F zeros(1);];
+B_e_r_a = [B_r;
+        -zeros(1,4)];
+C_e_r_a = [E zeros(1)];
+
+sys_lqi_reduced_a = ss(A_e_r_a, B_e_r_a,C_e_r_a,0);
+
+controlability = ctrb(A_e_r,B_e_r);
+
+rank(controlability)
