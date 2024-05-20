@@ -9,11 +9,7 @@
  *
  * Model version              : 1.0
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
-<<<<<<< Updated upstream
- * C source code generated on : Mon May 20 11:12:51 2024
-=======
- * C source code generated on : Sun May 19 15:03:49 2024
->>>>>>> Stashed changes
+ * C source code generated on : Mon May 20 14:26:47 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -40,12 +36,7 @@ static uint_T rtDataTypeSizes[] = {
   sizeof(action_T),
   2*sizeof(uint32_T),
   sizeof(int32_T),
-<<<<<<< Updated upstream
-  sizeof(beagleboneblue_bbblueBaromete_T),
-  sizeof(dsp_simulink_MovingAverage_un_T),
-=======
   sizeof(beagleboneblue_bbblueMPU9250__T),
->>>>>>> Stashed changes
   sizeof(uint_T),
   sizeof(char_T),
   sizeof(uchar_T),
@@ -69,12 +60,7 @@ static const char_T * rtDataTypeNames[] = {
   "action_T",
   "timer_uint32_pair_T",
   "physical_connection",
-<<<<<<< Updated upstream
-  "beagleboneblue_bbblueBaromete_T",
-  "dsp_simulink_MovingAverage_un_T",
-=======
   "beagleboneblue_bbblueMPU9250__T",
->>>>>>> Stashed changes
   "uint_T",
   "char_T",
   "uchar_T",
@@ -83,44 +69,23 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-<<<<<<< Updated upstream
-  { (char_T *)(&untitled_B.sensor), 0, 0, 3 }
-  ,
-
-  { (char_T *)(&untitled_DW.obj), 16, 0, 1 },
-
-  { (char_T *)(&untitled_DW.obj_n), 15, 0, 1 },
-
-  { (char_T *)(&untitled_DW.Scope1_PWORK.LoggedData[0]), 11, 0, 3 },
-
-  { (char_T *)(&untitled_DW.SampleandHold3_SubsysRanBC), 2, 0, 1 }
-=======
-  { (char_T *)(&untitled_B.MPU9250_o3[0]), 0, 0, 4 }
+  { (char_T *)(&untitled_B.Gain), 0, 0, 4 }
   ,
 
   { (char_T *)(&untitled_DW.obj), 15, 0, 1 },
 
-  { (char_T *)(&untitled_DW.Scope_PWORK.LoggedData[0]), 11, 0, 4 }
->>>>>>> Stashed changes
+  { (char_T *)(&untitled_DW.Scope1_PWORK.LoggedData[0]), 11, 0, 4 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-<<<<<<< Updated upstream
-  5U,
-=======
   3U,
->>>>>>> Stashed changes
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-<<<<<<< Updated upstream
-  { (char_T *)(&untitled_P.Barometer_SampleTime), 0, 0, 6 }
-=======
-  { (char_T *)(&untitled_P.MPU9250_SampleTime), 0, 0, 1 }
->>>>>>> Stashed changes
+  { (char_T *)(&untitled_P.MPU9250_SampleTime), 0, 0, 2 }
 };
 
 /* data type transition table for Parameters structure */

@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Mon May 20 11:12:51 2024
+ * C/C++ source code generated on : Mon May 20 14:26:47 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -24,23 +24,16 @@
 #include "rtwtypes.h"
 #include "rtw_extmode.h"
 #include "sysran_types.h"
-#include "rtw_continuous.h"
-#include "rtw_solver.h"
 #include "dt_info.h"
 #include "ext_work.h"
 #include "MW_I2C.h"
-#include "MW_bbblue_driver.h"
+#include "MW_MPU9250.h"
 #endif                                 /* untitled_COMMON_INCLUDES_ */
 
 #include "untitled_types.h"
-#include "multiword_types.h"
-#include "rt_zcfcn.h"
-#include <math.h>
 #include <float.h>
 #include <string.h>
-#include "rt_nonfinite.h"
 #include <stddef.h>
-#include "zero_crossing_types.h"
 
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetFinalTime
@@ -72,7 +65,7 @@
 #endif
 
 #ifndef rtmGetT
-#define rtmGetT(rtm)                   (rtmGetTPtr((rtm))[0])
+#define rtmGetT(rtm)                   ((rtm)->Timing.taskTime0)
 #endif
 
 #ifndef rtmGetTFinal
@@ -80,114 +73,34 @@
 #endif
 
 #ifndef rtmGetTPtr
-#define rtmGetTPtr(rtm)                ((rtm)->Timing.t)
+#define rtmGetTPtr(rtm)                (&(rtm)->Timing.taskTime0)
 #endif
 
 /* Block signals (default storage) */
 typedef struct {
-  int128m_T r;
-  int128m_T r1;
-  int128m_T r2;
-  uint128m_T r3;
-  uint128m_T r4;
-  int96m_T r5;
-  int96m_T r6;
-  int96m_T r7;
-  int96m_T r8;
-  int96m_T r9;
-  int96m_T r10;
-  int96m_T r11;
-  int96m_T r12;
-  real_T sensor;                       /* '<Root>/Add' */
-  real_T height;                       /* '<Root>/height' */
-  real_T In;                           /* '<S1>/In' */
-  real_T d;
-  real_T pwLocal;
-  real_T pmLocal;
-  real_T lambda;
-  real_T x_unsgn;
-  real_T yd;
-  uint32_T ux[2];
-  int64m_T val1;
-  int64m_T val4;
-  int64m_T r13;
-  int64m_T r14;
-  int64m_T r15;
-  int64m_T r16;
-  int64m_T r17;
-  int64m_T r18;
-  int64m_T r19;
-  int64m_T r20;
-  int64m_T r21;
-  int64m_T r22;
-  int64m_T r23;
-  int64m_T r24;
-  int64m_T r25;
-  int64m_T r39;
-  int64m_T r40;
-  uint64m_T nk_unsgn;
-  uint64m_T xint;
-  uint64m_T res;
-  uint64m_T nIsOdd;
-  uint64m_T r26;
-  uint64m_T r27;
-  uint64m_T r28;
-  uint64m_T r29;
-  uint64m_T r30;
-  uint64m_T r31;
-  uint64m_T r32;
-  uint64m_T r33;
-  uint64m_T r34;
-  uint64m_T r35;
-  uint64m_T r36;
-  uint64m_T r37;
-  uint64m_T r38;
-  uint64m_T n_unsgn;
-  uint64m_T yint;
-  uint64m_T b_y1;
-  uint64m_T b_y0;
-  uint64m_T n1;
-  uint64m_T ldword;
-  uint64m_T temp0;
-  uint64m_T r41;
-  uint64m_T r42;
+  real_T Gain;                         /* '<S2>/Gain' */
+  real_T MPU9250_o3[3];                /* '<Root>/MPU9250' */
 } B_untitled_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  dsp_simulink_MovingAverage_un_T obj; /* '<Root>/Moving Average' */
-  beagleboneblue_bbblueBaromete_T obj_n;/* '<Root>/Barometer' */
+  beagleboneblue_bbblueMPU9250__T obj; /* '<Root>/MPU9250' */
   struct {
     void *LoggedData[3];
   } Scope1_PWORK;                      /* '<Root>/Scope1' */
 
-  int8_T SampleandHold3_SubsysRanBC;   /* '<Root>/Sample and Hold3' */
+  struct {
+    void *LoggedData;
+  } Scope_PWORK;                       /* '<Root>/Scope' */
 } DW_untitled_T;
-
-/* Zero-crossing (trigger) state */
-typedef struct {
-  ZCSigState SampleandHold3_Trig_ZCE;  /* '<Root>/Sample and Hold3' */
-} PrevZCX_untitled_T;
 
 /* Parameters (default storage) */
 struct P_untitled_T_ {
-  real_T Barometer_SampleTime;         /* Expression: 0.1
-                                        * Referenced by: '<Root>/Barometer'
+  real_T MPU9250_SampleTime;           /* Expression: 0.1
+                                        * Referenced by: '<Root>/MPU9250'
                                         */
-  real_T MovingAverage_ForgettingFactor;/* Expression: 1.0
-                                         * Referenced by: '<Root>/Moving Average'
-                                         */
-  real_T _Y0;                          /* Expression: initCond
-                                        * Referenced by: '<S1>/ '
-                                        */
-  real_T Step3_Time;                   /* Expression: 2
-                                        * Referenced by: '<Root>/Step3'
-                                        */
-  real_T Step3_Y0;                     /* Expression: 0
-                                        * Referenced by: '<Root>/Step3'
-                                        */
-  real_T Step3_YFinal;                 /* Expression: 1
-                                        * Referenced by: '<Root>/Step3'
+  real_T Gain_Gain;                    /* Expression: 180/pi
+                                        * Referenced by: '<S2>/Gain'
                                         */
 };
 
@@ -195,7 +108,6 @@ struct P_untitled_T_ {
 struct tag_RTM_untitled_T {
   const char_T *errorStatus;
   RTWExtModeInfo *extModeInfo;
-  RTWSolverInfo solverInfo;
 
   /*
    * Sizes:
@@ -222,14 +134,11 @@ struct tag_RTM_untitled_T {
    * the timing information for the model.
    */
   struct {
+    time_T taskTime0;
     uint32_T clockTick0;
     time_T stepSize0;
-    uint32_T clockTick1;
     time_T tFinal;
-    SimTimeStep simTimeStep;
     boolean_T stopRequestedFlag;
-    time_T *t;
-    time_T tArray[2];
   } Timing;
 };
 
@@ -241,9 +150,6 @@ extern B_untitled_T untitled_B;
 
 /* Block states (default storage) */
 extern DW_untitled_T untitled_DW;
-
-/* Zero-crossing (trigger) state */
-extern PrevZCX_untitled_T untitled_PrevZCX;
 
 /* Model entry point functions */
 extern void untitled_initialize(void);
@@ -270,8 +176,8 @@ extern volatile boolean_T runModel;
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'untitled'
- * '<S1>'   : 'untitled/Sample and Hold3'
- * '<S2>'   : 'untitled/height'
+ * '<S1>'   : 'untitled/MATLAB Function'
+ * '<S2>'   : 'untitled/Radians to Degrees'
  */
 #endif                                 /* untitled_h_ */
 

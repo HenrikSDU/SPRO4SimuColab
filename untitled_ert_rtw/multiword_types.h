@@ -9,11 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
-<<<<<<< Updated upstream
- * C/C++ source code generated on : Mon May 20 11:12:51 2024
-=======
- * C/C++ source code generated on : Sun May 19 15:03:49 2024
->>>>>>> Stashed changes
+ * C/C++ source code generated on : Mon May 20 14:26:47 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -31,71 +27,6 @@
 typedef int32_T chunk_T;
 typedef uint32_T uchunk_T;
 
-<<<<<<< Updated upstream
-/*
- * MultiWord supporting definitions
- */
-typedef long int long_T;
-
-/*
- * MultiWord types
- */
-typedef struct {
-  uint32_T chunks[2];
-} int64m_T;
-
-typedef struct {
-  int64m_T re;
-  int64m_T im;
-} cint64m_T;
-
-typedef struct {
-  uint32_T chunks[2];
-} uint64m_T;
-
-typedef struct {
-  uint64m_T re;
-  uint64m_T im;
-} cuint64m_T;
-
-typedef struct {
-  uint32_T chunks[3];
-} int96m_T;
-
-typedef struct {
-  int96m_T re;
-  int96m_T im;
-} cint96m_T;
-
-typedef struct {
-  uint32_T chunks[3];
-} uint96m_T;
-
-typedef struct {
-  uint96m_T re;
-  uint96m_T im;
-} cuint96m_T;
-
-typedef struct {
-  uint32_T chunks[4];
-} int128m_T;
-
-typedef struct {
-  int128m_T re;
-  int128m_T im;
-} cint128m_T;
-
-typedef struct {
-  uint32_T chunks[4];
-} uint128m_T;
-
-typedef struct {
-  uint128m_T re;
-  uint128m_T im;
-} cuint128m_T;
-
-=======
->>>>>>> Stashed changes
 #endif                                 /* MULTIWORD_TYPES_H */
 
 /*
