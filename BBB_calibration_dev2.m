@@ -61,6 +61,12 @@ squared_diff = (data_pitchAngle - mean_value).^2;
 variance_pitchAngle = sum(squared_diff) / length(data_pitchAngle);
 disp(['The variance of the data points is: ' num2str(variance_pitchAngle)]);
 
+data_YawAngle = [1.217e-2, 1.363e-2, 7.551e-3, 5.976e-3, 1.046e-2, 6.599e-3, 1.292e-2, 1.272e-2, 1.103e-2, 1.004e-2, 1.340e-2, 1.201e-2, 1.283e-2, 7.281e-3, 7.793e-3, 1.074e-2, 9.535e-3, 6.142e-3, 1.361e-2, 1.198e-2, 1.022e-2, 1.384e-2, 8.256e-3, 9.017e-3, 1.790e-2, 9.567e-3, 1.191e-2, 1.240e-2, 1.191e-2, 5.351e-3, 1.329e-2, 1.145e-2, 9.767e-3, 8.288e-3, 1.101e-2, 8.555e-3, 1.044e-2, 1.022e-2, 9.167e-3, 7.032e-3, 1.101e-2, 1.099e-2, 6.350e-3, 9.796e-3, 1.175e-2, 1.293e-2, 1.290e-2, 1.042e-2, 1.143e-2, 8.320e-3]
+mean_value = mean(data_YawAngle);
+squared_diff = (data_YawAngle - mean_value).^2;
+variance_Yaw = sum(squared_diff) / length(data_YawAngle);
+disp(['The variance of the data points is: ' num2str(variance_Yaw)]);
+
 data_GyroRoll = [0, -6.104e-2, 6.104e-2, -6.104e-2, 0, -2.411e-1, -6.104e-2, 6.104e-2, -6.104e-2, 0, -6.104e-2, 0, -1.831e-1, 0, -6.104e-2, 0, 6.104e-2, 0, -6.104e-2, 0, 6.104e-2, -1.831e-1, -6.104e-2, 0, 6.104e-2, -6.104e-2, -1.831e-1, -6.104e-2, -6.104e-2, 0, -6.104e-2, -1.221e-1, -6.104e-2,1.221e-1,0];
 mean_value = mean(data_GyroRoll);
 squared_diff = (data_GyroRoll - mean_value).^2;
@@ -91,7 +97,7 @@ figure;
 
 % Construct the R matrix
 %R = diag([1,sigma_acc1,sigma_acc2, 1,sigma_baro,sigma_mag]);
-R = diag([variance_Height, variance_rollAngle, variance_pitchAngle, variance_GyroPitch,variance_GyroRoll,variance_GyroYaw]);
+R = diag([variance_Height, variance_rollAngle, variance_pitchAngle,variance_Yaw, variance_GyroPitch,variance_GyroRoll,variance_GyroYaw]);
 
 % Display the R matrix
 disp(R);
