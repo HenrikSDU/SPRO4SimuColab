@@ -14,19 +14,19 @@ variance_accel3 = sum(squared_diff) / length(data_accel3);
 disp(['The variance of the data points is: ' num2str(variance_accel3)]);
 
 
-data_Gyro = [-0.1831, -0.06104, -0.1221, 0, -0.18310, -0.06104, 0, -0.1221, 0, -0.1221, 0, 0, 0, 0, 0, -0.1221, -0.2441, -0.1221, 0, -0.1221, -0.1831, -0.3662, -0.1221, 0, -0.06104, -0.1831, 0, -0.06104, -0.06104, -0.2441, 0, -0.1221, 0, -0.3052, -0.1221, -0.1831, -0.2441, 0, 0, 0, -0.1831, -0.6104, -0.1221, -0.1221, -0.1221, -0.1831, -0.1221, 0.06104, 0, -0.1221]
+data_GyroPitch = [-0.1831, -0.06104, -0.1221, 0, -0.18310, -0.06104, 0, -0.1221, 0, -0.1221, 0, 0, 0, 0, 0, -0.1221, -0.2441, -0.1221, 0, -0.1221, -0.1831, -0.3662, -0.1221, 0, -0.06104, -0.1831, 0, -0.06104, -0.06104, -0.2441, 0, -0.1221, 0, -0.3052, -0.1221, -0.1831, -0.2441, 0, 0, 0, -0.1831, -0.6104, -0.1221, -0.1221, -0.1221, -0.1831, -0.1221, 0.06104, 0, -0.1221]
 
 % Calculate the mean
-mean_value = mean(data_Gyro);
+mean_value = mean(data_GyroPitch);
 
 % Calculate the squared differences from the mean
-squared_diff = (data_Gyro - mean_value).^2;
+squared_diff = (data_GyroPitch - mean_value).^2;
 
 % Calculate the variance
-variance_Gyro = sum(squared_diff) / length(data_Gyro);
+variance_GyroPitch = sum(squared_diff) / length(data_GyroPitch);
 
 % Display the result
-disp(['The variance of the data points is: ' num2str(variance_Gyro)]);
+disp(['The variance of the data points is: ' num2str(variance_GyroPitch)]);
 
 
 data_Mag1 = [4.802,6.236,3.606,3.367,3.845,5.041,3.845,4.802,5.280,5.280,4.802,6.475,4.323,4.802,3.128,6.714,6.475,2.889,4.802,5.519,2.650,4.323,3.845,4.563,3.606,4.802,4.323,5.758,5.519,3.363,4.802,5.563,2.411,5.997,3.606,6.475,5.280,5.997,5.997,4.323,5.519,4.323,6.236,5.997, 2.889,3.606,6.714,5.519,5.041,3.845,5.041]
@@ -42,11 +42,11 @@ variance_Mag1 = sum(squared_diff) / length(data_Mag1);
 disp(['The variance of the data points is: ' num2str(variance_Mag1)]);
 
 
-data_Bar1 = [6.107e-1, -1.353e-1, -3.603e-1, 1.695e-1, 3.945e-1, -5.762e-1, 3.232e-1, 2.720e-2, -4.379e-2, -2.688e-1, 4.0059e-1, 2.525e-1, -1.148e-1, 4.059e-1, 2.720e-2, -1.148e-1, 4.176e-1, 2.525e-1, -1.861e-1, -3.239e-2, -1.031e-1, 1.216e-1, 3.466e-1, -3.284e-1, 4.176e-1, 1.929e-1, -3.239e-2, -1.031e-1, 2.639e-1, -1.031e-1, -3.239e-2, 4.886e-1, -1.031e-1, -4.818e-1, 3.892e-2, -1.031e-1, 4.886e-1, 7.139e-1, 1.929e-1, -4.818e-1, 9.386e-1, 4.176e-1, 9.386e-1, -3.239e-2, 2.639e-1, 4.771e-2,4.886e-1]
-mean_value = mean(data_Bar1);
-squared_diff = (data_Bar1 - mean_value).^2;
-variance_Bar1 = sum(squared_diff) / length(data_Bar1);
-disp(['The variance of the data points is: ' num2str(variance_Bar1)]);
+data_Height = [6.107e-1, -1.353e-1, -3.603e-1, 1.695e-1, 3.945e-1, -5.762e-1, 3.232e-1, 2.720e-2, -4.379e-2, -2.688e-1, 4.0059e-1, 2.525e-1, -1.148e-1, 4.059e-1, 2.720e-2, -1.148e-1, 4.176e-1, 2.525e-1, -1.861e-1, -3.239e-2, -1.031e-1, 1.216e-1, 3.466e-1, -3.284e-1, 4.176e-1, 1.929e-1, -3.239e-2, -1.031e-1, 2.639e-1, -1.031e-1, -3.239e-2, 4.886e-1, -1.031e-1, -4.818e-1, 3.892e-2, -1.031e-1, 4.886e-1, 7.139e-1, 1.929e-1, -4.818e-1, 9.386e-1, 4.176e-1, 9.386e-1, -3.239e-2, 2.639e-1, 4.771e-2,4.886e-1]
+mean_value = mean(data_Height);
+squared_diff = (data_Height - mean_value).^2;
+variance_Height = sum(squared_diff) / length(data_Height);
+disp(['The variance of the data points is: ' num2str(variance_Height)]);
 
 data_rollAngle = [6.057e-2, 5.645e-2, 6.353e-2, 6.134e-2, 6.173e-2, 6.302e-2, 5.677e-2, 6.110e-2, 6.151e-2, 5.798e-2, 6.088e-2, 5.804e-2, 6.259e-2, 5.653e-2, 6.012e-2, 6.099e-2, 6.133e-2, 5.967e-2, 5.976e-2, 5.863e-2, 6.009e-2, 6.093e-2, 5.898e-2, 5.749e-2, 6.028e-2, 6.227e-2, 6.026e-2, 6.100e-2, 6.096e-2, 5.713e-2, 6.084e-2, 5.749e-2, 5.857e-2, 6.091e-2, 5.893e-2, 5.961e-2, 5.923e-2, 6.130e-2, 5.546e-2, 5.816e-2, 6.236e-2, 5.978e-2, 5.859e-2, 5.923e-2, 6.107e-2, 6.169e-2, 6.226e-2, 6.033e-2, 6.074e-2, 6.144e-2]
 mean_value = mean(data_rollAngle);
@@ -61,12 +61,25 @@ squared_diff = (data_pitchAngle - mean_value).^2;
 variance_pitchAngle = sum(squared_diff) / length(data_pitchAngle);
 disp(['The variance of the data points is: ' num2str(variance_pitchAngle)]);
 
+data_GyroRoll = [0, -6.104e-2, 6.104e-2, -6.104e-2, 0, -2.411e-1, -6.104e-2, 6.104e-2, -6.104e-2, 0, -6.104e-2, 0, -1.831e-1, 0, -6.104e-2, 0, 6.104e-2, 0, -6.104e-2, 0, 6.104e-2, -1.831e-1, -6.104e-2, 0, 6.104e-2, -6.104e-2, -1.831e-1, -6.104e-2, -6.104e-2, 0, -6.104e-2, -1.221e-1, -6.104e-2,1.221e-1,0];
+mean_value = mean(data_GyroRoll);
+squared_diff = (data_GyroRoll - mean_value).^2;
+variance_GyroRoll = sum(squared_diff) / length(data_GyroRoll);
+disp(['The variance of the data points is: ' num2str(variance_GyroRoll)]);
+
+data_GyroYaw = [1.221e-1, 0, -1.221e-1, 0, -1.221e-1, 0, -1.221e-1, 6.104e-2, 0, 1.221e-1, 0, -1.221e-1, 0, -1.221e-1, 0, 0, 1.221e-1, 0, -1.221e-1, 0, 6.104e-2, -1.221e-1, -1.831e-1, 0, -1.831e-1, 0, 6.104e-2, 0, 6.104e-2, 0, 0, 0, 1.221e-1, 6.104e-2, 0, 3.052e-1, 1.831e-1,6.104e-2];
+mean_value = mean(data_GyroYaw);
+squared_diff = (data_GyroYaw - mean_value).^2;
+variance_GyroYaw = sum(squared_diff) / length(data_GyroYaw);
+disp(['The variance of the data points is: ' num2str(variance_GyroYaw)]);
+
+
 figure;
 histogram(data_pitchAngle)
 figure;
 histogram(data_rollAngle)
 figure;
-histogram(data_Gyro)
+%histogram(data_Gyro)
 
 % Define the noise variances for each sensor
 %sigma_gyro = variance_Gyro;  % Gyro sensor noise variance
@@ -78,7 +91,7 @@ histogram(data_Gyro)
 
 % Construct the R matrix
 %R = diag([1,sigma_acc1,sigma_acc2, 1,sigma_baro,sigma_mag]);
-R = diag([1, variance_rollAngle, variance_pitchAngle,variance_accel3, variance_Bar1, variance_Mag1]);
+R = diag([variance_Height, variance_rollAngle, variance_pitchAngle, variance_GyroPitch,variance_GyroRoll,variance_GyroYaw]);
 
 % Display the R matrix
 disp(R);
