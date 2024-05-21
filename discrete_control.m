@@ -9,4 +9,4 @@ discrete_sys_reduced = c2d(sys_reduced,Ts);
 K_D_LQR_reduced = lqrd(A_r, B_r, Q_reduced, R_reduced, Ts);
 K_DD_LQR_reduced_ = lqrd(A_r, B_r, Q_reduced, R_reduced, Ts);
 K_LQR_reduced;
-
+A_r_d
