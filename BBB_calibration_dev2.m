@@ -99,6 +99,6 @@ histogram(data_Gyro)
 % Construct the R matrix
 %R = diag([1,sigma_acc1,sigma_acc2, 1,sigma_baro,sigma_mag]);
 R_kalman = diag([variance_Height, variance_rollAngle, variance_pitchAngle, variance_Yaw, variance_GyroRoll, variance_GyroPitch, variance_GyroYaw]);
-Q_kalman = diag([0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001]);
+Q_kalman = diag([0.005,0.3,0.3,0.0001,0.01,0.1,0.1,0.0001]);
 % Display the R matrix
 disp(R);
