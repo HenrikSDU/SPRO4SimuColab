@@ -79,7 +79,7 @@ sigma_acc2 = variance_pitchAngle;  % Accel2 sensor noise variance
 sigma_acc3 = 0;  % Accel3 sensor noise variance
 
 % Construct the R matrix
-%R = diag([1, variace_rollAngle, variace_pitchAngle, 1, variace_Bar1, variance_Mag1,);
+%R = diag(1, variace_rollAngle, variace_pitchAngle, 1, variace_Bar1, variance_Mag1,);
 
 % Display the R matrix
 disp(R);
