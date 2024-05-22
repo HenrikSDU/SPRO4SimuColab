@@ -71,7 +71,7 @@ Q_reduced = [0.9/(Max_z_r)^2 0 0 0 0 0 0 0;
              0 0 0 0 0 10/(Max_r_dot_r)^2 0 0;
              0 0 0 0 0 0 10/(Max_p_dot_r^2) 0;
              0 0 0 0 0 0 0 1/(Max_ya_dot_r)^2;];
-R_reduced = [0.5/(Max_U_r)^2 0 0 0;
+R_reduced = [20/(Max_U_r)^2 0 0 0;
              0 1/(Max_Mx_r)^2 0 0;
              0 0 0.1/(Max_My_r)^2 0;
              0 0 0 1/(Max_Mz_r)^2;];
