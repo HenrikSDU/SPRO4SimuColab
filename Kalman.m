@@ -98,7 +98,7 @@ disp(['The variance of the data points is: ' num2str(variance_GyroYaw)]);
 %% 
 % Construct the R matrix
 %R = diag([1,sigma_acc1,sigma_acc2, 1,sigma_baro,sigma_mag]);
-R_kalman = diag([variance_Height, variance_rollAngle, variance_pitchAngle, variance_Yaw, variance_GyroRoll, variance_GyroPitch, variance_GyroYaw]);
+R_kalman = diag([variance_Height+0.5, variance_rollAngle, variance_pitchAngle, variance_Yaw, variance_GyroRoll, variance_GyroPitch, variance_GyroYaw]);
 Q_kalman = diag([0,0,0,0,0.0000000001,0.0000000001,0.00000000001,0.00000000001]);
 Q_kalman_d = diag([0,0,0,0,0.000000001,0.000000001,0.000000001,0.000000001]);
 % Display the R matrix
