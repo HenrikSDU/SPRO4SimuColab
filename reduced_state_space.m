@@ -64,16 +64,16 @@ Max_U_r = 4 * 0.2 * 9.81; % Maximum thrust - maximum allowable current to esc is
 
 
 Q_reduced = [0.9/(Max_z_r)^2 0 0 0 0 0 0 0;
-             0 3/(Max_r_r)^2 0 0 0 0 0 0;
-             0 0 3/(Max_p_r)^2 0 0 0 0 0;
-             0 0 0 3.5/(Max_ya_r)^2 0 0 0 0;
+             0 100/(Max_r_r)^2 0 0 0 0 0 0;
+             0 0 100/(Max_p_r)^2 0 0 0 0 0;
+             0 0 0 100/(Max_ya_r)^2 0 0 0 0;
              0 0 0 0 0.5/(Max_z_dot_r)^2 0 0 0;
-             0 0 0 0 0 22/(Max_r_dot_r)^2 0 0;
-             0 0 0 0 0 0 23/(Max_p_dot_r^2) 0;
-             0 0 0 0 0 0 0 0.3/(Max_ya_dot_r)^2;];
+             0 0 0 0 0 10/(Max_r_dot_r)^2 0 0;
+             0 0 0 0 0 0 10/(Max_p_dot_r^2) 0;
+             0 0 0 0 0 0 0 1/(Max_ya_dot_r)^2;];
 R_reduced = [0.5/(Max_U_r)^2 0 0 0;
-             0 0.01/(Max_Mx_r)^2 0 0;
-             0 0 0.01/(Max_My_r)^2 0;
+             0 1/(Max_Mx_r)^2 0 0;
+             0 0 0.1/(Max_My_r)^2 0;
              0 0 0 1/(Max_Mz_r)^2;];
 
 K_LQR_reduced = lqr(A_r, B_r, Q_reduced, R_reduced, 0);
