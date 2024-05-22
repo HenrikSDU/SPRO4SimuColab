@@ -80,12 +80,12 @@ variance_GyroYaw = sum(squared_diff) / length(data_GyroYaw);
 disp(['The variance of the data points is: ' num2str(variance_GyroYaw)]);
 
 
-figure;
-histogram(data_pitchAngle)
-figure;
-histogram(data_rollAngle)
-figure;
-histogram(data_Gyro)
+%figure;
+%histogram(data_pitchAngle)
+%figure;
+%histogram(data_rollAngle)
+%figure;
+%histogram(data_Gyro)
 
 % Define the noise variances for each sensor
 %sigma_gyro = variance_Gyro;  % Gyro sensor noise variance
