@@ -28,8 +28,8 @@
         ;%
         ;% Auto data (Controller_implementation_P)
         ;%
-            section.nData     = 37;
-            section.data(37)  = dumData; %prealloc
+            section.nData     = 38;
+            section.data(38)  = dumData; %prealloc
 
                     ;% Controller_implementation_P.F
                     section.data(1).logicalSrcIdx = 0;
@@ -131,53 +131,57 @@
                     section.data(25).logicalSrcIdx = 24;
                     section.data(25).dtTransOffset = 409;
 
-                    ;% Controller_implementation_P.PWMlimit_UpperSat
+                    ;% Controller_implementation_P.Constant1_Value
                     section.data(26).logicalSrcIdx = 25;
                     section.data(26).dtTransOffset = 410;
 
-                    ;% Controller_implementation_P.PWMlimit_LowerSat
+                    ;% Controller_implementation_P.PWMlimit_UpperSat
                     section.data(27).logicalSrcIdx = 26;
-                    section.data(27).dtTransOffset = 411;
+                    section.data(27).dtTransOffset = 414;
+
+                    ;% Controller_implementation_P.PWMlimit_LowerSat
+                    section.data(28).logicalSrcIdx = 27;
+                    section.data(28).dtTransOffset = 415;
 
                     ;% Controller_implementation_P.Servolimit_UpperSat
-                    section.data(28).logicalSrcIdx = 27;
-                    section.data(28).dtTransOffset = 412;
+                    section.data(29).logicalSrcIdx = 28;
+                    section.data(29).dtTransOffset = 416;
 
                     ;% Controller_implementation_P.Servolimit_LowerSat
-                    section.data(29).logicalSrcIdx = 28;
-                    section.data(29).dtTransOffset = 413;
-
-                    ;% Controller_implementation_P.Constant_Value_a
                     section.data(30).logicalSrcIdx = 29;
-                    section.data(30).dtTransOffset = 414;
+                    section.data(30).dtTransOffset = 417;
 
-                    ;% Controller_implementation_P.Gain_Gain_a
+                    ;% Controller_implementation_P.SignConvention_Gain
                     section.data(31).logicalSrcIdx = 30;
                     section.data(31).dtTransOffset = 418;
 
-                    ;% Controller_implementation_P.Gain_Gain_j
+                    ;% Controller_implementation_P.Constant_Value_a
                     section.data(32).logicalSrcIdx = 31;
-                    section.data(32).dtTransOffset = 419;
+                    section.data(32).dtTransOffset = 422;
+
+                    ;% Controller_implementation_P.Gain_Gain_a
+                    section.data(33).logicalSrcIdx = 32;
+                    section.data(33).dtTransOffset = 426;
+
+                    ;% Controller_implementation_P.Gain_Gain_j
+                    section.data(34).logicalSrcIdx = 33;
+                    section.data(34).dtTransOffset = 427;
 
                     ;% Controller_implementation_P.CovarianceZ_Value
-                    section.data(33).logicalSrcIdx = 32;
-                    section.data(33).dtTransOffset = 420;
-
-                    ;% Controller_implementation_P.SignConvention_Gain
-                    section.data(34).logicalSrcIdx = 33;
-                    section.data(34).dtTransOffset = 484;
+                    section.data(35).logicalSrcIdx = 34;
+                    section.data(35).dtTransOffset = 428;
 
                     ;% Controller_implementation_P.Step3_Time
-                    section.data(35).logicalSrcIdx = 34;
-                    section.data(35).dtTransOffset = 488;
+                    section.data(36).logicalSrcIdx = 35;
+                    section.data(36).dtTransOffset = 492;
 
                     ;% Controller_implementation_P.Step3_Y0
-                    section.data(36).logicalSrcIdx = 35;
-                    section.data(36).dtTransOffset = 489;
+                    section.data(37).logicalSrcIdx = 36;
+                    section.data(37).dtTransOffset = 493;
 
                     ;% Controller_implementation_P.Step3_YFinal
-                    section.data(37).logicalSrcIdx = 36;
-                    section.data(37).dtTransOffset = 490;
+                    section.data(38).logicalSrcIdx = 37;
+                    section.data(38).dtTransOffset = 494;
 
             nTotData = nTotData + section.nData;
             paramMap.sections(1) = section;
@@ -187,11 +191,11 @@
             section.data(2)  = dumData; %prealloc
 
                     ;% Controller_implementation_P.Enable_Value
-                    section.data(1).logicalSrcIdx = 37;
+                    section.data(1).logicalSrcIdx = 38;
                     section.data(1).dtTransOffset = 0;
 
                     ;% Controller_implementation_P.isSqrtUsed_Value
-                    section.data(2).logicalSrcIdx = 38;
+                    section.data(2).logicalSrcIdx = 39;
                     section.data(2).dtTransOffset = 1;
 
             nTotData = nTotData + section.nData;
@@ -529,8 +533,8 @@
     ;%
 
 
-    targMap.checksum0 = 116020763;
-    targMap.checksum1 = 1399516391;
-    targMap.checksum2 = 372447460;
-    targMap.checksum3 = 935698346;
+    targMap.checksum0 = 1995874421;
+    targMap.checksum1 = 3135665047;
+    targMap.checksum2 = 2109017119;
+    targMap.checksum3 = 1441063281;
 

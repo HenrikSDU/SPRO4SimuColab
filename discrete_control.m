@@ -11,6 +11,7 @@ pzmap(discrete_sys_reduced_lqi)
 K_D_LQR_reduced = lqrd(A_r, B_r, Q_reduced, R_reduced, Ts);
 K_DD_LQR_reduced_ = lqrd(A_r, B_r, Q_reduced, R_reduced, Ts);
 
+%% LQI discrete
 K_D_LQI_reduced = lqrd(A_r_e_d, B_r_e_d, Q_lqi_reduced_a, R_lqi_reduced_a, Ts);
 Kx_D_lqi_reduced_a = K_lqi_reduced_a(:,1:8);
 Ki_D_lqi_reduced_a = K_lqi_reduced_a(:,9:12);

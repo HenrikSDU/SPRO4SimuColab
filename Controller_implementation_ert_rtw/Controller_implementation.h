@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.15
+ * Model version                  : 1.16
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 23 20:25:46 2024
+ * C/C++ source code generated on : Thu May 23 21:22:54 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -89,9 +89,10 @@ typedef struct {
   real_T dv[8];
   real_T Reshapey[7];                  /* '<S9>/Reshapey' */
   real_T rtb_Reshapey_m[7];
+  real_T Sum_c[4];                     /* '<Root>/Sum' */
   real_T DersiredMotorThrusts[4];      /* '<S65>/Gain' */
   uint8_T b_output[24];
-  real_T rtb_MPU9250_o1_c[3];
+  real_T rtb_MPU9250_o1_k[3];
   real_T mdata[3];
   int128m_T r;
   int128m_T r1;
@@ -122,11 +123,11 @@ typedef struct {
   real_T Product2[8];                  /* '<S63>/Product2' */
   real_T Product3[8];                  /* '<S61>/Product3' */
   real_T max_possible_rot_speed;
-  real_T pitch_tmp;
-  real_T Sum_k;
-  real_T Sum_c;
+  real_T yaw_tmp;
+  real_T yaw_tmp_c;
   real_T Sum_b;
   real_T Sum_p;
+  real_T Sum_cv;
   real_T x_unsgn;
   real_T yd;
   uint32_T ux[2];
@@ -327,6 +328,9 @@ struct P_Controller_implementation_T_ {
   real_T DiscreteTimeIntegrator_IC;    /* Expression: 0
                                         * Referenced by: '<S2>/Discrete-Time Integrator'
                                         */
+  real_T Constant1_Value[4];           /* Expression: [m*g;0;0;0]
+                                        * Referenced by: '<Root>/Constant1'
+                                        */
   real_T PWMlimit_UpperSat;            /* Expression: 255
                                         * Referenced by: '<S3>/PWM limit'
                                         */
@@ -339,6 +343,9 @@ struct P_Controller_implementation_T_ {
   real_T Servolimit_LowerSat;          /* Expression: 0
                                         * Referenced by: '<S3>/Servo limit'
                                         */
+  real_T SignConvention_Gain[4];       /* Expression: [1;-1;-1;1]
+                                        * Referenced by: '<S74>/Sign Convention'
+                                        */
   real_T Constant_Value_a[4];          /* Expression: [0;0;0;0;]
                                         * Referenced by: '<S6>/Constant'
                                         */
@@ -350,9 +357,6 @@ struct P_Controller_implementation_T_ {
                                         */
   real_T CovarianceZ_Value[64];        /* Expression: pInitialization.Z
                                         * Referenced by: '<S10>/CovarianceZ'
-                                        */
-  real_T SignConvention_Gain[4];       /* Expression: [1;-1;-1;1]
-                                        * Referenced by: '<S74>/Sign Convention'
                                         */
   real_T Step3_Time;                   /* Expression: 5
                                         * Referenced by: '<S67>/Step3'
@@ -461,7 +465,6 @@ extern volatile boolean_T runModel;
  * Block '<S9>/R' : Unused code path elimination
  * Block '<S51>/CheckSignalProperties' : Unused code path elimination
  * Block '<S52>/CheckSignalProperties' : Unused code path elimination
- * Block '<Root>/Product' : Unused code path elimination
  * Block '<S8>/Constant1' : Unused code path elimination
  * Block '<S8>/Sum' : Unused code path elimination
  * Block '<S53>/Conversion' : Eliminate redundant data type conversion

@@ -7,9 +7,9 @@
  *
  * Code generation for model "Controller_implementation".
  *
- * Model version              : 1.15
+ * Model version              : 1.16
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Thu May 23 20:25:46 2024
+ * C source code generated on : Thu May 23 21:22:54 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -105,7 +105,7 @@ static DataTypeTransitionTable rtBTransTable = {
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&Controller_implementation_P.F[0]), 0, 0, 491 },
+  { (char_T *)(&Controller_implementation_P.F[0]), 0, 0, 495 },
 
   { (char_T *)(&Controller_implementation_P.Enable_Value), 8, 0, 2 }
 };
