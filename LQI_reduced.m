@@ -123,7 +123,7 @@ sys_lqi_controlled_a = ss(A_e_r_a - B_e_r_a * K_lqi_reduced_a, B_e_r_a, C_e_r_a,
 %title('Closed loop poles & zeros LQI Controlled System'); 
 
 %figure; % Create a new figure window
-%step(sys_lqi_controlled_a); 
+step(sys_lqi_controlled_a,10); 
 %title('Step Response of LQI Controlled System'); 
 
 Kx_lqi_reduced_a = K_lqi_reduced_a(:,1:8);
