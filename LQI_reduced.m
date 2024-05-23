@@ -30,7 +30,7 @@ Max_p_dot_error = 1;
 Max_yaw_dot_error = 1;
 
 Q_lqi_reduced = [0.9/(Max_z)^2 0 0 0 0 0 0 0 0;
-                 0 100/(Max_r)^2 0 0 0 0 0 0 0;
+                 0 10/(Max_r)^2 0 0 0 0 0 0 0;
                  0 0 100/(Max_p)^2 0 0 0 0 0 0;
                  0 0 0 1/(Max_ya)^2 0 0 0 0 0;
                  0 0 0 0 0.5/(Max_z_dot)^2 0 0 0 0;
@@ -104,10 +104,10 @@ controlability = ctrb(A_e_r_a,B_e_r_a);
 
 rank(controlability)
 
-Q_lqi_reduced_a = diag([0.9/(Max_z)^2, 100/(Max_r)^2, 100/(Max_p)^2, ...
+Q_lqi_reduced_a = diag([0.9/(Max_z)^2, 1/(Max_r)^2, 0.8/(Max_p)^2, ...
                     100/(Max_ya)^2, 0.5/(Max_z_dot)^2, 10/(Max_r_dot)^2, ...
-                    10/(Max_p_dot^2), 1/(Max_ya_dot)^2, 1/(0.2)^2,1/0.000002^2, ...
-                    1/0.000002^2,1/0.2^2]);
+                    10/(Max_p_dot^2), 1/(Max_ya_dot)^2, 1/(0.2)^2,1/0.002^2, ...
+                    1/0.002^2,1/0.2^2]);
 R_lqi_reduced_a = [10/(Max_U)^2 0 0 0;
                  0 5/(Max_Mx)^2 0 0;
                  0 0 35/(Max_My)^2 0;
