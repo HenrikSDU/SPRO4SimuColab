@@ -239,8 +239,8 @@
         ;%
         ;% Auto data (Controller_implementation_B)
         ;%
-            section.nData     = 17;
-            section.data(17)  = dumData; %prealloc
+            section.nData     = 16;
+            section.data(16)  = dumData; %prealloc
 
                     ;% Controller_implementation_B.z
                     section.data(1).logicalSrcIdx = 0;
@@ -278,37 +278,33 @@
                     section.data(9).logicalSrcIdx = 8;
                     section.data(9).dtTransOffset = 24;
 
-                    ;% Controller_implementation_B.yaw
-                    section.data(10).logicalSrcIdx = 10;
+                    ;% Controller_implementation_B.roll
+                    section.data(10).logicalSrcIdx = 11;
                     section.data(10).dtTransOffset = 28;
 
-                    ;% Controller_implementation_B.roll
-                    section.data(11).logicalSrcIdx = 11;
+                    ;% Controller_implementation_B.pitch
+                    section.data(11).logicalSrcIdx = 12;
                     section.data(11).dtTransOffset = 29;
 
-                    ;% Controller_implementation_B.pitch
-                    section.data(12).logicalSrcIdx = 12;
+                    ;% Controller_implementation_B.height
+                    section.data(12).logicalSrcIdx = 13;
                     section.data(12).dtTransOffset = 30;
 
-                    ;% Controller_implementation_B.height
-                    section.data(13).logicalSrcIdx = 13;
+                    ;% Controller_implementation_B.In
+                    section.data(13).logicalSrcIdx = 14;
                     section.data(13).dtTransOffset = 31;
 
-                    ;% Controller_implementation_B.In
-                    section.data(14).logicalSrcIdx = 14;
+                    ;% Controller_implementation_B.MPU9250_o2
+                    section.data(14).logicalSrcIdx = 16;
                     section.data(14).dtTransOffset = 32;
 
-                    ;% Controller_implementation_B.MPU9250_o2
-                    section.data(15).logicalSrcIdx = 16;
-                    section.data(15).dtTransOffset = 33;
-
                     ;% Controller_implementation_B.Product2
-                    section.data(16).logicalSrcIdx = 20;
-                    section.data(16).dtTransOffset = 36;
+                    section.data(15).logicalSrcIdx = 20;
+                    section.data(15).dtTransOffset = 35;
 
                     ;% Controller_implementation_B.Product3
-                    section.data(17).logicalSrcIdx = 21;
-                    section.data(17).dtTransOffset = 44;
+                    section.data(16).logicalSrcIdx = 21;
+                    section.data(16).dtTransOffset = 43;
 
             nTotData = nTotData + section.nData;
             sigMap.sections(1) = section;
@@ -533,8 +529,8 @@
     ;%
 
 
-    targMap.checksum0 = 872755696;
-    targMap.checksum1 = 4005976953;
-    targMap.checksum2 = 990198975;
-    targMap.checksum3 = 537810445;
+    targMap.checksum0 = 1134403181;
+    targMap.checksum1 = 2949275120;
+    targMap.checksum2 = 3050332437;
+    targMap.checksum3 = 924216526;
 

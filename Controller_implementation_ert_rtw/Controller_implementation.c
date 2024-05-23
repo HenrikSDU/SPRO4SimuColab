@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.13
+ * Model version                  : 1.14
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 23 13:33:11 2024
+ * C/C++ source code generated on : Thu May 23 13:56:34 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -22,12 +22,11 @@
 #include "rtwtypes.h"
 #include "multiword_types.h"
 #include <math.h>
-#include "Controller_implementation_private.h"
 #include <string.h>
 #include <stddef.h>
 #include "rt_nonfinite.h"
+#include "Controller_implementation_private.h"
 #include "zero_crossing_types.h"
-#include "rt_defines.h"
 #include "Controller_implementation_dt.h"
 
 /* Block signals (default storage) */
@@ -995,42 +994,6 @@ void uMultiWordMul(const uint32_T u1[], int32_T n1, const uint32_T u2[], int32_T
 boolean_T sMultiWordGe(const uint32_T u1[], const uint32_T u2[], int32_T n)
 {
   return sMultiWordCmp(u1, u2, n) >= 0;
-}
-
-real_T rt_atan2d_snf(real_T u0, real_T u1)
-{
-  real_T y;
-  int32_T tmp;
-  int32_T tmp_0;
-  if (rtIsNaN(u0) || rtIsNaN(u1)) {
-    y = (rtNaN);
-  } else if (rtIsInf(u0) && rtIsInf(u1)) {
-    if (u0 > 0.0) {
-      tmp = 1;
-    } else {
-      tmp = -1;
-    }
-
-    if (u1 > 0.0) {
-      tmp_0 = 1;
-    } else {
-      tmp_0 = -1;
-    }
-
-    y = atan2(tmp, tmp_0);
-  } else if (u1 == 0.0) {
-    if (u0 > 0.0) {
-      y = RT_PI / 2.0;
-    } else if (u0 < 0.0) {
-      y = -(RT_PI / 2.0);
-    } else {
-      y = 0.0;
-    }
-  } else {
-    y = atan2(u0, u1);
-  }
-
-  return y;
 }
 
 static void bbblueBarometer_BMP_ReadRegiste(const
@@ -2392,39 +2355,21 @@ void Controller_implementation_step(void)
   Controller_implementation_B.roll = atan(Controller_implementation_B.roll);
 
   /* MATLAB Function: '<S7>/pitch' incorporates:
-   *  MATLAB Function: '<S7>/yaw'
    *  MATLABSystem: '<S7>/MPU9250'
    */
-  Controller_implementation_B.max_possible_rot_speed = sin
-    (Controller_implementation_B.roll);
-  Controller_implementation_B.pitch_tmp = cos(Controller_implementation_B.roll);
   Controller_implementation_B.pitch =
     -Controller_implementation_B.rtb_MPU9250_o1_c[0] /
-    (Controller_implementation_B.rtb_MPU9250_o1_c[1] *
-     Controller_implementation_B.max_possible_rot_speed +
-     Controller_implementation_B.rtb_MPU9250_o1_c[2] *
-     Controller_implementation_B.pitch_tmp);
+    (Controller_implementation_B.rtb_MPU9250_o1_c[1] * sin
+     (Controller_implementation_B.roll) +
+     Controller_implementation_B.rtb_MPU9250_o1_c[2] * cos
+     (Controller_implementation_B.roll));
   Controller_implementation_B.pitch = atan(Controller_implementation_B.pitch);
-
-  /* MATLAB Function: '<S7>/yaw' incorporates:
-   *  MATLABSystem: '<S7>/MPU9250'
-   * */
-  Controller_implementation_B.yaw = rt_atan2d_snf
-    (Controller_implementation_B.mdata[2] *
-     Controller_implementation_B.max_possible_rot_speed -
-     Controller_implementation_B.mdata[1] *
-     Controller_implementation_B.pitch_tmp, (Controller_implementation_B.mdata[1]
-      * Controller_implementation_B.max_possible_rot_speed +
-      Controller_implementation_B.mdata[2] *
-      Controller_implementation_B.pitch_tmp) * sin
-     (Controller_implementation_B.pitch) + Controller_implementation_B.mdata[0] *
-     cos(Controller_implementation_B.pitch));
 
   /* Reshape: '<S9>/Reshapey' */
   Controller_implementation_B.Reshapey[0] = Controller_implementation_B.z;
   Controller_implementation_B.Reshapey[1] = Controller_implementation_B.roll;
   Controller_implementation_B.Reshapey[2] = Controller_implementation_B.pitch;
-  Controller_implementation_B.Reshapey[3] = Controller_implementation_B.yaw;
+  Controller_implementation_B.Reshapey[3] = Controller_implementation_B.z;
   Controller_implementation_B.Reshapey[4] =
     Controller_implementation_B.MPU9250_o2[0];
   Controller_implementation_B.Reshapey[5] =
@@ -2543,18 +2488,18 @@ void Controller_implementation_step(void)
     Controller_implementation_P.KV_rating;
 
   /* Gain: '<S65>/Gain' */
-  Controller_implementation_B.pitch_tmp = Controller_implementation_B.Sum[1];
-  Controller_implementation_B.Sum_c = Controller_implementation_B.Sum[0];
-  Controller_implementation_B.Sum_b = Controller_implementation_B.Sum[2];
-  Controller_implementation_B.Sum_p = Controller_implementation_B.Sum[3];
+  Controller_implementation_B.Sum_c = Controller_implementation_B.Sum[1];
+  Controller_implementation_B.Sum_b = Controller_implementation_B.Sum[0];
+  Controller_implementation_B.Sum_p = Controller_implementation_B.Sum[2];
+  Controller_implementation_B.Sum_cv = Controller_implementation_B.Sum[3];
   for (i = 0; i < 4; i++) {
     Controller_implementation_B.rtb_DersiredMotorThrusts_k =
       ((Controller_implementation_P.K_mm[i + 4] *
-        Controller_implementation_B.pitch_tmp +
-        Controller_implementation_P.K_mm[i] * Controller_implementation_B.Sum_c)
-       + Controller_implementation_P.K_mm[i + 8] *
-       Controller_implementation_B.Sum_b) + Controller_implementation_P.K_mm[i +
-      12] * Controller_implementation_B.Sum_p;
+        Controller_implementation_B.Sum_c + Controller_implementation_P.K_mm[i] *
+        Controller_implementation_B.Sum_b) + Controller_implementation_P.K_mm[i
+       + 8] * Controller_implementation_B.Sum_p) +
+      Controller_implementation_P.K_mm[i + 12] *
+      Controller_implementation_B.Sum_cv;
 
     /* MATLAB Function: '<S65>/Calculate PWM' incorporates:
      *  Constant: '<S65>/Constant2'
@@ -2738,11 +2683,11 @@ void Controller_implementation_step(void)
    */
   Controller_implementation_B.max_possible_rot_speed = 0.70588235294117652 *
     Controller_implementation_B.PWMlimit[0];
-  Controller_implementation_B.pitch_tmp = 0.70588235294117652 *
-    Controller_implementation_B.PWMlimit[1];
   Controller_implementation_B.Sum_c = 0.70588235294117652 *
-    Controller_implementation_B.PWMlimit[2];
+    Controller_implementation_B.PWMlimit[1];
   Controller_implementation_B.Sum_b = 0.70588235294117652 *
+    Controller_implementation_B.PWMlimit[2];
+  Controller_implementation_B.Sum_p = 0.70588235294117652 *
     Controller_implementation_B.PWMlimit[3];
 
   /* Saturate: '<S3>/Servo limit' */
@@ -2763,23 +2708,6 @@ void Controller_implementation_step(void)
     (Controller_implementation_B.max_possible_rot_speed - 90.0) / 60.0);
 
   /* Saturate: '<S3>/Servo limit' */
-  if (Controller_implementation_B.pitch_tmp >
-      Controller_implementation_P.Servolimit_UpperSat) {
-    Controller_implementation_B.pitch_tmp =
-      Controller_implementation_P.Servolimit_UpperSat;
-  } else if (Controller_implementation_B.pitch_tmp <
-             Controller_implementation_P.Servolimit_LowerSat) {
-    Controller_implementation_B.pitch_tmp =
-      Controller_implementation_P.Servolimit_LowerSat;
-  }
-
-  /* MATLABSystem: '<S3>/Motor 2' incorporates:
-   *  Saturate: '<S3>/Servo limit'
-   */
-  rc_servo_send_pulse_normalized(2, (Controller_implementation_B.pitch_tmp -
-    90.0) / 60.0);
-
-  /* Saturate: '<S3>/Servo limit' */
   if (Controller_implementation_B.Sum_c >
       Controller_implementation_P.Servolimit_UpperSat) {
     Controller_implementation_B.Sum_c =
@@ -2790,10 +2718,10 @@ void Controller_implementation_step(void)
       Controller_implementation_P.Servolimit_LowerSat;
   }
 
-  /* MATLABSystem: '<S3>/Motor 3' incorporates:
+  /* MATLABSystem: '<S3>/Motor 2' incorporates:
    *  Saturate: '<S3>/Servo limit'
    */
-  rc_servo_send_pulse_normalized(3, (Controller_implementation_B.Sum_c - 90.0) /
+  rc_servo_send_pulse_normalized(2, (Controller_implementation_B.Sum_c - 90.0) /
     60.0);
 
   /* Saturate: '<S3>/Servo limit' */
@@ -2807,10 +2735,27 @@ void Controller_implementation_step(void)
       Controller_implementation_P.Servolimit_LowerSat;
   }
 
+  /* MATLABSystem: '<S3>/Motor 3' incorporates:
+   *  Saturate: '<S3>/Servo limit'
+   */
+  rc_servo_send_pulse_normalized(3, (Controller_implementation_B.Sum_b - 90.0) /
+    60.0);
+
+  /* Saturate: '<S3>/Servo limit' */
+  if (Controller_implementation_B.Sum_p >
+      Controller_implementation_P.Servolimit_UpperSat) {
+    Controller_implementation_B.Sum_p =
+      Controller_implementation_P.Servolimit_UpperSat;
+  } else if (Controller_implementation_B.Sum_p <
+             Controller_implementation_P.Servolimit_LowerSat) {
+    Controller_implementation_B.Sum_p =
+      Controller_implementation_P.Servolimit_LowerSat;
+  }
+
   /* MATLABSystem: '<S3>/Motor 4' incorporates:
    *  Saturate: '<S3>/Servo limit'
    */
-  rc_servo_send_pulse_normalized(4, (Controller_implementation_B.Sum_b - 90.0) /
+  rc_servo_send_pulse_normalized(4, (Controller_implementation_B.Sum_p - 90.0) /
     60.0);
 
   /* Gain: '<S4>/Gain' */
@@ -2874,29 +2819,27 @@ void Controller_implementation_step(void)
       Controller_implementation_DW.obj.pStatistic->ForgettingFactor;
   }
 
-  Controller_implementation_B.pitch_tmp =
-    Controller_implementation_DW.obj.pStatistic->pwN;
-  Controller_implementation_B.Sum_b =
-    Controller_implementation_DW.obj.pStatistic->pmN;
   Controller_implementation_B.Sum_c =
+    Controller_implementation_DW.obj.pStatistic->pwN;
+  Controller_implementation_B.Sum_p =
+    Controller_implementation_DW.obj.pStatistic->pmN;
+  Controller_implementation_B.Sum_b =
     Controller_implementation_DW.obj.pStatistic->plambda;
-  Controller_implementation_B.Sum_b = (1.0 - 1.0 /
-    Controller_implementation_B.pitch_tmp) * Controller_implementation_B.Sum_b +
-    1.0 / Controller_implementation_B.pitch_tmp *
+  Controller_implementation_B.Sum_p = (1.0 - 1.0 /
+    Controller_implementation_B.Sum_c) * Controller_implementation_B.Sum_p + 1.0
+    / Controller_implementation_B.Sum_c *
     Controller_implementation_B.max_possible_rot_speed;
   Controller_implementation_DW.obj.pStatistic->pwN =
-    Controller_implementation_B.Sum_c * Controller_implementation_B.pitch_tmp +
-    1.0;
+    Controller_implementation_B.Sum_b * Controller_implementation_B.Sum_c + 1.0;
   Controller_implementation_DW.obj.pStatistic->pmN =
-    Controller_implementation_B.Sum_b;
+    Controller_implementation_B.Sum_p;
 
   /* Step: '<S67>/Step3' */
   if (Controller_implementation_M->Timing.taskTime0 <
       Controller_implementation_P.Step3_Time) {
-    Controller_implementation_B.pitch_tmp = Controller_implementation_P.Step3_Y0;
+    Controller_implementation_B.Sum_c = Controller_implementation_P.Step3_Y0;
   } else {
-    Controller_implementation_B.pitch_tmp =
-      Controller_implementation_P.Step3_YFinal;
+    Controller_implementation_B.Sum_c = Controller_implementation_P.Step3_YFinal;
   }
 
   /* Outputs for Triggered SubSystem: '<S67>/Sample and Hold3' incorporates:
@@ -2904,14 +2847,14 @@ void Controller_implementation_step(void)
    */
   zcEvent = rt_ZCFcn(RISING_ZERO_CROSSING,
                      &Controller_implementati_PrevZCX.SampleandHold3_Trig_ZCE,
-                     (Controller_implementation_B.pitch_tmp));
+                     (Controller_implementation_B.Sum_c));
 
   /* End of Step: '<S67>/Step3' */
   if (zcEvent != NO_ZCEVENT) {
     /* SignalConversion generated from: '<S71>/In' incorporates:
      *  MATLABSystem: '<S67>/Moving Average'
      * */
-    Controller_implementation_B.In = Controller_implementation_B.Sum_b;
+    Controller_implementation_B.In = Controller_implementation_B.Sum_p;
     Controller_implementation_DW.SampleandHold3_SubsysRanBC = 4;
   }
 
@@ -2934,7 +2877,7 @@ void Controller_implementation_step(void)
     /* Product: '<S30>/B[k]*u[k]' incorporates:
      *  Constant: '<S9>/B'
      */
-    Controller_implementation_B.dv[i] = ((Controller_implementation_P.B_Value[i
+    Controller_implementation_B.dv1[i] = ((Controller_implementation_P.B_Value[i
       + 8] * Controller_implementation_B.Sum_o[1] +
       Controller_implementation_P.B_Value[i] *
       Controller_implementation_B.Sum_o[0]) +
@@ -2954,7 +2897,7 @@ void Controller_implementation_step(void)
         Controller_implementation_DW.MemoryX_DSTATE[i_0];
     }
 
-    Controller_implementation_B.dv1[i] =
+    Controller_implementation_B.dv[i] =
       Controller_implementation_B.max_possible_rot_speed;
 
     /* End of Product: '<S30>/A[k]*xhat[k|k-1]' */
@@ -2965,7 +2908,7 @@ void Controller_implementation_step(void)
    */
   for (i = 0; i < 8; i++) {
     Controller_implementation_DW.MemoryX_DSTATE[i] =
-      (Controller_implementation_B.dv[i] + Controller_implementation_B.dv1[i]) +
+      (Controller_implementation_B.dv1[i] + Controller_implementation_B.dv[i]) +
       Controller_implementation_B.Product3[i];
   }
 
@@ -2986,8 +2929,8 @@ void Controller_implementation_step(void)
      *  Sum: '<S2>/Subtract'
      */
     Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[i] +=
-      (Controller_implementation_B.max_possible_rot_speed -
-       Controller_implementation_P.Constant_Value_a[i]) *
+      (Controller_implementation_P.Constant_Value_a[i] -
+       Controller_implementation_B.max_possible_rot_speed) *
       Controller_implementation_P.DiscreteTimeIntegrator_gainval;
   }
 
@@ -3034,10 +2977,10 @@ void Controller_implementation_initialize(void)
   Controller_implementation_M->Timing.stepSize0 = 0.01;
 
   /* External mode info */
-  Controller_implementation_M->Sizes.checksums[0] = (872755696U);
-  Controller_implementation_M->Sizes.checksums[1] = (4005976953U);
-  Controller_implementation_M->Sizes.checksums[2] = (990198975U);
-  Controller_implementation_M->Sizes.checksums[3] = (537810445U);
+  Controller_implementation_M->Sizes.checksums[0] = (1134403181U);
+  Controller_implementation_M->Sizes.checksums[1] = (2949275120U);
+  Controller_implementation_M->Sizes.checksums[2] = (3050332437U);
+  Controller_implementation_M->Sizes.checksums[3] = (924216526U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;

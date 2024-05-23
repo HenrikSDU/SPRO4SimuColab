@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.13
+ * Model version                  : 1.14
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 23 13:33:11 2024
+ * C/C++ source code generated on : Thu May 23 13:56:34 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -34,7 +34,6 @@
 #include "Controller_implementation_types.h"
 #include "multiword_types.h"
 #include "rt_zcfcn.h"
-#include "rtGetNaN.h"
 #include <math.h>
 #include <float.h>
 #include <string.h>
@@ -85,8 +84,8 @@
 
 /* Block signals (default storage) */
 typedef struct {
-  real_T dv[8];
   real_T dv1[8];
+  real_T dv[8];
   real_T Reshapey[7];                  /* '<S9>/Reshapey' */
   real_T rtb_Reshapey_m[7];
   real_T req_rotorspeed[4];
@@ -116,7 +115,6 @@ typedef struct {
   real_T Gain_n;                       /* '<S5>/Gain' */
   real_T sensor;                       /* '<S67>/Add' */
   real_T U[4];                         /* '<S8>/MATLAB Function' */
-  real_T yaw;                          /* '<S7>/yaw' */
   real_T roll;                         /* '<S7>/roll ' */
   real_T pitch;                        /* '<S7>/pitch' */
   real_T height;                       /* '<S67>/height' */
@@ -125,11 +123,11 @@ typedef struct {
   real_T Product2[8];                  /* '<S63>/Product2' */
   real_T Product3[8];                  /* '<S61>/Product3' */
   real_T max_possible_rot_speed;
-  real_T pitch_tmp;
   real_T rtb_DersiredMotorThrusts_k;
   real_T Sum_c;
   real_T Sum_b;
   real_T Sum_p;
+  real_T Sum_cv;
   real_T x_unsgn;
   real_T yd;
   uint32_T ux[2];

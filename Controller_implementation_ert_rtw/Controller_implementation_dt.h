@@ -7,9 +7,9 @@
  *
  * Code generation for model "Controller_implementation".
  *
- * Model version              : 1.13
+ * Model version              : 1.14
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Thu May 23 13:33:11 2024
+ * C source code generated on : Thu May 23 13:56:34 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -75,7 +75,7 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&Controller_implementation_B.z), 0, 0, 52 }
+  { (char_T *)(&Controller_implementation_B.z), 0, 0, 51 }
   ,
 
   { (char_T *)(&Controller_implementation_DW.obj), 18, 0, 1 },
