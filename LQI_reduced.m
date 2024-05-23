@@ -105,13 +105,13 @@ controlability = ctrb(A_e_r_a,B_e_r_a);
 rank(controlability)
 
 Q_lqi_reduced_a = diag([0.9/(Max_z)^2, 1/(Max_r)^2, 0.8/(Max_p)^2, ...
-                    100/(Max_ya)^2, 0.5/(Max_z_dot)^2, 10/(Max_r_dot)^2, ...
+                    1/(Max_ya)^2, 0.5/(Max_z_dot)^2, 10/(Max_r_dot)^2, ...
                     10/(Max_p_dot^2), 1/(Max_ya_dot)^2, 1/(0.2)^2,1/0.002^2, ...
                     1/0.002^2,1/0.2^2]);
 R_lqi_reduced_a = [1/(Max_U)^2 0 0 0;
-                 0 1/(0.1)^2 0 0;
-                 0 0 1/(0.1)^2 0;
-                 0 0 0 1/(0.1)^2;];
+                 0 1/(0.002)^2 0 0;
+                 0 0 1/(0.002)^2 0;
+                 0 0 0 1/(0.002)^2;];
 
 [K_lqi_reduced_a,~,~] = lqr(sys_lqi_reduced_a,Q_lqi_reduced_a,R_lqi_reduced_a);
 
