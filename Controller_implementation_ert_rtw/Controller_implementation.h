@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.14
+ * Model version                  : 1.15
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 23 13:56:34 2024
+ * C/C++ source code generated on : Thu May 23 20:25:46 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -34,6 +34,7 @@
 #include "Controller_implementation_types.h"
 #include "multiword_types.h"
 #include "rt_zcfcn.h"
+#include "rtGetNaN.h"
 #include <math.h>
 #include <float.h>
 #include <string.h>
@@ -88,7 +89,6 @@ typedef struct {
   real_T dv[8];
   real_T Reshapey[7];                  /* '<S9>/Reshapey' */
   real_T rtb_Reshapey_m[7];
-  real_T req_rotorspeed[4];
   real_T DersiredMotorThrusts[4];      /* '<S65>/Gain' */
   uint8_T b_output[24];
   real_T rtb_MPU9250_o1_c[3];
@@ -107,27 +107,26 @@ typedef struct {
   int96m_T r11;
   int96m_T r12;
   real_T z;                            /* '<S7>/Constant' */
+  real_T Gain[3];                      /* '<S68>/Gain' */
   real_T Reshapexhat[8];               /* '<S9>/Reshapexhat' */
   real_T Sum[4];                       /* '<S2>/Sum' */
   real_T PWMlimit[4];                  /* '<S3>/PWM limit' */
-  real_T Sum_o[4];                     /* '<S8>/Sum' */
-  real_T Gain;                         /* '<S4>/Gain' */
+  real_T Gain_i;                       /* '<S4>/Gain' */
   real_T Gain_n;                       /* '<S5>/Gain' */
   real_T sensor;                       /* '<S67>/Add' */
-  real_T U[4];                         /* '<S8>/MATLAB Function' */
+  real_T yaw;                          /* '<S7>/yaw' */
   real_T roll;                         /* '<S7>/roll ' */
   real_T pitch;                        /* '<S7>/pitch' */
   real_T height;                       /* '<S67>/height' */
-  real_T In;                           /* '<S71>/In' */
-  real_T MPU9250_o2[3];                /* '<S7>/MPU9250' */
+  real_T In;                           /* '<S72>/In' */
   real_T Product2[8];                  /* '<S63>/Product2' */
   real_T Product3[8];                  /* '<S61>/Product3' */
   real_T max_possible_rot_speed;
-  real_T rtb_DersiredMotorThrusts_k;
+  real_T pitch_tmp;
+  real_T Sum_k;
   real_T Sum_c;
   real_T Sum_b;
   real_T Sum_p;
-  real_T Sum_cv;
   real_T x_unsgn;
   real_T yd;
   uint32_T ux[2];
@@ -195,15 +194,15 @@ typedef struct {
 
   struct {
     void *LoggedData;
-  } SystemUMonitor_PWORK;              /* '<Root>/System U Monitor' */
-
-  struct {
-    void *LoggedData;
-  } TrackPWM_PWORK;                    /* '<S3>/Track PWM' */
+  } Scope2_PWORK;                      /* '<Root>/Scope2' */
 
   struct {
     void *LoggedData;
   } DesiredU_PWORK;                    /* '<Root>/Desired U' */
+
+  struct {
+    void *LoggedData;
+  } TrackPWM_PWORK;                    /* '<S3>/Track PWM' */
 
   struct {
     void *LoggedData[7];
@@ -220,6 +219,10 @@ typedef struct {
   struct {
     void *LoggedData[3];
   } Scope1_PWORK_m;                    /* '<S67>/Scope1' */
+
+  struct {
+    void *LoggedData;
+  } SystemUMonitor_PWORK;              /* '<Root>/System U Monitor' */
 
   struct {
     void *LoggedData;
@@ -246,7 +249,7 @@ struct P_Controller_implementation_T_ {
   real_T KV_rating;                    /* Variable: KV_rating
                                         * Referenced by:
                                         *   '<S65>/Constant1'
-                                        *   '<S73>/Constant'
+                                        *   '<S74>/Constant'
                                         */
   real_T K_mm[16];                     /* Variable: K_mm
                                         * Referenced by: '<S65>/Gain'
@@ -265,18 +268,18 @@ struct P_Controller_implementation_T_ {
   real_T battery_voltage;              /* Variable: battery_voltage
                                         * Referenced by:
                                         *   '<S65>/Constant'
-                                        *   '<S73>/Battery Voltage'
+                                        *   '<S74>/Battery Voltage'
                                         */
   real_T dis;                          /* Variable: dis
                                         * Referenced by: '<S8>/Constant'
                                         */
   real_T drag_co;                      /* Variable: drag_co
-                                        * Referenced by: '<S73>/Gain1'
+                                        * Referenced by: '<S74>/Gain1'
                                         */
   real_T lift_co;                      /* Variable: lift_co
                                         * Referenced by:
                                         *   '<S65>/Constant2'
-                                        *   '<S73>/Gain'
+                                        *   '<S74>/Gain'
                                         */
   real_T Lykyhatkk1_Y0;                /* Expression: 0
                                         * Referenced by: '<S61>/L*(y[k]-yhat[k|k-1])'
@@ -288,7 +291,7 @@ struct P_Controller_implementation_T_ {
                                          * Referenced by: '<S67>/Moving Average'
                                          */
   real_T _Y0;                          /* Expression: initCond
-                                        * Referenced by: '<S71>/ '
+                                        * Referenced by: '<S72>/ '
                                         */
   real_T A_Value[64];                  /* Expression: pInitialization.A
                                         * Referenced by: '<S9>/A'
@@ -311,6 +314,9 @@ struct P_Controller_implementation_T_ {
   real_T Constant_Value;               /* Expression: 0
                                         * Referenced by: '<S7>/Constant'
                                         */
+  real_T Gain_Gain;                    /* Expression: 180/pi
+                                        * Referenced by: '<S68>/Gain'
+                                        */
   real_T X0_Value[8];                  /* Expression: pInitialization.X0
                                         * Referenced by: '<S9>/X0'
                                         */
@@ -327,22 +333,16 @@ struct P_Controller_implementation_T_ {
   real_T PWMlimit_LowerSat;            /* Expression: 0
                                         * Referenced by: '<S3>/PWM limit'
                                         */
-  real_T SignConvention_Gain[4];       /* Expression: [-1;1;-1;1]
-                                        * Referenced by: '<S73>/Sign Convention'
-                                        */
-  real_T Constant1_Value[4];           /* Expression: [-m*g;0;0;0]
-                                        * Referenced by: '<S8>/Constant1'
-                                        */
   real_T Servolimit_UpperSat;          /* Expression: 180
                                         * Referenced by: '<S3>/Servo limit'
                                         */
   real_T Servolimit_LowerSat;          /* Expression: 0
                                         * Referenced by: '<S3>/Servo limit'
                                         */
-  real_T Constant_Value_a[4];          /* Expression: [0;0;0;0]
+  real_T Constant_Value_a[4];          /* Expression: [0;0;0;0;]
                                         * Referenced by: '<S6>/Constant'
                                         */
-  real_T Gain_Gain;                    /* Expression: 180/pi
+  real_T Gain_Gain_a;                  /* Expression: 180/pi
                                         * Referenced by: '<S4>/Gain'
                                         */
   real_T Gain_Gain_j;                  /* Expression: 180/pi
@@ -350,6 +350,9 @@ struct P_Controller_implementation_T_ {
                                         */
   real_T CovarianceZ_Value[64];        /* Expression: pInitialization.Z
                                         * Referenced by: '<S10>/CovarianceZ'
+                                        */
+  real_T SignConvention_Gain[4];       /* Expression: [1;-1;-1;1]
+                                        * Referenced by: '<S74>/Sign Convention'
                                         */
   real_T Step3_Time;                   /* Expression: 5
                                         * Referenced by: '<S67>/Step3'
@@ -459,6 +462,8 @@ extern volatile boolean_T runModel;
  * Block '<S51>/CheckSignalProperties' : Unused code path elimination
  * Block '<S52>/CheckSignalProperties' : Unused code path elimination
  * Block '<Root>/Product' : Unused code path elimination
+ * Block '<S8>/Constant1' : Unused code path elimination
+ * Block '<S8>/Sum' : Unused code path elimination
  * Block '<S53>/Conversion' : Eliminate redundant data type conversion
  * Block '<S54>/Conversion' : Eliminate redundant data type conversion
  * Block '<S56>/Conversion' : Eliminate redundant data type conversion
@@ -483,7 +488,7 @@ extern volatile boolean_T runModel;
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'Controller_implementation'
- * '<S1>'   : 'Controller_implementation/Kalman Filter'
+ * '<S1>'   : 'Controller_implementation/Kalman'
  * '<S2>'   : 'Controller_implementation/LQI_reduced_a'
  * '<S3>'   : 'Controller_implementation/Motor Control'
  * '<S4>'   : 'Controller_implementation/Radians to Degrees'
@@ -491,73 +496,74 @@ extern volatile boolean_T runModel;
  * '<S6>'   : 'Controller_implementation/Reference Generator'
  * '<S7>'   : 'Controller_implementation/Sensor Readings'
  * '<S8>'   : 'Controller_implementation/System U estimator'
- * '<S9>'   : 'Controller_implementation/Kalman Filter/Kalman Filter'
- * '<S10>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CalculatePL'
- * '<S11>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CalculateYhat'
- * '<S12>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CovarianceOutputConfigurator'
- * '<S13>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionA'
- * '<S14>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionB'
- * '<S15>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionC'
- * '<S16>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionD'
- * '<S17>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionEnable'
- * '<S18>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionG'
- * '<S19>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionH'
- * '<S20>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionN'
- * '<S21>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionP'
- * '<S22>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionP0'
- * '<S23>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionQ'
- * '<S24>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionR'
- * '<S25>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionReset'
- * '<S26>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionX'
- * '<S27>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionX0'
- * '<S28>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/DataTypeConversionu'
- * '<S29>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/MemoryP'
- * '<S30>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/Observer'
- * '<S31>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/ReducedQRN'
- * '<S32>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/Reset'
- * '<S33>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/Reshapeyhat'
- * '<S34>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/ScalarExpansionP0'
- * '<S35>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/ScalarExpansionQ'
- * '<S36>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/ScalarExpansionR'
- * '<S37>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/UseCurrentEstimator'
- * '<S38>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkA'
- * '<S39>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkB'
- * '<S40>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkC'
- * '<S41>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkD'
- * '<S42>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkEnable'
- * '<S43>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkG'
- * '<S44>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkH'
- * '<S45>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkN'
- * '<S46>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkP0'
- * '<S47>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkQ'
- * '<S48>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkR'
- * '<S49>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkReset'
- * '<S50>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checkX0'
- * '<S51>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checku'
- * '<S52>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/checky'
- * '<S53>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CalculatePL/DataTypeConversionL'
- * '<S54>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CalculatePL/DataTypeConversionM'
- * '<S55>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CalculatePL/DataTypeConversionP'
- * '<S56>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CalculatePL/DataTypeConversionZ'
- * '<S57>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CalculatePL/Ground'
- * '<S58>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CalculateYhat/Ground'
- * '<S59>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CovarianceOutputConfigurator/decideOutput'
- * '<S60>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/CovarianceOutputConfigurator/decideOutput/SqrtUsedFcn'
- * '<S61>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/Observer/MeasurementUpdate'
- * '<S62>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/ReducedQRN/Ground'
- * '<S63>'  : 'Controller_implementation/Kalman Filter/Kalman Filter/UseCurrentEstimator/Enabled Subsystem'
+ * '<S9>'   : 'Controller_implementation/Kalman/Kalman Filter'
+ * '<S10>'  : 'Controller_implementation/Kalman/Kalman Filter/CalculatePL'
+ * '<S11>'  : 'Controller_implementation/Kalman/Kalman Filter/CalculateYhat'
+ * '<S12>'  : 'Controller_implementation/Kalman/Kalman Filter/CovarianceOutputConfigurator'
+ * '<S13>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionA'
+ * '<S14>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionB'
+ * '<S15>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionC'
+ * '<S16>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionD'
+ * '<S17>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionEnable'
+ * '<S18>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionG'
+ * '<S19>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionH'
+ * '<S20>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionN'
+ * '<S21>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionP'
+ * '<S22>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionP0'
+ * '<S23>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionQ'
+ * '<S24>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionR'
+ * '<S25>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionReset'
+ * '<S26>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionX'
+ * '<S27>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionX0'
+ * '<S28>'  : 'Controller_implementation/Kalman/Kalman Filter/DataTypeConversionu'
+ * '<S29>'  : 'Controller_implementation/Kalman/Kalman Filter/MemoryP'
+ * '<S30>'  : 'Controller_implementation/Kalman/Kalman Filter/Observer'
+ * '<S31>'  : 'Controller_implementation/Kalman/Kalman Filter/ReducedQRN'
+ * '<S32>'  : 'Controller_implementation/Kalman/Kalman Filter/Reset'
+ * '<S33>'  : 'Controller_implementation/Kalman/Kalman Filter/Reshapeyhat'
+ * '<S34>'  : 'Controller_implementation/Kalman/Kalman Filter/ScalarExpansionP0'
+ * '<S35>'  : 'Controller_implementation/Kalman/Kalman Filter/ScalarExpansionQ'
+ * '<S36>'  : 'Controller_implementation/Kalman/Kalman Filter/ScalarExpansionR'
+ * '<S37>'  : 'Controller_implementation/Kalman/Kalman Filter/UseCurrentEstimator'
+ * '<S38>'  : 'Controller_implementation/Kalman/Kalman Filter/checkA'
+ * '<S39>'  : 'Controller_implementation/Kalman/Kalman Filter/checkB'
+ * '<S40>'  : 'Controller_implementation/Kalman/Kalman Filter/checkC'
+ * '<S41>'  : 'Controller_implementation/Kalman/Kalman Filter/checkD'
+ * '<S42>'  : 'Controller_implementation/Kalman/Kalman Filter/checkEnable'
+ * '<S43>'  : 'Controller_implementation/Kalman/Kalman Filter/checkG'
+ * '<S44>'  : 'Controller_implementation/Kalman/Kalman Filter/checkH'
+ * '<S45>'  : 'Controller_implementation/Kalman/Kalman Filter/checkN'
+ * '<S46>'  : 'Controller_implementation/Kalman/Kalman Filter/checkP0'
+ * '<S47>'  : 'Controller_implementation/Kalman/Kalman Filter/checkQ'
+ * '<S48>'  : 'Controller_implementation/Kalman/Kalman Filter/checkR'
+ * '<S49>'  : 'Controller_implementation/Kalman/Kalman Filter/checkReset'
+ * '<S50>'  : 'Controller_implementation/Kalman/Kalman Filter/checkX0'
+ * '<S51>'  : 'Controller_implementation/Kalman/Kalman Filter/checku'
+ * '<S52>'  : 'Controller_implementation/Kalman/Kalman Filter/checky'
+ * '<S53>'  : 'Controller_implementation/Kalman/Kalman Filter/CalculatePL/DataTypeConversionL'
+ * '<S54>'  : 'Controller_implementation/Kalman/Kalman Filter/CalculatePL/DataTypeConversionM'
+ * '<S55>'  : 'Controller_implementation/Kalman/Kalman Filter/CalculatePL/DataTypeConversionP'
+ * '<S56>'  : 'Controller_implementation/Kalman/Kalman Filter/CalculatePL/DataTypeConversionZ'
+ * '<S57>'  : 'Controller_implementation/Kalman/Kalman Filter/CalculatePL/Ground'
+ * '<S58>'  : 'Controller_implementation/Kalman/Kalman Filter/CalculateYhat/Ground'
+ * '<S59>'  : 'Controller_implementation/Kalman/Kalman Filter/CovarianceOutputConfigurator/decideOutput'
+ * '<S60>'  : 'Controller_implementation/Kalman/Kalman Filter/CovarianceOutputConfigurator/decideOutput/SqrtUsedFcn'
+ * '<S61>'  : 'Controller_implementation/Kalman/Kalman Filter/Observer/MeasurementUpdate'
+ * '<S62>'  : 'Controller_implementation/Kalman/Kalman Filter/ReducedQRN/Ground'
+ * '<S63>'  : 'Controller_implementation/Kalman/Kalman Filter/UseCurrentEstimator/Enabled Subsystem'
  * '<S64>'  : 'Controller_implementation/Motor Control/MATLAB Function'
  * '<S65>'  : 'Controller_implementation/Motor Control/Motor Mixing Algorithm'
  * '<S66>'  : 'Controller_implementation/Motor Control/Motor Mixing Algorithm/Calculate PWM'
  * '<S67>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude'
- * '<S68>'  : 'Controller_implementation/Sensor Readings/pitch'
- * '<S69>'  : 'Controller_implementation/Sensor Readings/roll '
- * '<S70>'  : 'Controller_implementation/Sensor Readings/yaw'
- * '<S71>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude/Sample and Hold3'
- * '<S72>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude/height'
- * '<S73>'  : 'Controller_implementation/System U estimator/Actuators'
- * '<S74>'  : 'Controller_implementation/System U estimator/MATLAB Function'
- * '<S75>'  : 'Controller_implementation/System U estimator/Actuators/MATLAB Function'
+ * '<S68>'  : 'Controller_implementation/Sensor Readings/Radians to Degrees'
+ * '<S69>'  : 'Controller_implementation/Sensor Readings/pitch'
+ * '<S70>'  : 'Controller_implementation/Sensor Readings/roll '
+ * '<S71>'  : 'Controller_implementation/Sensor Readings/yaw'
+ * '<S72>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude/Sample and Hold3'
+ * '<S73>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude/height'
+ * '<S74>'  : 'Controller_implementation/System U estimator/Actuators'
+ * '<S75>'  : 'Controller_implementation/System U estimator/MATLAB Function'
+ * '<S76>'  : 'Controller_implementation/System U estimator/Actuators/MATLAB Function'
  */
 #endif                                 /* Controller_implementation_h_ */
 
