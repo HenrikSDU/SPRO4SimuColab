@@ -9,7 +9,7 @@
  *
  * Model version              : 1.0
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Mon May 20 14:26:47 2024
+ * C source code generated on : Fri May 24 17:26:55 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -36,7 +36,7 @@ static uint_T rtDataTypeSizes[] = {
   sizeof(action_T),
   2*sizeof(uint32_T),
   sizeof(int32_T),
-  sizeof(beagleboneblue_bbblueMPU9250__T),
+  sizeof(beagleboneblue_bbblueServo_un_T),
   sizeof(uint_T),
   sizeof(char_T),
   sizeof(uchar_T),
@@ -60,7 +60,7 @@ static const char_T * rtDataTypeNames[] = {
   "action_T",
   "timer_uint32_pair_T",
   "physical_connection",
-  "beagleboneblue_bbblueMPU9250__T",
+  "beagleboneblue_bbblueServo_un_T",
   "uint_T",
   "char_T",
   "uchar_T",
@@ -69,23 +69,18 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&untitled_B.Gain), 0, 0, 4 }
-  ,
-
-  { (char_T *)(&untitled_DW.obj), 15, 0, 1 },
-
-  { (char_T *)(&untitled_DW.Scope1_PWORK.LoggedData[0]), 11, 0, 4 }
+  { (char_T *)(&untitled_DW.obj), 15, 0, 1 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  3U,
+  1U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&untitled_P.MPU9250_SampleTime), 0, 0, 2 }
+  { (char_T *)(&untitled_P.Constant_Value), 0, 0, 1 }
 };
 
 /* data type transition table for Parameters structure */

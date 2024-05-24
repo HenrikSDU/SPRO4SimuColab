@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Mon May 20 14:26:47 2024
+ * C/C++ source code generated on : Fri May 24 17:26:55 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -18,14 +18,8 @@
  */
 
 #include "untitled.h"
-#include "untitled_types.h"
-#include <math.h>
-#include "rtwtypes.h"
 #include "untitled_private.h"
 #include "untitled_dt.h"
-
-/* Block signals (default storage) */
-B_untitled_T untitled_B;
 
 /* Block states (default storage) */
 DW_untitled_T untitled_DW;
@@ -34,72 +28,23 @@ DW_untitled_T untitled_DW;
 static RT_MODEL_untitled_T untitled_M_;
 RT_MODEL_untitled_T *const untitled_M = &untitled_M_;
 
-/* Forward declaration for local functions */
-static void untitled_SystemCore_setup(beagleboneblue_bbblueMPU9250__T *obj);
-static void untitled_SystemCore_setup(beagleboneblue_bbblueMPU9250__T *obj)
-{
-  /* Start for MATLABSystem: '<Root>/MPU9250' */
-  obj->isInitialized = 1;
-  MW_IMU_DMP_isAccel_Calibrated();
-  MW_IMU_DMP_isGyro_Calibrated();
-  MW_IMU_DMP_isMag_Calibrated();
-
-  /* Start for MATLABSystem: '<Root>/MPU9250' */
-  obj->i2cObjmpu.MW_I2C_HANDLE = MW_I2C_Open(2, MW_I2C_MASTER);
-  obj->i2cObjmpu.BusSpeed = 100000U;
-  MW_I2C_SetBusSpeed(obj->i2cObjmpu.MW_I2C_HANDLE, obj->i2cObjmpu.BusSpeed);
-  obj->i2cObjak8963.MW_I2C_HANDLE = MW_I2C_Open(2, MW_I2C_MASTER);
-  obj->i2cObjak8963.BusSpeed = 100000U;
-  MW_I2C_SetBusSpeed(obj->i2cObjak8963.MW_I2C_HANDLE, obj->i2cObjak8963.BusSpeed);
-  MW_Init_IMU_DMP(200);
-  obj->TunablePropsChanged = false;
-}
-
 /* Model step function */
 void untitled_step(void)
 {
-  real_T mdata[3];
-
-  /* MATLABSystem: '<Root>/MPU9250' */
-  if (untitled_DW.obj.SampleTime != untitled_P.MPU9250_SampleTime) {
-    untitled_DW.obj.SampleTime = untitled_P.MPU9250_SampleTime;
-  }
-
-  if (untitled_DW.obj.TunablePropsChanged) {
-    untitled_DW.obj.TunablePropsChanged = false;
-  }
-
-  MW_Read_Accel(&mdata[0]);
-  mdata[0] = 0.0;
-  mdata[1] = 0.0;
-  mdata[2] = 0.0;
-  MW_Read_Gyro(&mdata[0]);
-  mdata[0] = 0.0;
-  mdata[1] = 0.0;
-  mdata[2] = 0.0;
-  MW_Read_Mag(&mdata[0]);
-
-  /* MATLABSystem: '<Root>/MPU9250' */
-  untitled_B.MPU9250_o3[0] = mdata[0];
-  untitled_B.MPU9250_o3[1] = mdata[1];
-  untitled_B.MPU9250_o3[2] = mdata[2];
-
-  /* Gain: '<S2>/Gain' incorporates:
-   *  MATLAB Function: '<Root>/MATLAB Function'
-   *  MATLABSystem: '<Root>/MPU9250'
+  /* MATLABSystem: '<Root>/Servo Motor' incorporates:
+   *  Constant: '<Root>/Constant'
    */
-  untitled_B.Gain = fabs(atan(untitled_B.MPU9250_o3[1] / untitled_B.MPU9250_o3[0]))
-    * untitled_P.Gain_Gain;
+  rc_servo_send_pulse_normalized(1, (untitled_P.Constant_Value - 90.0) / 60.0);
 
   /* External mode */
   rtExtModeUploadCheckTrigger(1);
 
-  {                                    /* Sample time: [0.1s, 0.0s] */
+  {                                    /* Sample time: [0.002s, 0.0s] */
     rtExtModeUpload(0, (real_T)untitled_M->Timing.taskTime0);
   }
 
   /* signal main to stop simulation */
-  {                                    /* Sample time: [0.1s, 0.0s] */
+  {                                    /* Sample time: [0.002s, 0.0s] */
     if ((rtmGetTFinal(untitled_M)!=-1) &&
         !((rtmGetTFinal(untitled_M)-untitled_M->Timing.taskTime0) >
           untitled_M->Timing.taskTime0 * (DBL_EPSILON))) {
@@ -126,23 +71,22 @@ void untitled_initialize(void)
 {
   /* Registration code */
   rtmSetTFinal(untitled_M, -1);
-  untitled_M->Timing.stepSize0 = 0.1;
+  untitled_M->Timing.stepSize0 = 0.002;
 
   /* External mode info */
-  untitled_M->Sizes.checksums[0] = (1117120442U);
-  untitled_M->Sizes.checksums[1] = (994978541U);
-  untitled_M->Sizes.checksums[2] = (3088299259U);
-  untitled_M->Sizes.checksums[3] = (2849404771U);
+  untitled_M->Sizes.checksums[0] = (580570508U);
+  untitled_M->Sizes.checksums[1] = (474436775U);
+  untitled_M->Sizes.checksums[2] = (541021459U);
+  untitled_M->Sizes.checksums[3] = (2622090879U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
     static RTWExtModeInfo rt_ExtModeInfo;
-    static const sysRanDType *systemRan[3];
+    static const sysRanDType *systemRan[2];
     untitled_M->extModeInfo = (&rt_ExtModeInfo);
     rteiSetSubSystemActiveVectorAddresses(&rt_ExtModeInfo, systemRan);
     systemRan[0] = &rtAlwaysEnabled;
     systemRan[1] = &rtAlwaysEnabled;
-    systemRan[2] = &rtAlwaysEnabled;
     rteiSetModelMappingInfoPtr(untitled_M->extModeInfo,
       &untitled_M->SpecialInfo.mappingInfo);
     rteiSetChecksumsPtr(untitled_M->extModeInfo, untitled_M->Sizes.checksums);
@@ -166,42 +110,25 @@ void untitled_initialize(void)
     dtInfo.PTransTable = &rtPTransTable;
   }
 
-  /* Start for MATLABSystem: '<Root>/MPU9250' */
-  untitled_DW.obj.isInitialized = 0;
-  untitled_DW.obj.i2cObjmpu.DefaultMaximumBusSpeedInHz = 400000.0;
-  untitled_DW.obj.i2cObjmpu.isInitialized = 0;
-  untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted = false;
-  untitled_DW.obj.i2cObjak8963.DefaultMaximumBusSpeedInHz = 400000.0;
-  untitled_DW.obj.i2cObjak8963.isInitialized = 0;
-  untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted = false;
+  /* Start for MATLABSystem: '<Root>/Servo Motor' */
   untitled_DW.obj.matlabCodegenIsDeleted = false;
-  untitled_DW.obj.SampleTime = untitled_P.MPU9250_SampleTime;
-  untitled_SystemCore_setup(&untitled_DW.obj);
+  untitled_DW.obj.isInitialized = 1;
+  untitled_DW.obj.isSetupComplete = true;
 }
 
 /* Model terminate function */
 void untitled_terminate(void)
 {
-  /* Terminate for MATLABSystem: '<Root>/MPU9250' */
+  /* Terminate for MATLABSystem: '<Root>/Servo Motor' */
   if (!untitled_DW.obj.matlabCodegenIsDeleted) {
     untitled_DW.obj.matlabCodegenIsDeleted = true;
-  }
-
-  if (!untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted) {
-    untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted = true;
-    if (untitled_DW.obj.i2cObjak8963.isInitialized == 1) {
-      untitled_DW.obj.i2cObjak8963.isInitialized = 2;
+    if ((untitled_DW.obj.isInitialized == 1) && untitled_DW.obj.isSetupComplete)
+    {
+      rc_servo_send_pulse_normalized(1, 0.0);
     }
   }
 
-  if (!untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted) {
-    untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted = true;
-    if (untitled_DW.obj.i2cObjmpu.isInitialized == 1) {
-      untitled_DW.obj.i2cObjmpu.isInitialized = 2;
-    }
-  }
-
-  /* End of Terminate for MATLABSystem: '<Root>/MPU9250' */
+  /* End of Terminate for MATLABSystem: '<Root>/Servo Motor' */
 }
 
 /*

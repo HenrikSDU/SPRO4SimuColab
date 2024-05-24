@@ -7,9 +7,9 @@
  *
  * Code generation for model "DroneModel".
  *
- * Model version              : 3.13
+ * Model version              : 3.25
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Mon May 13 16:34:50 2024
+ * C source code generated on : Fri May 24 17:06:10 2024
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -20,6 +20,25 @@
 
 #ifndef DroneModel_types_h_
 #define DroneModel_types_h_
+#include "rtwtypes.h"
+#ifndef struct_tag_VIgeb4UfEy1UvclkadFbY
+#define struct_tag_VIgeb4UfEy1UvclkadFbY
+
+struct tag_VIgeb4UfEy1UvclkadFbY
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  boolean_T isSetupComplete;
+};
+
+#endif                                 /* struct_tag_VIgeb4UfEy1UvclkadFbY */
+
+#ifndef typedef_beagleboneblue_bbblueServo_Dr_T
+#define typedef_beagleboneblue_bbblueServo_Dr_T
+
+typedef struct tag_VIgeb4UfEy1UvclkadFbY beagleboneblue_bbblueServo_Dr_T;
+
+#endif                             /* typedef_beagleboneblue_bbblueServo_Dr_T */
 
 /* Parameters (default storage) */
 typedef struct P_DroneModel_T_ P_DroneModel_T;

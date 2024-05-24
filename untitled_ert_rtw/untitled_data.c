@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Mon May 20 14:26:47 2024
+ * C/C++ source code generated on : Fri May 24 17:26:55 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -21,15 +21,10 @@
 
 /* Block parameters (default storage) */
 P_untitled_T untitled_P = {
-  /* Expression: 0.1
-   * Referenced by: '<Root>/MPU9250'
+  /* Expression: 0
+   * Referenced by: '<Root>/Constant'
    */
-  0.1,
-
-  /* Expression: 180/pi
-   * Referenced by: '<S2>/Gain'
-   */
-  57.295779513082323
+  0.0
 };
 
 /*
