@@ -7,9 +7,9 @@
  *
  * Code generation for model "DroneModel".
  *
- * Model version              : 3.13
+ * Model version              : 3.25
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Mon May 13 16:34:50 2024
+ * C source code generated on : Fri May 24 20:45:04 2024
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -37,6 +37,7 @@ static uint_T rtDataTypeSizes[] = {
   sizeof(action_T),
   2*sizeof(uint32_T),
   sizeof(int32_T),
+  sizeof(beagleboneblue_bbblueServo_Dr_T),
   sizeof(uint_T),
   sizeof(char_T),
   sizeof(uchar_T),
@@ -60,6 +61,7 @@ static const char_T * rtDataTypeNames[] = {
   "action_T",
   "timer_uint32_pair_T",
   "physical_connection",
+  "beagleboneblue_bbblueServo_Dr_T",
   "uint_T",
   "char_T",
   "uchar_T",
@@ -68,10 +70,9 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&DroneModel_B.Constant), 0, 0, 1 }
-  ,
+  { (char_T *)(&DroneModel_DW.obj), 15, 0, 1 },
 
-  { (char_T *)(&DroneModel_DW.Scope_PWORK.LoggedData), 11, 0, 1 }
+  { (char_T *)(&DroneModel_DW.objisempty), 8, 0, 1 }
 };
 
 /* data type transition table for block I/O structure */

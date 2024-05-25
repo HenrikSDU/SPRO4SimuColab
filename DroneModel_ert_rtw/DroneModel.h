@@ -7,9 +7,9 @@
  *
  * Code generation for model "DroneModel".
  *
- * Model version              : 3.13
+ * Model version              : 3.25
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Mon May 13 16:34:50 2024
+ * C source code generated on : Fri May 24 20:45:04 2024
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -29,6 +29,7 @@
 #include "rtw_solver.h"
 #include "dt_info.h"
 #include "ext_work.h"
+#include "MW_bbblue_driver.h"
 #endif                                 /* DroneModel_COMMON_INCLUDES_ */
 
 #include "DroneModel_types.h"
@@ -77,21 +78,15 @@
 #define rtmGetTPtr(rtm)                (&(rtm)->Timing.taskTime0)
 #endif
 
-/* Block signals (default storage) */
-typedef struct {
-  real_T Constant;                     /* '<Root>/Constant' */
-} B_DroneModel_T;
-
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  struct {
-    void *LoggedData;
-  } Scope_PWORK;                       /* '<Root>/Scope' */
+  beagleboneblue_bbblueServo_Dr_T obj; /* '<Root>/Servo Motor' */
+  boolean_T objisempty;                /* '<Root>/Servo Motor' */
 } DW_DroneModel_T;
 
 /* Parameters (default storage) */
 struct P_DroneModel_T_ {
-  real_T Constant_Value;               /* Expression: 1
+  real_T Constant_Value;               /* Expression: 0
                                         * Referenced by: '<Root>/Constant'
                                         */
 };
@@ -137,9 +132,6 @@ struct tag_RTM_DroneModel_T {
 
 /* Block parameters (default storage) */
 extern P_DroneModel_T DroneModel_P;
-
-/* Block signals (default storage) */
-extern B_DroneModel_T DroneModel_B;
 
 /* Block states (default storage) */
 extern DW_DroneModel_T DroneModel_DW;

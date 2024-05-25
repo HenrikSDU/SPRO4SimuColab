@@ -54,9 +54,9 @@ Max_r_dot_r = 0.1; % Maximum allowed roll rate (rad/s)
 Max_p_dot_r = 0.1; % Maximum allowed picth rate (rad/s)
 Max_ya_dot_r = 0.01; % Maximum allowed yaw rate (rad/s)
  
-Max_Mx_r = 5.17e-3; % Max moment on x - axis kgm^2
-Max_My_r = 5.17e-3; % Max moment on y - axis kgm^2
-Max_Mz_r = 1.7e-2;  % Max moment on z - axis kgm^2
+Max_Mx_r = 0.0032; % Max moment on x - axis kgm^2
+Max_My_r = 0.0032; % Max moment on y - axis kgm^2
+Max_Mz_r = 0.0032;  % Max moment on z - axis kgm^2
 
 Max_U_r = 4 * 0.2 * 9.81; % Maximum thrust - maximum allowable current to esc is 60A ==> 15A per motor
               % motor with less that 15A has 581g of thrust at 13.28A

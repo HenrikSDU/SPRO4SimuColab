@@ -2,7 +2,7 @@
 ## Makefile generated for component 'DroneModel'. 
 ## 
 ## Makefile     : DroneModel.mk
-## Generated on : Mon May 13 16:34:59 2024
+## Generated on : Fri May 24 20:45:12 2024
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/DroneModel.elf
 ## Product type : executable
 ## 
@@ -165,7 +165,7 @@ INCLUDES = $(INCLUDES_BUILDINFO)
 ## DEFINES
 ###########################################################################
 
-DEFINES_ = -D__MW_TARGET_USE_HARDWARE_RESOURCES_H__
+DEFINES_ = -D_roboticscape_in_use_ -D_RTT_SERVOMOTOR_INUSE_ -D__MW_TARGET_USE_HARDWARE_RESOURCES_H__
 DEFINES_BUILD_ARGS = -DCLASSIC_INTERFACE=0 -DALLOCATIONFCN=0 -DEXT_MODE=1 -DONESTEPFCN=1 -DTERMFCN=1 -DMULTI_INSTANCE_CODE=0 -DINTEGER_CODE=0 -DMT=0
 DEFINES_CUSTOM = 
 DEFINES_OPTS = -DON_TARGET_WAIT_FOR_START=1 -DTID01EQ=0
@@ -238,33 +238,37 @@ CPPFLAGS += $(CPPFLAGS_SKIPFORSIL) $(CPPFLAGS_BASIC)
 # C++ Linker
 #---------------
 
+CPP_LDFLAGS_ = -lroboticscape
 CPP_LDFLAGS_SKIPFORSIL =  
 
-CPP_LDFLAGS += $(CPP_LDFLAGS_SKIPFORSIL)
+CPP_LDFLAGS += $(CPP_LDFLAGS_) $(CPP_LDFLAGS_SKIPFORSIL)
 
 #------------------------------
 # C++ Shared Library Linker
 #------------------------------
 
+CPP_SHAREDLIB_LDFLAGS_ = -lroboticscape
 CPP_SHAREDLIB_LDFLAGS_SKIPFORSIL =  
 
-CPP_SHAREDLIB_LDFLAGS += $(CPP_SHAREDLIB_LDFLAGS_SKIPFORSIL)
+CPP_SHAREDLIB_LDFLAGS += $(CPP_SHAREDLIB_LDFLAGS_) $(CPP_SHAREDLIB_LDFLAGS_SKIPFORSIL)
 
 #-----------
 # Linker
 #-----------
 
+LDFLAGS_ = -lroboticscape
 LDFLAGS_SKIPFORSIL =  
 
-LDFLAGS += $(LDFLAGS_SKIPFORSIL)
+LDFLAGS += $(LDFLAGS_) $(LDFLAGS_SKIPFORSIL)
 
 #--------------------------
 # Shared Library Linker
 #--------------------------
 
+SHAREDLIB_LDFLAGS_ = -lroboticscape
 SHAREDLIB_LDFLAGS_SKIPFORSIL =  
 
-SHAREDLIB_LDFLAGS += $(SHAREDLIB_LDFLAGS_SKIPFORSIL)
+SHAREDLIB_LDFLAGS += $(SHAREDLIB_LDFLAGS_) $(SHAREDLIB_LDFLAGS_SKIPFORSIL)
 
 ###########################################################################
 ## INLINED COMMANDS
