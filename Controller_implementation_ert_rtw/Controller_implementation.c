@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.15
+ * Model version                  : 1.16
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 23 20:25:46 2024
+ * C/C++ source code generated on : Fri May 24 10:07:43 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -2319,7 +2319,7 @@ static void Controller__SystemCore_setup_p5(dsp_simulink_MovingAverage_Co_T *obj
   obj->isSetupComplete = false;
   obj->isInitialized = 1;
 
-  /* Start for MATLABSystem: '<S67>/Moving Average' */
+  /* Start for MATLABSystem: '<S68>/Moving Average' */
   obj->NumChannels = 1;
   obj->FrameLength = 1;
   varargin_2 = obj->ForgettingFactor;
@@ -2327,11 +2327,11 @@ static void Controller__SystemCore_setup_p5(dsp_simulink_MovingAverage_Co_T *obj
   obj->_pobj0.isInitialized = 0;
   flag = (obj->_pobj0.isInitialized == 1);
   if (flag) {
-    /* Start for MATLABSystem: '<S67>/Moving Average' */
+    /* Start for MATLABSystem: '<S68>/Moving Average' */
     obj->_pobj0.TunablePropsChanged = true;
   }
 
-  /* Start for MATLABSystem: '<S67>/Moving Average' */
+  /* Start for MATLABSystem: '<S68>/Moving Average' */
   obj->_pobj0.ForgettingFactor = varargin_2;
   obj->pStatistic = &obj->_pobj0;
   obj->isSetupComplete = true;
@@ -2371,10 +2371,10 @@ void Controller_implementation_step(void)
   }
 
   MW_Read_Accel(&Controller_implementation_B.rtb_MPU9250_o1_c[0]);
-  Controller_implementation_B.Gain[0] = 0.0;
-  Controller_implementation_B.Gain[1] = 0.0;
-  Controller_implementation_B.Gain[2] = 0.0;
-  MW_Read_Gyro(&Controller_implementation_B.Gain[0]);
+  Controller_implementation_B.Gain1[0] = 0.0;
+  Controller_implementation_B.Gain1[1] = 0.0;
+  Controller_implementation_B.Gain1[2] = 0.0;
+  MW_Read_Gyro(&Controller_implementation_B.Gain1[0]);
   Controller_implementation_B.mdata[0] = 0.0;
   Controller_implementation_B.mdata[1] = 0.0;
   Controller_implementation_B.mdata[2] = 0.0;
@@ -2422,38 +2422,187 @@ void Controller_implementation_step(void)
   Controller_implementation_B.Reshapey[2] = Controller_implementation_B.pitch;
   Controller_implementation_B.Reshapey[3] = Controller_implementation_B.yaw;
 
-  /* Gain: '<S68>/Gain' incorporates:
+  /* Gain: '<S67>/Gain1' incorporates:
    *  MATLABSystem: '<S7>/MPU9250'
    */
-  Controller_implementation_B.pitch_tmp = Controller_implementation_P.Gain_Gain *
-    Controller_implementation_B.Gain[0];
-  Controller_implementation_B.Gain[0] = Controller_implementation_B.pitch_tmp;
+  Controller_implementation_B.pitch_tmp = Controller_implementation_P.Gain1_Gain
+    * Controller_implementation_B.Gain1[0];
+  Controller_implementation_B.Gain1[0] = Controller_implementation_B.pitch_tmp;
 
   /* Reshape: '<S9>/Reshapey' */
   Controller_implementation_B.Reshapey[4] =
     Controller_implementation_B.pitch_tmp;
 
-  /* Gain: '<S68>/Gain' incorporates:
+  /* Gain: '<S67>/Gain1' incorporates:
    *  MATLABSystem: '<S7>/MPU9250'
    */
-  Controller_implementation_B.pitch_tmp = Controller_implementation_P.Gain_Gain *
-    Controller_implementation_B.Gain[1];
-  Controller_implementation_B.Gain[1] = Controller_implementation_B.pitch_tmp;
+  Controller_implementation_B.pitch_tmp = Controller_implementation_P.Gain1_Gain
+    * Controller_implementation_B.Gain1[1];
+  Controller_implementation_B.Gain1[1] = Controller_implementation_B.pitch_tmp;
 
   /* Reshape: '<S9>/Reshapey' */
   Controller_implementation_B.Reshapey[5] =
     Controller_implementation_B.pitch_tmp;
 
-  /* Gain: '<S68>/Gain' incorporates:
+  /* Gain: '<S67>/Gain1' incorporates:
    *  MATLABSystem: '<S7>/MPU9250'
    */
-  Controller_implementation_B.pitch_tmp = Controller_implementation_P.Gain_Gain *
-    Controller_implementation_B.Gain[2];
-  Controller_implementation_B.Gain[2] = Controller_implementation_B.pitch_tmp;
+  Controller_implementation_B.pitch_tmp = Controller_implementation_P.Gain1_Gain
+    * Controller_implementation_B.Gain1[2];
+  Controller_implementation_B.Gain1[2] = Controller_implementation_B.pitch_tmp;
 
   /* Reshape: '<S9>/Reshapey' */
   Controller_implementation_B.Reshapey[6] =
     Controller_implementation_B.pitch_tmp;
+
+  /* MATLAB Function: '<S74>/MATLAB Function' incorporates:
+   *  Constant: '<Root>/Constant'
+   *  Constant: '<S74>/Battery Voltage'
+   *  Constant: '<S74>/Constant'
+   */
+  Controller_implementation_B.pitch_tmp =
+    Controller_implementation_P.Constant_Value_p[0] / 255.0 *
+    Controller_implementation_P.battery_voltage *
+    Controller_implementation_P.KV_rating;
+
+  /* Math: '<S74>/Square' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   */
+  Controller_implementation_B.pitch_tmp *= Controller_implementation_B.pitch_tmp;
+
+  /* Gain: '<S74>/Gain' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   */
+  Controller_implementation_B.rtb_Gain_idx_0 =
+    Controller_implementation_P.lift_co * Controller_implementation_B.pitch_tmp;
+
+  /* Gain: '<S74>/Sign Convention' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   *  Gain: '<S74>/Gain1'
+   */
+  Controller_implementation_B.max_possible_rot_speed =
+    Controller_implementation_P.drag_co * Controller_implementation_B.pitch_tmp *
+    Controller_implementation_P.SignConvention_Gain[0];
+
+  /* MATLAB Function: '<S74>/MATLAB Function' incorporates:
+   *  Constant: '<Root>/Constant'
+   *  Constant: '<S74>/Battery Voltage'
+   *  Constant: '<S74>/Constant'
+   */
+  Controller_implementation_B.pitch_tmp =
+    Controller_implementation_P.Constant_Value_p[1] / 255.0 *
+    Controller_implementation_P.battery_voltage *
+    Controller_implementation_P.KV_rating;
+
+  /* Math: '<S74>/Square' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   */
+  Controller_implementation_B.pitch_tmp *= Controller_implementation_B.pitch_tmp;
+
+  /* Gain: '<S74>/Gain' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   */
+  Controller_implementation_B.rtb_Gain_idx_1 =
+    Controller_implementation_P.lift_co * Controller_implementation_B.pitch_tmp;
+
+  /* Gain: '<S74>/Sign Convention' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   *  Gain: '<S74>/Gain1'
+   */
+  Controller_implementation_B.rotor_speeds[1] =
+    Controller_implementation_P.drag_co * Controller_implementation_B.pitch_tmp *
+    Controller_implementation_P.SignConvention_Gain[1];
+
+  /* MATLAB Function: '<S74>/MATLAB Function' incorporates:
+   *  Constant: '<Root>/Constant'
+   *  Constant: '<S74>/Battery Voltage'
+   *  Constant: '<S74>/Constant'
+   */
+  Controller_implementation_B.pitch_tmp =
+    Controller_implementation_P.Constant_Value_p[2] / 255.0 *
+    Controller_implementation_P.battery_voltage *
+    Controller_implementation_P.KV_rating;
+
+  /* Math: '<S74>/Square' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   */
+  Controller_implementation_B.pitch_tmp *= Controller_implementation_B.pitch_tmp;
+
+  /* Gain: '<S74>/Gain' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   */
+  Controller_implementation_B.rtb_Gain_idx_2 =
+    Controller_implementation_P.lift_co * Controller_implementation_B.pitch_tmp;
+
+  /* Gain: '<S74>/Sign Convention' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   *  Gain: '<S74>/Gain1'
+   */
+  Controller_implementation_B.rotor_speeds_k =
+    Controller_implementation_P.drag_co * Controller_implementation_B.pitch_tmp *
+    Controller_implementation_P.SignConvention_Gain[2];
+
+  /* MATLAB Function: '<S74>/MATLAB Function' incorporates:
+   *  Constant: '<Root>/Constant'
+   *  Constant: '<S74>/Battery Voltage'
+   *  Constant: '<S74>/Constant'
+   */
+  Controller_implementation_B.pitch_tmp =
+    Controller_implementation_P.Constant_Value_p[3] / 255.0 *
+    Controller_implementation_P.battery_voltage *
+    Controller_implementation_P.KV_rating;
+
+  /* Math: '<S74>/Square' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   */
+  Controller_implementation_B.pitch_tmp *= Controller_implementation_B.pitch_tmp;
+
+  /* Gain: '<S74>/Gain' incorporates:
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   */
+  Controller_implementation_B.rtb_Gain_idx_3 =
+    Controller_implementation_P.lift_co * Controller_implementation_B.pitch_tmp;
+
+  /* MATLAB Function: '<S8>/MATLAB Function' incorporates:
+   *  Constant: '<S8>/Constant'
+   *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+   *  Gain: '<S74>/Gain'
+   *  Gain: '<S74>/Gain1'
+   *  Gain: '<S74>/Sign Convention'
+   */
+  Controller_implementation_B.U[1] =
+    (((Controller_implementation_B.rtb_Gain_idx_0 -
+       Controller_implementation_B.rtb_Gain_idx_1) +
+      Controller_implementation_B.rtb_Gain_idx_2) -
+     Controller_implementation_B.rtb_Gain_idx_3) *
+    Controller_implementation_P.dis;
+  Controller_implementation_B.rtb_Gain_idx_0 +=
+    Controller_implementation_B.rtb_Gain_idx_1;
+  Controller_implementation_B.U[2] = (Controller_implementation_B.rtb_Gain_idx_0
+    - (Controller_implementation_B.rtb_Gain_idx_2 +
+       Controller_implementation_B.rtb_Gain_idx_3)) *
+    Controller_implementation_P.dis;
+  Controller_implementation_B.U[0] = (Controller_implementation_B.rtb_Gain_idx_0
+    + Controller_implementation_B.rtb_Gain_idx_2) +
+    Controller_implementation_B.rtb_Gain_idx_3;
+  Controller_implementation_B.U[3] =
+    ((Controller_implementation_B.max_possible_rot_speed +
+      Controller_implementation_B.rotor_speeds[1]) +
+     Controller_implementation_B.rotor_speeds_k) +
+    Controller_implementation_P.drag_co * Controller_implementation_B.pitch_tmp *
+    Controller_implementation_P.SignConvention_Gain[3];
+
+  /* Sum: '<S8>/Sum' incorporates:
+   *  Constant: '<S8>/Constant1'
+   */
+  Controller_implementation_B.Sum[0] = Controller_implementation_B.U[0] +
+    Controller_implementation_P.Constant1_Value[0];
+  Controller_implementation_B.Sum[1] = Controller_implementation_B.U[1] +
+    Controller_implementation_P.Constant1_Value[1];
+  Controller_implementation_B.Sum[2] = Controller_implementation_B.U[2] +
+    Controller_implementation_P.Constant1_Value[2];
+  Controller_implementation_B.Sum[3] = Controller_implementation_B.U[3] +
+    Controller_implementation_P.Constant1_Value[3];
 
   /* Delay: '<S9>/MemoryX' incorporates:
    *  Constant: '<S9>/X0'
@@ -2466,97 +2615,6 @@ void Controller_implementation_step(void)
   /* Outputs for Enabled SubSystem: '<S37>/Enabled Subsystem' incorporates:
    *  EnablePort: '<S63>/Enable'
    */
-  /* Constant: '<S9>/Enable' */
-  if (Controller_implementation_P.Enable_Value) {
-    Controller_implementation_DW.EnabledSubsystem_MODE = true;
-
-    /* Sum: '<S63>/Add1' incorporates:
-     *  Constant: '<S9>/C'
-     *  Delay: '<S9>/MemoryX'
-     *  Product: '<S63>/Product'
-     */
-    for (i = 0; i < 7; i++) {
-      Controller_implementation_B.pitch_tmp = 0.0;
-      for (i_0 = 0; i_0 < 8; i_0++) {
-        Controller_implementation_B.pitch_tmp +=
-          Controller_implementation_P.C_Value[7 * i_0 + i] *
-          Controller_implementation_DW.MemoryX_DSTATE[i_0];
-      }
-
-      Controller_implementation_B.rtb_Reshapey_m[i] =
-        Controller_implementation_B.Reshapey[i] -
-        Controller_implementation_B.pitch_tmp;
-    }
-
-    /* End of Sum: '<S63>/Add1' */
-    for (i = 0; i < 8; i++) {
-      /* Product: '<S63>/Product2' incorporates:
-       *  Constant: '<S10>/KalmanGainM'
-       */
-      Controller_implementation_B.pitch_tmp = 0.0;
-      for (i_0 = 0; i_0 < 7; i_0++) {
-        Controller_implementation_B.pitch_tmp +=
-          Controller_implementation_P.KalmanGainM_Value[(i_0 << 3) + i] *
-          Controller_implementation_B.rtb_Reshapey_m[i_0];
-      }
-
-      Controller_implementation_B.Product2[i] =
-        Controller_implementation_B.pitch_tmp;
-
-      /* End of Product: '<S63>/Product2' */
-    }
-
-    srUpdateBC(Controller_implementation_DW.EnabledSubsystem_SubsysRanBC);
-  } else if (Controller_implementation_DW.EnabledSubsystem_MODE) {
-    for (i = 0; i < 8; i++) {
-      /* Disable for Product: '<S63>/Product2' incorporates:
-       *  Outport: '<S63>/deltax'
-       */
-      Controller_implementation_B.Product2[i] =
-        Controller_implementation_P.deltax_Y0;
-    }
-
-    Controller_implementation_DW.EnabledSubsystem_MODE = false;
-  }
-
-  /* End of Outputs for SubSystem: '<S37>/Enabled Subsystem' */
-  for (i = 0; i < 8; i++) {
-    /* Reshape: '<S9>/Reshapexhat' incorporates:
-     *  Delay: '<S9>/MemoryX'
-     *  Sum: '<S37>/Add'
-     */
-    Controller_implementation_B.Reshapexhat[i] =
-      Controller_implementation_B.Product2[i] +
-      Controller_implementation_DW.MemoryX_DSTATE[i];
-  }
-
-  for (i = 0; i < 4; i++) {
-    /* Sum: '<S2>/Sum' incorporates:
-     *  Gain: '<S2>/Gain'
-     */
-    Controller_implementation_B.pitch_tmp = 0.0;
-    for (i_0 = 0; i_0 < 8; i_0++) {
-      Controller_implementation_B.pitch_tmp +=
-        Controller_implementation_P.Kx_D_lqi_reduced_a[(i_0 << 2) + i] *
-        Controller_implementation_B.Reshapexhat[i_0];
-    }
-
-    /* Sum: '<S2>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
-     *  Gain: '<S2>/Gain2'
-     */
-    Controller_implementation_B.Sum[i] = (0.0 -
-      Controller_implementation_B.pitch_tmp) -
-      (((Controller_implementation_P.Ki_D_lqi_reduced_a[i + 4] *
-         Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[1] +
-         Controller_implementation_P.Ki_D_lqi_reduced_a[i] *
-         Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[0]) +
-        Controller_implementation_P.Ki_D_lqi_reduced_a[i + 8] *
-        Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[2]) +
-       Controller_implementation_P.Ki_D_lqi_reduced_a[i + 12] *
-       Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[3]);
-  }
-
   /* Outputs for Enabled SubSystem: '<S30>/MeasurementUpdate' incorporates:
    *  EnablePort: '<S61>/Enable'
    */
@@ -2566,14 +2624,20 @@ void Controller_implementation_step(void)
     for (i = 0; i < 7; i++) {
       /* Product: '<S61>/C[k]*xhat[k|k-1]' incorporates:
        *  Constant: '<S9>/C'
-       *  Delay: '<S9>/MemoryX'
        */
       Controller_implementation_B.pitch_tmp = 0.0;
       for (i_0 = 0; i_0 < 8; i_0++) {
+        /* Product: '<S63>/Product' incorporates:
+         *  Constant: '<S9>/C'
+         *  Delay: '<S9>/MemoryX'
+         */
         Controller_implementation_B.pitch_tmp +=
           Controller_implementation_P.C_Value[7 * i_0 + i] *
           Controller_implementation_DW.MemoryX_DSTATE[i_0];
       }
+
+      Controller_implementation_B.rtb_Add_m_tmp[i] =
+        Controller_implementation_B.pitch_tmp;
 
       /* Sum: '<S61>/Sum' incorporates:
        *  Constant: '<S9>/D'
@@ -2594,37 +2658,120 @@ void Controller_implementation_step(void)
          Controller_implementation_B.pitch_tmp);
     }
 
-    for (i = 0; i < 8; i++) {
+    for (i_0 = 0; i_0 < 8; i_0++) {
       /* Product: '<S61>/Product3' incorporates:
        *  Constant: '<S10>/KalmanGainL'
        */
       Controller_implementation_B.pitch_tmp = 0.0;
-      for (i_0 = 0; i_0 < 7; i_0++) {
+      for (i = 0; i < 7; i++) {
         Controller_implementation_B.pitch_tmp +=
-          Controller_implementation_P.KalmanGainL_Value[(i_0 << 3) + i] *
-          Controller_implementation_B.rtb_Reshapey_m[i_0];
+          Controller_implementation_P.KalmanGainL_Value[(i << 3) + i_0] *
+          Controller_implementation_B.rtb_Reshapey_m[i];
       }
 
-      Controller_implementation_B.Product3[i] =
+      Controller_implementation_B.Product3[i_0] =
         Controller_implementation_B.pitch_tmp;
 
       /* End of Product: '<S61>/Product3' */
     }
 
     srUpdateBC(Controller_implementation_DW.MeasurementUpdate_SubsysRanBC);
-  } else if (Controller_implementation_DW.MeasurementUpdate_MODE) {
-    for (i = 0; i < 8; i++) {
-      /* Disable for Product: '<S61>/Product3' incorporates:
-       *  Outport: '<S61>/L*(y[k]-yhat[k|k-1])'
-       */
-      Controller_implementation_B.Product3[i] =
-        Controller_implementation_P.Lykyhatkk1_Y0;
+    Controller_implementation_DW.EnabledSubsystem_MODE = true;
+
+    /* Sum: '<S63>/Add1' incorporates:
+     *  Product: '<S63>/Product'
+     */
+    for (i_0 = 0; i_0 < 7; i_0++) {
+      Controller_implementation_B.rtb_Reshapey_m[i_0] =
+        Controller_implementation_B.Reshapey[i_0] -
+        Controller_implementation_B.rtb_Add_m_tmp[i_0];
     }
 
-    Controller_implementation_DW.MeasurementUpdate_MODE = false;
+    /* End of Sum: '<S63>/Add1' */
+    for (i_0 = 0; i_0 < 8; i_0++) {
+      /* Product: '<S63>/Product2' incorporates:
+       *  Constant: '<S10>/KalmanGainM'
+       */
+      Controller_implementation_B.pitch_tmp = 0.0;
+      for (i = 0; i < 7; i++) {
+        Controller_implementation_B.pitch_tmp +=
+          Controller_implementation_P.KalmanGainM_Value[(i << 3) + i_0] *
+          Controller_implementation_B.rtb_Reshapey_m[i];
+      }
+
+      Controller_implementation_B.Product2[i_0] =
+        Controller_implementation_B.pitch_tmp;
+
+      /* End of Product: '<S63>/Product2' */
+    }
+
+    srUpdateBC(Controller_implementation_DW.EnabledSubsystem_SubsysRanBC);
+  } else {
+    if (Controller_implementation_DW.MeasurementUpdate_MODE) {
+      for (i = 0; i < 8; i++) {
+        /* Disable for Product: '<S61>/Product3' incorporates:
+         *  Outport: '<S61>/L*(y[k]-yhat[k|k-1])'
+         */
+        Controller_implementation_B.Product3[i] =
+          Controller_implementation_P.Lykyhatkk1_Y0;
+      }
+
+      Controller_implementation_DW.MeasurementUpdate_MODE = false;
+    }
+
+    if (Controller_implementation_DW.EnabledSubsystem_MODE) {
+      for (i = 0; i < 8; i++) {
+        /* Disable for Product: '<S63>/Product2' incorporates:
+         *  Outport: '<S63>/deltax'
+         */
+        Controller_implementation_B.Product2[i] =
+          Controller_implementation_P.deltax_Y0;
+      }
+
+      Controller_implementation_DW.EnabledSubsystem_MODE = false;
+    }
   }
 
+  /* End of Constant: '<S9>/Enable' */
   /* End of Outputs for SubSystem: '<S30>/MeasurementUpdate' */
+  /* End of Outputs for SubSystem: '<S37>/Enabled Subsystem' */
+  for (i = 0; i < 8; i++) {
+    /* Reshape: '<S9>/Reshapexhat' incorporates:
+     *  Delay: '<S9>/MemoryX'
+     *  Sum: '<S37>/Add'
+     */
+    Controller_implementation_B.Reshapexhat[i] =
+      Controller_implementation_B.Product2[i] +
+      Controller_implementation_DW.MemoryX_DSTATE[i];
+  }
+
+  for (i_0 = 0; i_0 < 4; i_0++) {
+    /* Sum: '<S2>/Sum' incorporates:
+     *  Gain: '<S2>/Gain'
+     */
+    Controller_implementation_B.pitch_tmp = 0.0;
+    for (i = 0; i < 8; i++) {
+      Controller_implementation_B.pitch_tmp +=
+        Controller_implementation_P.Kx_D_lqi_reduced_a[(i << 2) + i_0] *
+        Controller_implementation_B.Reshapexhat[i];
+    }
+
+    /* Sum: '<S2>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
+     *  Gain: '<S2>/Gain2'
+     */
+    Controller_implementation_B.Sum_n[i_0] = (0.0 -
+      Controller_implementation_B.pitch_tmp) -
+      (((Controller_implementation_P.Ki_D_lqi_reduced_a[i_0 + 4] *
+         Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[1] +
+         Controller_implementation_P.Ki_D_lqi_reduced_a[i_0] *
+         Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[0]) +
+        Controller_implementation_P.Ki_D_lqi_reduced_a[i_0 + 8] *
+        Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[2]) +
+       Controller_implementation_P.Ki_D_lqi_reduced_a[i_0 + 12] *
+       Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[3]);
+  }
+
   /* MATLAB Function: '<S65>/Calculate PWM' incorporates:
    *  Constant: '<S65>/Constant'
    *  Constant: '<S65>/Constant1'
@@ -2634,17 +2781,23 @@ void Controller_implementation_step(void)
     Controller_implementation_P.KV_rating;
 
   /* Gain: '<S65>/Gain' */
-  Controller_implementation_B.Sum_k = Controller_implementation_B.Sum[1];
-  Controller_implementation_B.Sum_c = Controller_implementation_B.Sum[0];
-  Controller_implementation_B.Sum_b = Controller_implementation_B.Sum[2];
-  Controller_implementation_B.Sum_p = Controller_implementation_B.Sum[3];
+  Controller_implementation_B.rtb_Gain_idx_2 =
+    Controller_implementation_B.Sum_n[1];
+  Controller_implementation_B.rotor_speeds_k =
+    Controller_implementation_B.Sum_n[0];
+  Controller_implementation_B.rtb_Gain_idx_3 =
+    Controller_implementation_B.Sum_n[2];
+  Controller_implementation_B.rtb_Gain_idx_0 =
+    Controller_implementation_B.Sum_n[3];
   for (i = 0; i < 4; i++) {
     Controller_implementation_B.pitch_tmp = ((Controller_implementation_P.K_mm[i
-      + 4] * Controller_implementation_B.Sum_k +
-      Controller_implementation_P.K_mm[i] * Controller_implementation_B.Sum_c) +
+      + 4] * Controller_implementation_B.rtb_Gain_idx_2 +
+      Controller_implementation_P.K_mm[i] *
+      Controller_implementation_B.rotor_speeds_k) +
       Controller_implementation_P.K_mm[i + 8] *
-      Controller_implementation_B.Sum_b) + Controller_implementation_P.K_mm[i +
-      12] * Controller_implementation_B.Sum_p;
+      Controller_implementation_B.rtb_Gain_idx_3) +
+      Controller_implementation_P.K_mm[i + 12] *
+      Controller_implementation_B.rtb_Gain_idx_0;
 
     /* MATLAB Function: '<S65>/Calculate PWM' incorporates:
      *  Constant: '<S65>/Constant2'
@@ -2701,16 +2854,16 @@ void Controller_implementation_step(void)
     if (Controller_implementation_B.pitch_tmp >
         Controller_implementation_P.Servolimit_UpperSat) {
       /* Saturate: '<S3>/Servo limit' */
-      Controller_implementation_B.DersiredMotorThrusts[i] =
+      Controller_implementation_B.rotor_speeds[i] =
         Controller_implementation_P.Servolimit_UpperSat;
     } else if (Controller_implementation_B.pitch_tmp <
                Controller_implementation_P.Servolimit_LowerSat) {
       /* Saturate: '<S3>/Servo limit' */
-      Controller_implementation_B.DersiredMotorThrusts[i] =
+      Controller_implementation_B.rotor_speeds[i] =
         Controller_implementation_P.Servolimit_LowerSat;
     } else {
       /* Saturate: '<S3>/Servo limit' */
-      Controller_implementation_B.DersiredMotorThrusts[i] =
+      Controller_implementation_B.rotor_speeds[i] =
         Controller_implementation_B.pitch_tmp;
     }
 
@@ -2720,23 +2873,23 @@ void Controller_implementation_step(void)
   /* End of Gain: '<S65>/Gain' */
 
   /* MATLABSystem: '<S3>/Motor 1' */
-  rc_servo_send_pulse_normalized(1,
-    (Controller_implementation_B.DersiredMotorThrusts[0] - 90.0) / 60.0);
+  rc_servo_send_pulse_normalized(1, (Controller_implementation_B.rotor_speeds[0]
+    - 90.0) / 60.0);
 
   /* MATLABSystem: '<S3>/Motor 2' */
-  rc_servo_send_pulse_normalized(2,
-    (Controller_implementation_B.DersiredMotorThrusts[1] - 90.0) / 60.0);
+  rc_servo_send_pulse_normalized(2, (Controller_implementation_B.rotor_speeds[1]
+    - 90.0) / 60.0);
 
   /* MATLABSystem: '<S3>/Motor 3' */
-  rc_servo_send_pulse_normalized(3,
-    (Controller_implementation_B.DersiredMotorThrusts[2] - 90.0) / 60.0);
+  rc_servo_send_pulse_normalized(3, (Controller_implementation_B.rotor_speeds[2]
+    - 90.0) / 60.0);
 
   /* MATLABSystem: '<S3>/Motor 4' */
-  rc_servo_send_pulse_normalized(4,
-    (Controller_implementation_B.DersiredMotorThrusts[3] - 90.0) / 60.0);
+  rc_servo_send_pulse_normalized(4, (Controller_implementation_B.rotor_speeds[3]
+    - 90.0) / 60.0);
 
   /* Gain: '<S4>/Gain' */
-  Controller_implementation_B.Gain_i = Controller_implementation_P.Gain_Gain_a *
+  Controller_implementation_B.Gain = Controller_implementation_P.Gain_Gain *
     Controller_implementation_B.Reshapexhat[2];
 
   /* Gain: '<S5>/Gain' */
@@ -2753,7 +2906,7 @@ void Controller_implementation_step(void)
   Controller_implementation_B.pitch_tmp = Contro_bbblueBarometer_stepImpl
     (&Controller_implementation_DW.obj_j);
 
-  /* MATLABSystem: '<S67>/Moving Average' incorporates:
+  /* MATLABSystem: '<S68>/Moving Average' incorporates:
    *  MATLABSystem: '<S7>/Barometer'
    */
   if (Controller_implementation_DW.obj.ForgettingFactor !=
@@ -2798,22 +2951,22 @@ void Controller_implementation_step(void)
 
   Controller_implementation_B.max_possible_rot_speed =
     Controller_implementation_DW.obj.pStatistic->pwN;
-  Controller_implementation_B.Sum_c =
+  Controller_implementation_B.rotor_speeds_k =
     Controller_implementation_DW.obj.pStatistic->pmN;
-  Controller_implementation_B.Sum_k =
+  Controller_implementation_B.rtb_Gain_idx_2 =
     Controller_implementation_DW.obj.pStatistic->plambda;
-  Controller_implementation_B.Sum_c = (1.0 - 1.0 /
+  Controller_implementation_B.rotor_speeds_k = (1.0 - 1.0 /
     Controller_implementation_B.max_possible_rot_speed) *
-    Controller_implementation_B.Sum_c + 1.0 /
+    Controller_implementation_B.rotor_speeds_k + 1.0 /
     Controller_implementation_B.max_possible_rot_speed *
     Controller_implementation_B.pitch_tmp;
   Controller_implementation_DW.obj.pStatistic->pwN =
-    Controller_implementation_B.Sum_k *
+    Controller_implementation_B.rtb_Gain_idx_2 *
     Controller_implementation_B.max_possible_rot_speed + 1.0;
   Controller_implementation_DW.obj.pStatistic->pmN =
-    Controller_implementation_B.Sum_c;
+    Controller_implementation_B.rotor_speeds_k;
 
-  /* Step: '<S67>/Step3' */
+  /* Step: '<S68>/Step3' */
   if (Controller_implementation_M->Timing.taskTime0 <
       Controller_implementation_P.Step3_Time) {
     Controller_implementation_B.max_possible_rot_speed =
@@ -2823,46 +2976,48 @@ void Controller_implementation_step(void)
       Controller_implementation_P.Step3_YFinal;
   }
 
-  /* Outputs for Triggered SubSystem: '<S67>/Sample and Hold3' incorporates:
+  /* Outputs for Triggered SubSystem: '<S68>/Sample and Hold3' incorporates:
    *  TriggerPort: '<S72>/Trigger'
    */
   zcEvent = rt_ZCFcn(RISING_ZERO_CROSSING,
                      &Controller_implementati_PrevZCX.SampleandHold3_Trig_ZCE,
                      (Controller_implementation_B.max_possible_rot_speed));
 
-  /* End of Step: '<S67>/Step3' */
+  /* End of Step: '<S68>/Step3' */
   if (zcEvent != NO_ZCEVENT) {
     /* SignalConversion generated from: '<S72>/In' incorporates:
-     *  MATLABSystem: '<S67>/Moving Average'
+     *  MATLABSystem: '<S68>/Moving Average'
      * */
-    Controller_implementation_B.In = Controller_implementation_B.Sum_c;
+    Controller_implementation_B.In = Controller_implementation_B.rotor_speeds_k;
     Controller_implementation_DW.SampleandHold3_SubsysRanBC = 4;
   }
 
-  /* End of Outputs for SubSystem: '<S67>/Sample and Hold3' */
+  /* End of Outputs for SubSystem: '<S68>/Sample and Hold3' */
 
-  /* Sum: '<S67>/Add' incorporates:
+  /* Sum: '<S68>/Add' incorporates:
    *  MATLABSystem: '<S7>/Barometer'
    */
   Controller_implementation_B.sensor = Controller_implementation_B.pitch_tmp -
     Controller_implementation_B.In;
 
-  /* MATLAB Function: '<S67>/height' */
+  /* MATLAB Function: '<S68>/height' */
   Controller_implementation_B.height = -(Controller_implementation_B.sensor /
     Controller_implementation_B.In) * 8430.0;
 
   /* Update for Delay: '<S9>/MemoryX' */
   Controller_implementation_DW.icLoad = false;
-  for (i = 0; i < 8; i++) {
+  for (i_0 = 0; i_0 < 8; i_0++) {
     /* Product: '<S30>/B[k]*u[k]' incorporates:
      *  Constant: '<S9>/B'
      */
-    Controller_implementation_B.dv1[i] = ((Controller_implementation_P.B_Value[i
-      + 8] * Controller_implementation_B.Sum[1] +
-      Controller_implementation_P.B_Value[i] * Controller_implementation_B.Sum[0])
-      + Controller_implementation_P.B_Value[i + 16] *
-      Controller_implementation_B.Sum[2]) +
-      Controller_implementation_P.B_Value[i + 24] *
+    Controller_implementation_B.dv[i_0] =
+      ((Controller_implementation_P.B_Value[i_0 + 8] *
+        Controller_implementation_B.Sum[1] +
+        Controller_implementation_P.B_Value[i_0] *
+        Controller_implementation_B.Sum[0]) +
+       Controller_implementation_P.B_Value[i_0 + 16] *
+       Controller_implementation_B.Sum[2]) +
+      Controller_implementation_P.B_Value[i_0 + 24] *
       Controller_implementation_B.Sum[3];
 
     /* Product: '<S30>/A[k]*xhat[k|k-1]' incorporates:
@@ -2870,13 +3025,13 @@ void Controller_implementation_step(void)
      *  Delay: '<S9>/MemoryX'
      */
     Controller_implementation_B.pitch_tmp = 0.0;
-    for (i_0 = 0; i_0 < 8; i_0++) {
+    for (i = 0; i < 8; i++) {
       Controller_implementation_B.pitch_tmp +=
-        Controller_implementation_P.A_Value[(i_0 << 3) + i] *
-        Controller_implementation_DW.MemoryX_DSTATE[i_0];
+        Controller_implementation_P.A_Value[(i << 3) + i_0] *
+        Controller_implementation_DW.MemoryX_DSTATE[i];
     }
 
-    Controller_implementation_B.dv[i] = Controller_implementation_B.pitch_tmp;
+    Controller_implementation_B.dv1[i_0] = Controller_implementation_B.pitch_tmp;
 
     /* End of Product: '<S30>/A[k]*xhat[k|k-1]' */
   }
@@ -2884,20 +3039,20 @@ void Controller_implementation_step(void)
   /* Update for Delay: '<S9>/MemoryX' incorporates:
    *  Sum: '<S30>/Add'
    */
-  for (i = 0; i < 8; i++) {
-    Controller_implementation_DW.MemoryX_DSTATE[i] =
-      (Controller_implementation_B.dv1[i] + Controller_implementation_B.dv[i]) +
-      Controller_implementation_B.Product3[i];
+  for (i_0 = 0; i_0 < 8; i_0++) {
+    Controller_implementation_DW.MemoryX_DSTATE[i_0] =
+      (Controller_implementation_B.dv[i_0] + Controller_implementation_B.dv1[i_0])
+      + Controller_implementation_B.Product3[i_0];
   }
 
-  for (i = 0; i < 4; i++) {
+  for (i_0 = 0; i_0 < 4; i_0++) {
     /* Sum: '<S2>/Subtract' incorporates:
      *  Gain: '<S2>/Gain1'
      */
     Controller_implementation_B.pitch_tmp = 0.0;
-    for (i_0 = 0; i_0 < 8; i_0++) {
-      Controller_implementation_B.pitch_tmp += Controller_implementation_P.F
-        [(i_0 << 2) + i] * Controller_implementation_B.Reshapexhat[i_0];
+    for (i = 0; i < 8; i++) {
+      Controller_implementation_B.pitch_tmp += Controller_implementation_P.F[(i <<
+        2) + i_0] * Controller_implementation_B.Reshapexhat[i];
     }
 
     /* Update for DiscreteIntegrator: '<S2>/Discrete-Time Integrator' incorporates:
@@ -2905,8 +3060,8 @@ void Controller_implementation_step(void)
      *  Gain: '<S2>/Gain1'
      *  Sum: '<S2>/Subtract'
      */
-    Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[i] +=
-      (Controller_implementation_P.Constant_Value_a[i] -
+    Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[i_0] +=
+      (Controller_implementation_P.Constant_Value_a[i_0] -
        Controller_implementation_B.pitch_tmp) *
       Controller_implementation_P.DiscreteTimeIntegrator_gainval;
   }
@@ -2954,10 +3109,10 @@ void Controller_implementation_initialize(void)
   Controller_implementation_M->Timing.stepSize0 = 0.01;
 
   /* External mode info */
-  Controller_implementation_M->Sizes.checksums[0] = (116020763U);
-  Controller_implementation_M->Sizes.checksums[1] = (1399516391U);
-  Controller_implementation_M->Sizes.checksums[2] = (372447460U);
-  Controller_implementation_M->Sizes.checksums[3] = (935698346U);
+  Controller_implementation_M->Sizes.checksums[0] = (2516280603U);
+  Controller_implementation_M->Sizes.checksums[1] = (2199434281U);
+  Controller_implementation_M->Sizes.checksums[2] = (3461140230U);
+  Controller_implementation_M->Sizes.checksums[3] = (1352351663U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -3032,32 +3187,32 @@ void Controller_implementation_initialize(void)
     Controller_implementation_DW.DiscreteTimeIntegrator_DSTATE[3] =
       Controller_implementation_P.DiscreteTimeIntegrator_IC;
 
-    /* SystemInitialize for Enabled SubSystem: '<S30>/MeasurementUpdate' */
     /* SystemInitialize for Enabled SubSystem: '<S37>/Enabled Subsystem' */
+    /* SystemInitialize for Enabled SubSystem: '<S30>/MeasurementUpdate' */
     for (i = 0; i < 8; i++) {
-      /* SystemInitialize for Product: '<S63>/Product2' incorporates:
-       *  Outport: '<S63>/deltax'
-       */
-      Controller_implementation_B.Product2[i] =
-        Controller_implementation_P.deltax_Y0;
-
       /* SystemInitialize for Product: '<S61>/Product3' incorporates:
        *  Outport: '<S61>/L*(y[k]-yhat[k|k-1])'
        */
       Controller_implementation_B.Product3[i] =
         Controller_implementation_P.Lykyhatkk1_Y0;
+
+      /* SystemInitialize for Product: '<S63>/Product2' incorporates:
+       *  Outport: '<S63>/deltax'
+       */
+      Controller_implementation_B.Product2[i] =
+        Controller_implementation_P.deltax_Y0;
     }
 
-    /* End of SystemInitialize for SubSystem: '<S37>/Enabled Subsystem' */
     /* End of SystemInitialize for SubSystem: '<S30>/MeasurementUpdate' */
+    /* End of SystemInitialize for SubSystem: '<S37>/Enabled Subsystem' */
 
-    /* SystemInitialize for Triggered SubSystem: '<S67>/Sample and Hold3' */
+    /* SystemInitialize for Triggered SubSystem: '<S68>/Sample and Hold3' */
     /* SystemInitialize for SignalConversion generated from: '<S72>/In' incorporates:
      *  Outport: '<S72>/ '
      */
     Controller_implementation_B.In = Controller_implementation_P._Y0;
 
-    /* End of SystemInitialize for SubSystem: '<S67>/Sample and Hold3' */
+    /* End of SystemInitialize for SubSystem: '<S68>/Sample and Hold3' */
 
     /* Start for MATLABSystem: '<S7>/MPU9250' */
     Controller_implementation_DW.obj_n.isInitialized = 0;
@@ -3103,7 +3258,7 @@ void Controller_implementation_initialize(void)
       Controller_implementation_P.Ts;
     Controller_imp_SystemCore_setup(&Controller_implementation_DW.obj_j);
 
-    /* Start for MATLABSystem: '<S67>/Moving Average' */
+    /* Start for MATLABSystem: '<S68>/Moving Average' */
     Controller_implementation_DW.obj.isInitialized = 0;
     Controller_implementation_DW.obj.NumChannels = -1;
     Controller_implementation_DW.obj.FrameLength = -1;
@@ -3117,13 +3272,13 @@ void Controller_implementation_initialize(void)
       Controller_implementation_P.MovingAverage_ForgettingFactor;
     Controller__SystemCore_setup_p5(&Controller_implementation_DW.obj);
 
-    /* InitializeConditions for MATLABSystem: '<S67>/Moving Average' */
+    /* InitializeConditions for MATLABSystem: '<S68>/Moving Average' */
     if (Controller_implementation_DW.obj.pStatistic->isInitialized == 1) {
       Controller_implementation_DW.obj.pStatistic->pwN = 1.0;
       Controller_implementation_DW.obj.pStatistic->pmN = 0.0;
     }
 
-    /* End of InitializeConditions for MATLABSystem: '<S67>/Moving Average' */
+    /* End of InitializeConditions for MATLABSystem: '<S68>/Moving Average' */
   }
 }
 
@@ -3210,7 +3365,7 @@ void Controller_implementation_terminate(void)
 
   /* End of Terminate for MATLABSystem: '<S7>/Barometer' */
 
-  /* Terminate for MATLABSystem: '<S67>/Moving Average' */
+  /* Terminate for MATLABSystem: '<S68>/Moving Average' */
   if (!Controller_implementation_DW.obj.matlabCodegenIsDeleted) {
     Controller_implementation_DW.obj.matlabCodegenIsDeleted = true;
     if ((Controller_implementation_DW.obj.isInitialized == 1) &&
@@ -3224,7 +3379,7 @@ void Controller_implementation_terminate(void)
     }
   }
 
-  /* End of Terminate for MATLABSystem: '<S67>/Moving Average' */
+  /* End of Terminate for MATLABSystem: '<S68>/Moving Average' */
 }
 
 /*

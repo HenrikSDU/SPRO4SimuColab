@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.15
+ * Model version                  : 1.16
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 23 20:25:46 2024
+ * C/C++ source code generated on : Fri May 24 10:07:43 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -85,11 +85,12 @@
 
 /* Block signals (default storage) */
 typedef struct {
-  real_T dv1[8];
   real_T dv[8];
+  real_T dv1[8];
   real_T Reshapey[7];                  /* '<S9>/Reshapey' */
+  real_T rtb_Add_m_tmp[7];
   real_T rtb_Reshapey_m[7];
-  real_T DersiredMotorThrusts[4];      /* '<S65>/Gain' */
+  real_T rotor_speeds[4];
   uint8_T b_output[24];
   real_T rtb_MPU9250_o1_c[3];
   real_T mdata[3];
@@ -107,26 +108,29 @@ typedef struct {
   int96m_T r11;
   int96m_T r12;
   real_T z;                            /* '<S7>/Constant' */
-  real_T Gain[3];                      /* '<S68>/Gain' */
+  real_T Gain1[3];                     /* '<S67>/Gain1' */
+  real_T Sum[4];                       /* '<S8>/Sum' */
   real_T Reshapexhat[8];               /* '<S9>/Reshapexhat' */
-  real_T Sum[4];                       /* '<S2>/Sum' */
+  real_T Sum_n[4];                     /* '<S2>/Sum' */
   real_T PWMlimit[4];                  /* '<S3>/PWM limit' */
-  real_T Gain_i;                       /* '<S4>/Gain' */
+  real_T Gain;                         /* '<S4>/Gain' */
   real_T Gain_n;                       /* '<S5>/Gain' */
-  real_T sensor;                       /* '<S67>/Add' */
+  real_T sensor;                       /* '<S68>/Add' */
+  real_T U[4];                         /* '<S8>/MATLAB Function' */
   real_T yaw;                          /* '<S7>/yaw' */
   real_T roll;                         /* '<S7>/roll ' */
   real_T pitch;                        /* '<S7>/pitch' */
-  real_T height;                       /* '<S67>/height' */
+  real_T height;                       /* '<S68>/height' */
   real_T In;                           /* '<S72>/In' */
   real_T Product2[8];                  /* '<S63>/Product2' */
   real_T Product3[8];                  /* '<S61>/Product3' */
   real_T max_possible_rot_speed;
   real_T pitch_tmp;
-  real_T Sum_k;
-  real_T Sum_c;
-  real_T Sum_b;
-  real_T Sum_p;
+  real_T rtb_Gain_idx_0;
+  real_T rtb_Gain_idx_1;
+  real_T rtb_Gain_idx_2;
+  real_T rtb_Gain_idx_3;
+  real_T rotor_speeds_k;
   real_T x_unsgn;
   real_T yd;
   uint32_T ux[2];
@@ -179,7 +183,7 @@ typedef struct {
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  dsp_simulink_MovingAverage_Co_T obj; /* '<S67>/Moving Average' */
+  dsp_simulink_MovingAverage_Co_T obj; /* '<S68>/Moving Average' */
   beagleboneblue_bbblueBaromete_T obj_j;/* '<S7>/Barometer' */
   beagleboneblue_bbblueMPU9250__T obj_n;/* '<S7>/MPU9250' */
   beagleboneblue_bbblueServo_Co_T obj_b;/* '<S3>/Motor 4' */
@@ -205,6 +209,10 @@ typedef struct {
   } TrackPWM_PWORK;                    /* '<S3>/Track PWM' */
 
   struct {
+    void *LoggedData;
+  } SystemUMonitor_PWORK;              /* '<Root>/System U Monitor' */
+
+  struct {
     void *LoggedData[7];
   } Scope1_PWORK;                      /* '<Root>/Scope1' */
 
@@ -218,17 +226,13 @@ typedef struct {
 
   struct {
     void *LoggedData[3];
-  } Scope1_PWORK_m;                    /* '<S67>/Scope1' */
-
-  struct {
-    void *LoggedData;
-  } SystemUMonitor_PWORK;              /* '<Root>/System U Monitor' */
+  } Scope1_PWORK_m;                    /* '<S68>/Scope1' */
 
   struct {
     void *LoggedData;
   } yaw_PWORK;                         /* '<Root>/yaw' */
 
-  int8_T SampleandHold3_SubsysRanBC;   /* '<S67>/Sample and Hold3' */
+  int8_T SampleandHold3_SubsysRanBC;   /* '<S68>/Sample and Hold3' */
   int8_T EnabledSubsystem_SubsysRanBC; /* '<S37>/Enabled Subsystem' */
   int8_T MeasurementUpdate_SubsysRanBC;/* '<S30>/MeasurementUpdate' */
   boolean_T icLoad;                    /* '<S9>/MemoryX' */
@@ -238,7 +242,7 @@ typedef struct {
 
 /* Zero-crossing (trigger) state */
 typedef struct {
-  ZCSigState SampleandHold3_Trig_ZCE;  /* '<S67>/Sample and Hold3' */
+  ZCSigState SampleandHold3_Trig_ZCE;  /* '<S68>/Sample and Hold3' */
 } PrevZCX_Controller_implementa_T;
 
 /* Parameters (default storage) */
@@ -288,7 +292,7 @@ struct P_Controller_implementation_T_ {
                                         * Referenced by: '<S63>/deltax'
                                         */
   real_T MovingAverage_ForgettingFactor;/* Expression: 1.0
-                                         * Referenced by: '<S67>/Moving Average'
+                                         * Referenced by: '<S68>/Moving Average'
                                          */
   real_T _Y0;                          /* Expression: initCond
                                         * Referenced by: '<S72>/ '
@@ -314,8 +318,17 @@ struct P_Controller_implementation_T_ {
   real_T Constant_Value;               /* Expression: 0
                                         * Referenced by: '<S7>/Constant'
                                         */
-  real_T Gain_Gain;                    /* Expression: 180/pi
-                                        * Referenced by: '<S68>/Gain'
+  real_T Gain1_Gain;                   /* Expression: pi/180
+                                        * Referenced by: '<S67>/Gain1'
+                                        */
+  real_T Constant_Value_p[4];          /* Expression: [0;0;0;0]
+                                        * Referenced by: '<Root>/Constant'
+                                        */
+  real_T SignConvention_Gain[4];       /* Expression: [1;-1;-1;1]
+                                        * Referenced by: '<S74>/Sign Convention'
+                                        */
+  real_T Constant1_Value[4];           /* Expression: [-m*g;0;0;0]
+                                        * Referenced by: '<S8>/Constant1'
                                         */
   real_T X0_Value[8];                  /* Expression: pInitialization.X0
                                         * Referenced by: '<S9>/X0'
@@ -342,7 +355,7 @@ struct P_Controller_implementation_T_ {
   real_T Constant_Value_a[4];          /* Expression: [0;0;0;0;]
                                         * Referenced by: '<S6>/Constant'
                                         */
-  real_T Gain_Gain_a;                  /* Expression: 180/pi
+  real_T Gain_Gain;                    /* Expression: 180/pi
                                         * Referenced by: '<S4>/Gain'
                                         */
   real_T Gain_Gain_j;                  /* Expression: 180/pi
@@ -351,17 +364,14 @@ struct P_Controller_implementation_T_ {
   real_T CovarianceZ_Value[64];        /* Expression: pInitialization.Z
                                         * Referenced by: '<S10>/CovarianceZ'
                                         */
-  real_T SignConvention_Gain[4];       /* Expression: [1;-1;-1;1]
-                                        * Referenced by: '<S74>/Sign Convention'
-                                        */
   real_T Step3_Time;                   /* Expression: 5
-                                        * Referenced by: '<S67>/Step3'
+                                        * Referenced by: '<S68>/Step3'
                                         */
   real_T Step3_Y0;                     /* Expression: 0
-                                        * Referenced by: '<S67>/Step3'
+                                        * Referenced by: '<S68>/Step3'
                                         */
   real_T Step3_YFinal;                 /* Expression: 1
-                                        * Referenced by: '<S67>/Step3'
+                                        * Referenced by: '<S68>/Step3'
                                         */
   boolean_T Enable_Value;              /* Expression: true()
                                         * Referenced by: '<S9>/Enable'
@@ -462,8 +472,6 @@ extern volatile boolean_T runModel;
  * Block '<S51>/CheckSignalProperties' : Unused code path elimination
  * Block '<S52>/CheckSignalProperties' : Unused code path elimination
  * Block '<Root>/Product' : Unused code path elimination
- * Block '<S8>/Constant1' : Unused code path elimination
- * Block '<S8>/Sum' : Unused code path elimination
  * Block '<S53>/Conversion' : Eliminate redundant data type conversion
  * Block '<S54>/Conversion' : Eliminate redundant data type conversion
  * Block '<S56>/Conversion' : Eliminate redundant data type conversion
@@ -554,8 +562,8 @@ extern volatile boolean_T runModel;
  * '<S64>'  : 'Controller_implementation/Motor Control/MATLAB Function'
  * '<S65>'  : 'Controller_implementation/Motor Control/Motor Mixing Algorithm'
  * '<S66>'  : 'Controller_implementation/Motor Control/Motor Mixing Algorithm/Calculate PWM'
- * '<S67>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude'
- * '<S68>'  : 'Controller_implementation/Sensor Readings/Radians to Degrees'
+ * '<S67>'  : 'Controller_implementation/Sensor Readings/Degrees to Radians'
+ * '<S68>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude'
  * '<S69>'  : 'Controller_implementation/Sensor Readings/pitch'
  * '<S70>'  : 'Controller_implementation/Sensor Readings/roll '
  * '<S71>'  : 'Controller_implementation/Sensor Readings/yaw'
