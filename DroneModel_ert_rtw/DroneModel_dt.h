@@ -9,7 +9,7 @@
  *
  * Model version              : 3.25
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Fri May 24 17:06:10 2024
+ * C source code generated on : Fri May 24 20:45:04 2024
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -83,7 +83,7 @@ static DataTypeTransitionTable rtBTransTable = {
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&DroneModel_P.Constant_Value), 5, 0, 1 }
+  { (char_T *)(&DroneModel_P.Constant_Value), 0, 0, 1 }
 };
 
 /* data type transition table for Parameters structure */

@@ -9,7 +9,7 @@
  *
  * Model version              : 3.25
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Fri May 24 17:06:10 2024
+ * C source code generated on : Fri May 24 20:45:04 2024
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -80,13 +80,13 @@
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  beagleboneblue_bbblueServo_Dr_T obj; /* '<Root>/Motor 1 out' */
-  boolean_T objisempty;                /* '<Root>/Motor 1 out' */
+  beagleboneblue_bbblueServo_Dr_T obj; /* '<Root>/Servo Motor' */
+  boolean_T objisempty;                /* '<Root>/Servo Motor' */
 } DW_DroneModel_T;
 
 /* Parameters (default storage) */
 struct P_DroneModel_T_ {
-  uint16_T Constant_Value;             /* Computed Parameter: Constant_Value
+  real_T Constant_Value;               /* Expression: 0
                                         * Referenced by: '<Root>/Constant'
                                         */
 };

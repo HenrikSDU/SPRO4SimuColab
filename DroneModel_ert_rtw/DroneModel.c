@@ -9,7 +9,7 @@
  *
  * Model version              : 3.25
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Fri May 24 17:06:10 2024
+ * C source code generated on : Fri May 24 20:45:04 2024
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -19,7 +19,6 @@
  */
 
 #include "DroneModel.h"
-#include "rtwtypes.h"
 #include "DroneModel_private.h"
 #include <string.h>
 #include "DroneModel_dt.h"
@@ -34,21 +33,20 @@ RT_MODEL_DroneModel_T *const DroneModel_M = &DroneModel_M_;
 /* Model step function */
 void DroneModel_step(void)
 {
-  /* MATLABSystem: '<Root>/Motor 1 out' incorporates:
+  /* MATLABSystem: '<Root>/Servo Motor' incorporates:
    *  Constant: '<Root>/Constant'
    */
-  rc_servo_send_pulse_normalized(1, ((real_T)DroneModel_P.Constant_Value - 90.0)
-    / 60.0);
+  rc_servo_send_pulse_normalized(1, (DroneModel_P.Constant_Value - 90.0) / 60.0);
 
   /* External mode */
   rtExtModeUploadCheckTrigger(1);
 
-  {                                    /* Sample time: [0.002s, 0.0s] */
+  {                                    /* Sample time: [0.01s, 0.0s] */
     rtExtModeUpload(0, (real_T)DroneModel_M->Timing.taskTime0);
   }
 
   /* signal main to stop simulation */
-  {                                    /* Sample time: [0.002s, 0.0s] */
+  {                                    /* Sample time: [0.01s, 0.0s] */
     if ((rtmGetTFinal(DroneModel_M)!=-1) &&
         !((rtmGetTFinal(DroneModel_M)-DroneModel_M->Timing.taskTime0) >
           DroneModel_M->Timing.taskTime0 * (DBL_EPSILON))) {
@@ -87,13 +85,13 @@ void DroneModel_initialize(void)
   (void) memset((void *)DroneModel_M, 0,
                 sizeof(RT_MODEL_DroneModel_T));
   rtmSetTFinal(DroneModel_M, -1);
-  DroneModel_M->Timing.stepSize0 = 0.002;
+  DroneModel_M->Timing.stepSize0 = 0.01;
 
   /* External mode info */
-  DroneModel_M->Sizes.checksums[0] = (779703249U);
-  DroneModel_M->Sizes.checksums[1] = (137264654U);
-  DroneModel_M->Sizes.checksums[2] = (1581418477U);
-  DroneModel_M->Sizes.checksums[3] = (981632123U);
+  DroneModel_M->Sizes.checksums[0] = (3792263365U);
+  DroneModel_M->Sizes.checksums[1] = (522558056U);
+  DroneModel_M->Sizes.checksums[2] = (1174985144U);
+  DroneModel_M->Sizes.checksums[3] = (633386027U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -130,7 +128,7 @@ void DroneModel_initialize(void)
     dtInfo.PTransTable = &rtPTransTable;
   }
 
-  /* Start for MATLABSystem: '<Root>/Motor 1 out' */
+  /* Start for MATLABSystem: '<Root>/Servo Motor' */
   DroneModel_DW.obj.matlabCodegenIsDeleted = false;
   DroneModel_DW.objisempty = true;
   DroneModel_DW.obj.isInitialized = 1;
@@ -140,7 +138,7 @@ void DroneModel_initialize(void)
 /* Model terminate function */
 void DroneModel_terminate(void)
 {
-  /* Terminate for MATLABSystem: '<Root>/Motor 1 out' */
+  /* Terminate for MATLABSystem: '<Root>/Servo Motor' */
   if (!DroneModel_DW.obj.matlabCodegenIsDeleted) {
     DroneModel_DW.obj.matlabCodegenIsDeleted = true;
     if ((DroneModel_DW.obj.isInitialized == 1) &&
@@ -149,5 +147,5 @@ void DroneModel_terminate(void)
     }
   }
 
-  /* End of Terminate for MATLABSystem: '<Root>/Motor 1 out' */
+  /* End of Terminate for MATLABSystem: '<Root>/Servo Motor' */
 }

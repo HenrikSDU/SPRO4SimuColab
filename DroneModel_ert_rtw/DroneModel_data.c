@@ -9,7 +9,7 @@
  *
  * Model version              : 3.25
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Fri May 24 17:06:10 2024
+ * C source code generated on : Fri May 24 20:45:04 2024
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -22,8 +22,8 @@
 
 /* Block parameters (default storage) */
 P_DroneModel_T DroneModel_P = {
-  /* Computed Parameter: Constant_Value
+  /* Expression: 0
    * Referenced by: '<Root>/Constant'
    */
-  0U
+  0.0
 };
