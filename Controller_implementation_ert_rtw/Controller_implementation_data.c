@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.16
+ * Model version                  : 1.18
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Fri May 24 10:07:43 2024
+ * C/C++ source code generated on : Mon May 27 17:16:40 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -30,44 +30,44 @@ P_Controller_implementation_T Controller_implementation_P = {
 
   /* Variable: KV_rating
    * Referenced by:
-   *   '<S65>/Constant1'
-   *   '<S74>/Constant'
+   *   '<S66>/Constant1'
+   *   '<S75>/Constant'
    */
   2800.0,
 
   /* Variable: K_mm
-   * Referenced by: '<S65>/Gain'
+   * Referenced by: '<S66>/Gain'
    */
-  { 0.25, 0.24999999999999994, 0.24999999999999994, 0.25, 3.0799556486386588,
-    -3.0799556486386588, 3.0799556486386597, -3.0799556486386597,
-    3.0799556486386588, 3.0799556486386597, -3.0799556486386588,
+  { 0.25, 0.25, 0.24999999999999994, 0.25, 3.0799556486386588,
+    -3.0799556486386588, -3.0799556486386597, 3.0799556486386597,
+    3.0799556486386597, 3.0799556486386588, -3.0799556486386588,
     -3.0799556486386597, 15.094412367154886, -15.094412367154886,
-    -15.094412367154886, 15.094412367154886 },
+    15.094412367154886, -15.094412367154886 },
 
   /* Variable: Ki_D_lqi_reduced_a
    * Referenced by: '<S2>/Gain2'
    */
-  { -58.859999999999935, -2.1732508328770191E-18, 8.0842703805029964E-18,
-    -1.596503165788668E-18, -2.2892905966431303E-11, -0.99999999999998346,
-    -7.0419510029807107E-15, 7.0209351358723557E-15, -1.78949122171926E-11,
-    -1.4202994085343606E-14, -0.99999999999999045, 1.8357000485072289E-15,
-    1.7253895674795589E-14, -1.1779293060128988E-17, 1.4583573304785095E-16,
-    -0.009999999999999877 },
+  { -39.240000000001018, 2.5870514251349964E-15, -3.01028838879467E-14,
+    2.1342505622833488E-14, -5.9554027427506754E-13, -9.9999999999999609,
+    5.6205249996478852E-13, -3.6584402793076448E-14, -1.1561994467764894E-13,
+    2.3243562386277609E-12, -10.000000000001206, 3.0573846674546583E-14,
+    9.1425578253150825E-14, -2.2820681654451703E-15, 3.0679054457819819E-15,
+    -0.999999999999906 },
 
   /* Variable: Kx_D_lqi_reduced_a
    * Referenced by: '<S2>/Gain'
    */
-  { 90.0608598966105, -1.3958889922538936E-18, 8.7022825365695354E-19,
-    1.1073576658836018E-18, 3.3728727995011987E-12, 0.23627312993875707,
-    2.0026713801791E-15, -5.8061488470478645E-16, 2.6469522618827805E-12,
-    3.0596006590999448E-16, 0.23454225039454443, -2.5049430724310337E-16,
-    -5.0111040523012656E-14, 3.3440665944428038E-16, -5.1375208917727787E-16,
-    0.059803873066974725, 62.278678859300918, -6.268527422204051E-19,
-    -1.0438658559474289E-18, 1.2433803263907597E-19, 1.6796728536019103E-13,
-    0.026271092790522872, 1.4416212963386056E-16, -1.2740550337518994E-17,
-    1.3873360637620807E-13, -1.0966674186100561E-16, 0.026191911070064168,
-    -2.1898888358838176E-17, -1.0899849962456858E-14, 2.2202752858490717E-16,
-    2.8249183550771042E-17, 0.014684844189954442 },
+  { 163.43301266009598, -2.7165656406245385E-14, 4.1394531370083686E-14,
+    -2.945286575749255E-14, 5.86288031520079E-13, 8.539930428625766,
+    -4.633974628000558E-13, 1.8933150346405054E-14, 3.7859013090781409E-14,
+    -1.6371403064260762E-13, 8.5399304286259881, 3.2988775040603508E-15,
+    -5.1119021936266558E-14, -4.1983138697318568E-14, -6.3828342880184789E-15,
+    6.3505401512198976, 261.86594326140175, 4.7144051140552548E-15,
+    -1.7546939567664659E-15, 6.332055988680194E-16, 1.1733713655521714E-13,
+    2.0051174112826118, -5.3994740076259107E-15, -2.0308504147737184E-16,
+    -8.04283889638786E-15, 1.5406408219548214E-14, 2.0051174112826251,
+    1.8991637876258213E-16, -9.9882619235431257E-13, -2.6919998044500862E-14,
+    -4.2915052192622979E-14, 20.000539788628444 },
 
   /* Variable: Ts
    * Referenced by:
@@ -78,8 +78,8 @@ P_Controller_implementation_T Controller_implementation_P = {
 
   /* Variable: battery_voltage
    * Referenced by:
-   *   '<S65>/Constant'
-   *   '<S74>/Battery Voltage'
+   *   '<S66>/Constant'
+   *   '<S75>/Battery Voltage'
    */
   25.0,
 
@@ -89,16 +89,21 @@ P_Controller_implementation_T Controller_implementation_P = {
   0.08117,
 
   /* Variable: drag_co
-   * Referenced by: '<S74>/Gain1'
+   * Referenced by: '<S75>/Gain1'
    */
   9.7533277591854016E-12,
 
   /* Variable: lift_co
    * Referenced by:
-   *   '<S65>/Constant2'
-   *   '<S74>/Gain'
+   *   '<S66>/Constant2'
+   *   '<S75>/Gain'
    */
   5.8888300459665265E-10,
+
+  /* Mask Parameter: CompareToConstant1_const
+   * Referenced by: '<S64>/Constant'
+   */
+  5.0,
 
   /* Expression: 0
    * Referenced by: '<S61>/L*(y[k]-yhat[k|k-1])'
@@ -111,12 +116,12 @@ P_Controller_implementation_T Controller_implementation_P = {
   0.0,
 
   /* Expression: 1.0
-   * Referenced by: '<S68>/Moving Average'
+   * Referenced by: '<S69>/Moving Average'
    */
   1.0,
 
   /* Expression: initCond
-   * Referenced by: '<S72>/ '
+   * Referenced by: '<S73>/ '
    */
   1.0E+8,
 
@@ -203,24 +208,14 @@ P_Controller_implementation_T Controller_implementation_P = {
   0.0,
 
   /* Expression: pi/180
-   * Referenced by: '<S67>/Gain1'
+   * Referenced by: '<S68>/Gain1'
    */
   0.017453292519943295,
 
-  /* Expression: [0;0;0;0]
+  /* Expression: 0
    * Referenced by: '<Root>/Constant'
    */
-  { 0.0, 0.0, 0.0, 0.0 },
-
-  /* Expression: [1;-1;-1;1]
-   * Referenced by: '<S74>/Sign Convention'
-   */
-  { 1.0, -1.0, -1.0, 1.0 },
-
-  /* Expression: [-m*g;0;0;0]
-   * Referenced by: '<S8>/Constant1'
-   */
-  { -4.178079, 0.0, 0.0, 0.0 },
+  0.0,
 
   /* Expression: pInitialization.X0
    * Referenced by: '<S9>/X0'
@@ -247,15 +242,15 @@ P_Controller_implementation_T Controller_implementation_P = {
    */
   0.0,
 
-  /* Expression: 180
-   * Referenced by: '<S3>/Servo limit'
+  /* Expression: [1;-1;1;-1]
+   * Referenced by: '<S75>/Sign Convention'
    */
-  180.0,
+  { 1.0, -1.0, 1.0, -1.0 },
 
-  /* Expression: 0
-   * Referenced by: '<S3>/Servo limit'
+  /* Expression: [0;0;0;0]
+   * Referenced by: '<S8>/Constant1'
    */
-  0.0,
+  { 0.0, 0.0, 0.0, 0.0 },
 
   /* Expression: [0;0;0;0;]
    * Referenced by: '<S6>/Constant'
@@ -299,19 +294,29 @@ P_Controller_implementation_T Controller_implementation_P = {
     3.9719402974194115E-9 },
 
   /* Expression: 5
-   * Referenced by: '<S68>/Step3'
+   * Referenced by: '<S69>/Step3'
    */
   5.0,
 
   /* Expression: 0
-   * Referenced by: '<S68>/Step3'
+   * Referenced by: '<S69>/Step3'
    */
   0.0,
 
   /* Expression: 1
-   * Referenced by: '<S68>/Step3'
+   * Referenced by: '<S69>/Step3'
    */
   1.0,
+
+  /* Computed Parameter: Servolimit_UpperSat
+   * Referenced by: '<S3>/Servo limit'
+   */
+  60,
+
+  /* Computed Parameter: Servolimit_LowerSat
+   * Referenced by: '<S3>/Servo limit'
+   */
+  40,
 
   /* Expression: true()
    * Referenced by: '<S9>/Enable'
@@ -321,7 +326,12 @@ P_Controller_implementation_T Controller_implementation_P = {
   /* Expression: pInitialization.isSqrtUsed
    * Referenced by: '<S59>/isSqrtUsed'
    */
-  false
+  false,
+
+  /* Computed Parameter: Initial1_Value
+   * Referenced by: '<S3>/Initial1'
+   */
+  { 40U, 40U, 40U, 40U }
 };
 
 /*

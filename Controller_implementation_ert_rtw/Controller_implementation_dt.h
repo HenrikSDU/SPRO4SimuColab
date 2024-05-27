@@ -7,9 +7,9 @@
  *
  * Code generation for model "Controller_implementation".
  *
- * Model version              : 1.16
+ * Model version              : 1.18
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Fri May 24 10:07:43 2024
+ * C source code generated on : Mon May 27 17:16:40 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -75,7 +75,9 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&Controller_implementation_B.z), 0, 0, 52 }
+  { (char_T *)(&Controller_implementation_B.z), 0, 0, 51 },
+
+  { (char_T *)(&Controller_implementation_B.angle[0]), 6, 0, 4 }
   ,
 
   { (char_T *)(&Controller_implementation_DW.obj), 18, 0, 1 },
@@ -89,7 +91,10 @@ static DataTypeTransition rtBTransitions[] = {
   { (char_T *)(&Controller_implementation_DW.MemoryX_DSTATE[0]), 0, 0, 12 },
 
   { (char_T *)(&Controller_implementation_DW.Scope_PWORK.LoggedData[0]), 11, 0,
-    25 },
+    26 },
+
+  { (char_T *)(&Controller_implementation_DW.RateTransition_Buffer[0]), 6, 0, 4
+  },
 
   { (char_T *)(&Controller_implementation_DW.SampleandHold3_SubsysRanBC), 2, 0,
     3 },
@@ -99,20 +104,24 @@ static DataTypeTransition rtBTransitions[] = {
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  9U,
+  11U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&Controller_implementation_P.F[0]), 0, 0, 499 },
+  { (char_T *)(&Controller_implementation_P.F[0]), 0, 0, 495 },
 
-  { (char_T *)(&Controller_implementation_P.Enable_Value), 8, 0, 2 }
+  { (char_T *)(&Controller_implementation_P.Servolimit_UpperSat), 6, 0, 2 },
+
+  { (char_T *)(&Controller_implementation_P.Enable_Value), 8, 0, 2 },
+
+  { (char_T *)(&Controller_implementation_P.Initial1_Value[0]), 3, 0, 4 }
 };
 
 /* data type transition table for Parameters structure */
 static DataTypeTransitionTable rtPTransTable = {
-  2U,
+  4U,
   rtPTransitions
 };
 

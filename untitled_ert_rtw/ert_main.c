@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Fri May 24 21:11:37 2024
+ * C/C++ source code generated on : Mon May 27 15:07:44 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
   rtERTExtModeStartMsg();
 
   /* Call RTOS Initialization function */
-  myRTOSInit(0.002, 0);
+  myRTOSInit(0.1, 0);
 
   /* Wait for stop semaphore */
   sem_wait(&stopSem);

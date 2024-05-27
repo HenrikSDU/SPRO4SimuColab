@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Fri May 24 21:11:37 2024
+ * C/C++ source code generated on : Mon May 27 15:07:44 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -26,7 +26,8 @@
 #include "sysran_types.h"
 #include "dt_info.h"
 #include "ext_work.h"
-#include "MW_bbblue_driver.h"
+#include "MW_I2C.h"
+#include "MW_MPU9250.h"
 #endif                                 /* untitled_COMMON_INCLUDES_ */
 
 #include "untitled_types.h"
@@ -75,15 +76,33 @@
 #define rtmGetTPtr(rtm)                (&(rtm)->Timing.taskTime0)
 #endif
 
+/* Block signals (default storage) */
+typedef struct {
+  real_T MPU9250_o1[3];                /* '<Root>/MPU9250' */
+  real_T MPU9250_o2[3];                /* '<Root>/MPU9250' */
+  real_T MPU9250_o3[3];                /* '<Root>/MPU9250' */
+} B_untitled_T;
+
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  beagleboneblue_bbblueServo_un_T obj; /* '<Root>/Servo Motor' */
+  beagleboneblue_bbblueMPU9250__T obj; /* '<Root>/MPU9250' */
+  struct {
+    void *LoggedData;
+  } Scope_PWORK;                       /* '<Root>/Scope' */
+
+  struct {
+    void *LoggedData;
+  } Scope1_PWORK;                      /* '<Root>/Scope1' */
+
+  struct {
+    void *LoggedData;
+  } Scope2_PWORK;                      /* '<Root>/Scope2' */
 } DW_untitled_T;
 
 /* Parameters (default storage) */
 struct P_untitled_T_ {
-  real_T Constant_Value;               /* Expression: 180
-                                        * Referenced by: '<Root>/Constant'
+  real_T MPU9250_SampleTime;           /* Expression: 0.1
+                                        * Referenced by: '<Root>/MPU9250'
                                         */
 };
 
@@ -127,6 +146,9 @@ struct tag_RTM_untitled_T {
 
 /* Block parameters (default storage) */
 extern P_untitled_T untitled_P;
+
+/* Block signals (default storage) */
+extern B_untitled_T untitled_B;
 
 /* Block states (default storage) */
 extern DW_untitled_T untitled_DW;
