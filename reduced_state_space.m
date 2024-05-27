@@ -19,18 +19,13 @@ C_r = [1 0 0 0 0 0 0 0;
        0 1 0 0 0 0 0 0;
        0 0 1 0 0 0 0 0;
        0 0 0 1 0 0 0 0;
-      ];
-D_r = zeros(7,4);
-
-C_r_r = [1 0 0 0 0 0 0 0;
-       0 1 0 0 0 0 0 0;
-       0 0 1 0 0 0 0 0;
-       0 0 0 1 0 0 0 0;
-       0 0 0 0 1 0 0 0;
        0 0 0 0 0 1 0 0;
        0 0 0 0 0 0 1 0;
        0 0 0 0 0 0 0 1;      
        ];
+D_r = zeros(7,4);
+
+
 %sys_reduced = ss(A_r, B_r, C_r, D_r);
 
 %if 8 == rank(obsv(A_r,C_r))
@@ -41,12 +36,12 @@ C_r_r = [1 0 0 0 0 0 0 0;
 x0_r = [0;0;0;0;0;0;0;0;];%initial condition
 %%
 Max_z_r = 0.05; % Max distance allowed on z _axis (m)
-Max_r_r = 2*(pi/180); % Max roll allowed (°)
-Max_p_r = 2 *(pi/180); % Max pitch allowed (°)
+Max_r_r = 0.2*(pi/180); % Max roll allowed (°)
+Max_p_r = 0.2 *(pi/180); % Max pitch allowed (°)
 Max_ya_r = 20 *(pi/180); % Max yaw allowed (°)
  
 
-Max_z_dot_r = 0.03; % Maximum allowed velocity on the z - axis (m/s)
+Max_z_dot_r = 0.1; % Maximum allowed velocity on the z - axis (m/s)
 Max_r_dot_r = 0.1; % Maximum allowed roll rate (rad/s)
 Max_p_dot_r = 0.1; % Maximum allowed picth rate (rad/s)
 Max_ya_dot_r = 0.01; % Maximum allowed yaw rate (rad/s)
