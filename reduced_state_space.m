@@ -43,7 +43,7 @@ x0_r = [0;0;0;0;0;0;0;0;];%initial condition
 Max_z_r = 0.05; % Max distance allowed on z _axis (m)
 Max_r_r = 2*(pi/180); % Max roll allowed (°)
 Max_p_r = 2 *(pi/180); % Max pitch allowed (°)
-Max_ya_r = 2 *(pi/180); % Max yaw allowed (°)
+Max_ya_r = 20 *(pi/180); % Max yaw allowed (°)
  
 
 Max_z_dot_r = 0.03; % Maximum allowed velocity on the z - axis (m/s)

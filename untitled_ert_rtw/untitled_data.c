@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sat May 25 15:33:57 2024
+ * C/C++ source code generated on : Mon May 27 15:07:44 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -21,55 +21,10 @@
 
 /* Block parameters (default storage) */
 P_untitled_T untitled_P = {
-  /* Expression: 1
-   * Referenced by: '<Root>/Pulse Generator1'
+  /* Expression: 0.1
+   * Referenced by: '<Root>/MPU9250'
    */
-  1.0,
-
-  /* Computed Parameter: PulseGenerator1_Period
-   * Referenced by: '<Root>/Pulse Generator1'
-   */
-  4.0,
-
-  /* Computed Parameter: PulseGenerator1_Duty
-   * Referenced by: '<Root>/Pulse Generator1'
-   */
-  1.0,
-
-  /* Expression: 0
-   * Referenced by: '<Root>/Pulse Generator1'
-   */
-  0.0,
-
-  /* Expression: 0
-   * Referenced by:
-   */
-  0.0,
-
-  /* Expression: 1
-   * Referenced by: '<Root>/Pulse Generator2'
-   */
-  1.0,
-
-  /* Computed Parameter: PulseGenerator2_Period
-   * Referenced by: '<Root>/Pulse Generator2'
-   */
-  4.0,
-
-  /* Computed Parameter: PulseGenerator2_Duty
-   * Referenced by: '<Root>/Pulse Generator2'
-   */
-  1.0,
-
-  /* Expression: 0
-   * Referenced by: '<Root>/Pulse Generator2'
-   */
-  0.0,
-
-  /* Computed Parameter: ManualSwitch1_CurrentSetting
-   * Referenced by: '<Root>/Manual Switch1'
-   */
-  1U
+  0.1
 };
 
 /*

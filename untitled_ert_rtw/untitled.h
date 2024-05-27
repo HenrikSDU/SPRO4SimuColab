@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sat May 25 15:33:57 2024
+ * C/C++ source code generated on : Mon May 27 15:07:44 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -26,7 +26,8 @@
 #include "sysran_types.h"
 #include "dt_info.h"
 #include "ext_work.h"
-#include "MW_digitalIO.h"
+#include "MW_I2C.h"
+#include "MW_MPU9250.h"
 #endif                                 /* untitled_COMMON_INCLUDES_ */
 
 #include "untitled_types.h"
@@ -49,10 +50,6 @@
 
 #ifndef rtmSetErrorStatus
 #define rtmSetErrorStatus(rtm, val)    ((rtm)->errorStatus = (val))
-#endif
-
-#ifndef rtmStepTask
-#define rtmStepTask(rtm, idx)          ((rtm)->Timing.TaskCounters.TID[(idx)] == 0)
 #endif
 
 #ifndef rtmGetStopRequested
@@ -79,59 +76,34 @@
 #define rtmGetTPtr(rtm)                (&(rtm)->Timing.taskTime0)
 #endif
 
-#ifndef rtmTaskCounter
-#define rtmTaskCounter(rtm, idx)       ((rtm)->Timing.TaskCounters.TID[(idx)])
-#endif
-
 /* Block signals (default storage) */
 typedef struct {
-  real_T TmpRTBAtManualSwitch1Inport1; /* '<Root>/Pulse Generator2' */
+  real_T MPU9250_o1[3];                /* '<Root>/MPU9250' */
+  real_T MPU9250_o2[3];                /* '<Root>/MPU9250' */
+  real_T MPU9250_o3[3];                /* '<Root>/MPU9250' */
 } B_untitled_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  beagleboneblue_bbblueDigitalW_T obj; /* '<Root>/Digital Write3' */
-  beagleboneblue_bbblueDigitalW_T obj_j;/* '<Root>/Digital Write2' */
-  beagleboneblue_bbblueDigitalW_T obj_n;/* '<Root>/Digital Write1' */
-  beagleboneblue_bbblueDigitalW_T obj_i;/* '<Root>/Digital Write' */
-  real_T TmpRTBAtManualSwitch1Inport1_Bu;/* synthesized block */
-  int32_T clockTickCounter;            /* '<Root>/Pulse Generator1' */
-  int32_T clockTickCounter_g;          /* '<Root>/Pulse Generator2' */
+  beagleboneblue_bbblueMPU9250__T obj; /* '<Root>/MPU9250' */
+  struct {
+    void *LoggedData;
+  } Scope_PWORK;                       /* '<Root>/Scope' */
+
+  struct {
+    void *LoggedData;
+  } Scope1_PWORK;                      /* '<Root>/Scope1' */
+
+  struct {
+    void *LoggedData;
+  } Scope2_PWORK;                      /* '<Root>/Scope2' */
 } DW_untitled_T;
 
 /* Parameters (default storage) */
 struct P_untitled_T_ {
-  real_T PulseGenerator1_Amp;          /* Expression: 1
-                                        * Referenced by: '<Root>/Pulse Generator1'
+  real_T MPU9250_SampleTime;           /* Expression: 0.1
+                                        * Referenced by: '<Root>/MPU9250'
                                         */
-  real_T PulseGenerator1_Period;   /* Computed Parameter: PulseGenerator1_Period
-                                    * Referenced by: '<Root>/Pulse Generator1'
-                                    */
-  real_T PulseGenerator1_Duty;       /* Computed Parameter: PulseGenerator1_Duty
-                                      * Referenced by: '<Root>/Pulse Generator1'
-                                      */
-  real_T PulseGenerator1_PhaseDelay;   /* Expression: 0
-                                        * Referenced by: '<Root>/Pulse Generator1'
-                                        */
-  real_T TmpRTBAtManualSwitch1Inport1_In;/* Expression: 0
-                                          * Referenced by:
-                                          */
-  real_T PulseGenerator2_Amp;          /* Expression: 1
-                                        * Referenced by: '<Root>/Pulse Generator2'
-                                        */
-  real_T PulseGenerator2_Period;   /* Computed Parameter: PulseGenerator2_Period
-                                    * Referenced by: '<Root>/Pulse Generator2'
-                                    */
-  real_T PulseGenerator2_Duty;       /* Computed Parameter: PulseGenerator2_Duty
-                                      * Referenced by: '<Root>/Pulse Generator2'
-                                      */
-  real_T PulseGenerator2_PhaseDelay;   /* Expression: 0
-                                        * Referenced by: '<Root>/Pulse Generator2'
-                                        */
-  uint8_T ManualSwitch1_CurrentSetting;
-                             /* Computed Parameter: ManualSwitch1_CurrentSetting
-                              * Referenced by: '<Root>/Manual Switch1'
-                              */
 };
 
 /* Real-time Model Data Structure */
@@ -167,15 +139,6 @@ struct tag_RTM_untitled_T {
     time_T taskTime0;
     uint32_T clockTick0;
     time_T stepSize0;
-    uint32_T clockTick1;
-    struct {
-      uint8_T TID[2];
-    } TaskCounters;
-
-    struct {
-      boolean_T TID0_1;
-    } RateInteraction;
-
     time_T tFinal;
     boolean_T stopRequestedFlag;
   } Timing;
@@ -190,14 +153,9 @@ extern B_untitled_T untitled_B;
 /* Block states (default storage) */
 extern DW_untitled_T untitled_DW;
 
-/* External function called from main */
-extern void untitled_SetEventsForThisBaseStep(boolean_T *eventFlags);
-
 /* Model entry point functions */
 extern void untitled_initialize(void);
-extern void untitled_step0(void);
-extern void untitled_step1(void);
-extern void untitled_step(int_T tid);
+extern void untitled_step(void);
 extern void untitled_terminate(void);
 
 /* Real-time Model object */

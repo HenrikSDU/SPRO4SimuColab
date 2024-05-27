@@ -9,7 +9,7 @@
  *
  * Model version              : 1.0
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Sat May 25 15:33:57 2024
+ * C source code generated on : Mon May 27 15:07:44 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -36,7 +36,7 @@ static uint_T rtDataTypeSizes[] = {
   sizeof(action_T),
   2*sizeof(uint32_T),
   sizeof(int32_T),
-  sizeof(beagleboneblue_bbblueDigitalW_T),
+  sizeof(beagleboneblue_bbblueMPU9250__T),
   sizeof(uint_T),
   sizeof(char_T),
   sizeof(uchar_T),
@@ -60,7 +60,7 @@ static const char_T * rtDataTypeNames[] = {
   "action_T",
   "timer_uint32_pair_T",
   "physical_connection",
-  "beagleboneblue_bbblueDigitalW_T",
+  "beagleboneblue_bbblueMPU9250__T",
   "uint_T",
   "char_T",
   "uchar_T",
@@ -69,32 +69,28 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&untitled_B.TmpRTBAtManualSwitch1Inport1), 0, 0, 1 }
+  { (char_T *)(&untitled_B.MPU9250_o1[0]), 0, 0, 9 }
   ,
 
-  { (char_T *)(&untitled_DW.obj), 15, 0, 4 },
+  { (char_T *)(&untitled_DW.obj), 15, 0, 1 },
 
-  { (char_T *)(&untitled_DW.TmpRTBAtManualSwitch1Inport1_Bu), 0, 0, 1 },
-
-  { (char_T *)(&untitled_DW.clockTickCounter), 6, 0, 2 }
+  { (char_T *)(&untitled_DW.Scope_PWORK.LoggedData), 11, 0, 3 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  4U,
+  3U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&untitled_P.PulseGenerator1_Amp), 0, 0, 9 },
-
-  { (char_T *)(&untitled_P.ManualSwitch1_CurrentSetting), 3, 0, 1 }
+  { (char_T *)(&untitled_P.MPU9250_SampleTime), 0, 0, 1 }
 };
 
 /* data type transition table for Parameters structure */
 static DataTypeTransitionTable rtPTransTable = {
-  2U,
+  1U,
   rtPTransitions
 };
 

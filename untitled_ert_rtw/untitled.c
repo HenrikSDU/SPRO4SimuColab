@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sat May 25 15:33:57 2024
+ * C/C++ source code generated on : Mon May 27 15:07:44 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -18,6 +18,7 @@
  */
 
 #include "untitled.h"
+#include "untitled_types.h"
 #include "rtwtypes.h"
 #include "untitled_private.h"
 #include "untitled_dt.h"
@@ -31,110 +32,70 @@ DW_untitled_T untitled_DW;
 /* Real-time model */
 static RT_MODEL_untitled_T untitled_M_;
 RT_MODEL_untitled_T *const untitled_M = &untitled_M_;
-static void rate_monotonic_scheduler(void);
 
-/*
- * Set which subrates need to run this base step (base rate always runs).
- * This function must be called prior to calling the model step function
- * in order to remember which rates need to run this base step.  The
- * buffering of events allows for overlapping preemption.
- */
-void untitled_SetEventsForThisBaseStep(boolean_T *eventFlags)
+/* Forward declaration for local functions */
+static void untitled_SystemCore_setup(beagleboneblue_bbblueMPU9250__T *obj);
+static void untitled_SystemCore_setup(beagleboneblue_bbblueMPU9250__T *obj)
 {
-  /* Task runs when its counter is zero, computed via rtmStepTask macro */
-  eventFlags[1] = ((boolean_T)rtmStepTask(untitled_M, 1));
+  /* Start for MATLABSystem: '<Root>/MPU9250' */
+  obj->isInitialized = 1;
+  MW_IMU_DMP_isAccel_Calibrated();
+  MW_IMU_DMP_isGyro_Calibrated();
+  MW_IMU_DMP_isMag_Calibrated();
+
+  /* Start for MATLABSystem: '<Root>/MPU9250' */
+  obj->i2cObjmpu.MW_I2C_HANDLE = MW_I2C_Open(2, MW_I2C_MASTER);
+  obj->i2cObjmpu.BusSpeed = 100000U;
+  MW_I2C_SetBusSpeed(obj->i2cObjmpu.MW_I2C_HANDLE, obj->i2cObjmpu.BusSpeed);
+  obj->i2cObjak8963.MW_I2C_HANDLE = MW_I2C_Open(2, MW_I2C_MASTER);
+  obj->i2cObjak8963.BusSpeed = 100000U;
+  MW_I2C_SetBusSpeed(obj->i2cObjak8963.MW_I2C_HANDLE, obj->i2cObjak8963.BusSpeed);
+  MW_Init_IMU_DMP(200);
+  obj->TunablePropsChanged = false;
 }
 
-/*
- *         This function updates active task flag for each subrate
- *         and rate transition flags for tasks that exchange data.
- *         The function assumes rate-monotonic multitasking scheduler.
- *         The function must be called at model base rate so that
- *         the generated code self-manages all its subrates and rate
- *         transition flags.
- */
-static void rate_monotonic_scheduler(void)
+/* Model step function */
+void untitled_step(void)
 {
-  /* To ensure a deterministic data transfer between two rates,
-   * data is transferred at the priority of a fast task and the frequency
-   * of the slow task.  The following flags indicate when the data transfer
-   * happens.  That is, a rate interaction flag is set true when both rates
-   * will run, and false otherwise.
-   */
+  real_T mdata[3];
 
-  /* tid 0 shares data with slower tid rate: 1 */
-  untitled_M->Timing.RateInteraction.TID0_1 =
-    (untitled_M->Timing.TaskCounters.TID[1] == 0);
-
-  /* Compute which subrates run during the next base time step.  Subrates
-   * are an integer multiple of the base rate counter.  Therefore, the subtask
-   * counter is reset when it reaches its limit (zero means run).
-   */
-  (untitled_M->Timing.TaskCounters.TID[1])++;
-  if ((untitled_M->Timing.TaskCounters.TID[1]) > 9) {/* Sample time: [0.0025s, 0.0s] */
-    untitled_M->Timing.TaskCounters.TID[1] = 0;
-  }
-}
-
-/* Model step function for TID0 */
-void untitled_step0(void)              /* Sample time: [0.00025s, 0.0s] */
-{
-  real_T rtb_PulseGenerator1;
-
-  {                                    /* Sample time: [0.00025s, 0.0s] */
-    rate_monotonic_scheduler();
+  /* MATLABSystem: '<Root>/MPU9250' */
+  if (untitled_DW.obj.SampleTime != untitled_P.MPU9250_SampleTime) {
+    untitled_DW.obj.SampleTime = untitled_P.MPU9250_SampleTime;
   }
 
-  /* DiscretePulseGenerator: '<Root>/Pulse Generator1' */
-  rtb_PulseGenerator1 = (untitled_DW.clockTickCounter <
-    untitled_P.PulseGenerator1_Duty) && (untitled_DW.clockTickCounter >= 0) ?
-    untitled_P.PulseGenerator1_Amp : 0.0;
-  if (untitled_DW.clockTickCounter >= untitled_P.PulseGenerator1_Period - 1.0) {
-    untitled_DW.clockTickCounter = 0;
-  } else {
-    untitled_DW.clockTickCounter++;
+  if (untitled_DW.obj.TunablePropsChanged) {
+    untitled_DW.obj.TunablePropsChanged = false;
   }
 
-  /* End of DiscretePulseGenerator: '<Root>/Pulse Generator1' */
+  MW_Read_Accel(&untitled_B.MPU9250_o1[0]);
 
-  /* RateTransition generated from: '<Root>/Manual Switch1' */
-  if (untitled_M->Timing.RateInteraction.TID0_1) {
-    /* RateTransition generated from: '<Root>/Manual Switch1' */
-    untitled_B.TmpRTBAtManualSwitch1Inport1 =
-      untitled_DW.TmpRTBAtManualSwitch1Inport1_Bu;
-  }
+  /* MATLABSystem: '<Root>/MPU9250' */
+  untitled_B.MPU9250_o2[0] = 0.0;
+  untitled_B.MPU9250_o2[1] = 0.0;
+  untitled_B.MPU9250_o2[2] = 0.0;
 
-  /* End of RateTransition generated from: '<Root>/Manual Switch1' */
+  /* MATLABSystem: '<Root>/MPU9250' */
+  MW_Read_Gyro(&untitled_B.MPU9250_o2[0]);
+  mdata[0] = 0.0;
+  mdata[1] = 0.0;
+  mdata[2] = 0.0;
+  MW_Read_Mag(&mdata[0]);
 
-  /* ManualSwitch: '<Root>/Manual Switch1' */
-  if (untitled_P.ManualSwitch1_CurrentSetting == 1) {
-    rtb_PulseGenerator1 = untitled_B.TmpRTBAtManualSwitch1Inport1;
-  }
-
-  /* End of ManualSwitch: '<Root>/Manual Switch1' */
-
-  /* MATLABSystem: '<Root>/Digital Write' */
-  MW_digitalIO_write(untitled_DW.obj_i.MW_DIGITALIO_HANDLE, rtb_PulseGenerator1
-                     != 0.0);
-
-  /* MATLABSystem: '<Root>/Digital Write1' */
-  MW_digitalIO_write(untitled_DW.obj_n.MW_DIGITALIO_HANDLE, rtb_PulseGenerator1
-                     != 0.0);
-
-  /* MATLABSystem: '<Root>/Digital Write2' */
-  MW_digitalIO_write(untitled_DW.obj_j.MW_DIGITALIO_HANDLE, rtb_PulseGenerator1
-                     != 0.0);
-
-  /* MATLABSystem: '<Root>/Digital Write3' */
-  MW_digitalIO_write(untitled_DW.obj.MW_DIGITALIO_HANDLE, rtb_PulseGenerator1 !=
-                     0.0);
+  /* MATLABSystem: '<Root>/MPU9250' */
+  untitled_B.MPU9250_o3[0] = mdata[0];
+  untitled_B.MPU9250_o3[1] = mdata[1];
+  untitled_B.MPU9250_o3[2] = mdata[2];
 
   /* External mode */
-  rtExtModeUploadCheckTrigger(2);
-  rtExtModeUpload(0, (real_T)untitled_M->Timing.taskTime0);
+  rtExtModeUploadCheckTrigger(1);
+
+  {                                    /* Sample time: [0.1s, 0.0s] */
+    rtExtModeUpload(0, (real_T)untitled_M->Timing.taskTime0);
+  }
 
   /* signal main to stop simulation */
-  {                                    /* Sample time: [0.00025s, 0.0s] */
+  {                                    /* Sample time: [0.1s, 0.0s] */
     if ((rtmGetTFinal(untitled_M)!=-1) &&
         !((rtmGetTFinal(untitled_M)-untitled_M->Timing.taskTime0) >
           untitled_M->Timing.taskTime0 * (DBL_EPSILON))) {
@@ -146,7 +107,7 @@ void untitled_step0(void)              /* Sample time: [0.00025s, 0.0s] */
     }
   }
 
-  /* Update absolute time */
+  /* Update absolute time for base rate */
   /* The "clockTick0" counts the number of times the code of this task has
    * been executed. The absolute time is the multiplication of "clockTick0"
    * and "Timing.stepSize0". Size of "clockTick0" ensures timer will not
@@ -156,79 +117,27 @@ void untitled_step0(void)              /* Sample time: [0.00025s, 0.0s] */
     ((time_T)(++untitled_M->Timing.clockTick0)) * untitled_M->Timing.stepSize0;
 }
 
-/* Model step function for TID1 */
-void untitled_step1(void)              /* Sample time: [0.0025s, 0.0s] */
-{
-  real_T rtb_PulseGenerator2;
-
-  /* DiscretePulseGenerator: '<Root>/Pulse Generator2' */
-  rtb_PulseGenerator2 = (untitled_DW.clockTickCounter_g <
-    untitled_P.PulseGenerator2_Duty) && (untitled_DW.clockTickCounter_g >= 0) ?
-    untitled_P.PulseGenerator2_Amp : 0.0;
-  if (untitled_DW.clockTickCounter_g >= untitled_P.PulseGenerator2_Period - 1.0)
-  {
-    untitled_DW.clockTickCounter_g = 0;
-  } else {
-    untitled_DW.clockTickCounter_g++;
-  }
-
-  /* End of DiscretePulseGenerator: '<Root>/Pulse Generator2' */
-
-  /* RateTransition generated from: '<Root>/Manual Switch1' */
-  untitled_DW.TmpRTBAtManualSwitch1Inport1_Bu = rtb_PulseGenerator2;
-  rtExtModeUpload(1, (real_T)((untitled_M->Timing.clockTick1) * 0.0025));
-
-  /* Update absolute time */
-  /* The "clockTick1" counts the number of times the code of this task has
-   * been executed. The resolution of this integer timer is 0.0025, which is the step size
-   * of the task. Size of "clockTick1" ensures timer will not overflow during the
-   * application lifespan selected.
-   */
-  untitled_M->Timing.clockTick1++;
-}
-
-/* Use this function only if you need to maintain compatibility with an existing static main program. */
-void untitled_step(int_T tid)
-{
-  switch (tid) {
-   case 0 :
-    untitled_step0();
-    break;
-
-   case 1 :
-    untitled_step1();
-    break;
-
-   default :
-    /* do nothing */
-    break;
-  }
-}
-
 /* Model initialize function */
 void untitled_initialize(void)
 {
   /* Registration code */
   rtmSetTFinal(untitled_M, -1);
-  untitled_M->Timing.stepSize0 = 0.00025;
+  untitled_M->Timing.stepSize0 = 0.1;
 
   /* External mode info */
-  untitled_M->Sizes.checksums[0] = (1799495404U);
-  untitled_M->Sizes.checksums[1] = (2151791646U);
-  untitled_M->Sizes.checksums[2] = (1065890362U);
-  untitled_M->Sizes.checksums[3] = (321331878U);
+  untitled_M->Sizes.checksums[0] = (848338050U);
+  untitled_M->Sizes.checksums[1] = (1712540774U);
+  untitled_M->Sizes.checksums[2] = (2252353920U);
+  untitled_M->Sizes.checksums[3] = (1093627579U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
     static RTWExtModeInfo rt_ExtModeInfo;
-    static const sysRanDType *systemRan[5];
+    static const sysRanDType *systemRan[2];
     untitled_M->extModeInfo = (&rt_ExtModeInfo);
     rteiSetSubSystemActiveVectorAddresses(&rt_ExtModeInfo, systemRan);
     systemRan[0] = &rtAlwaysEnabled;
     systemRan[1] = &rtAlwaysEnabled;
-    systemRan[2] = &rtAlwaysEnabled;
-    systemRan[3] = &rtAlwaysEnabled;
-    systemRan[4] = &rtAlwaysEnabled;
     rteiSetModelMappingInfoPtr(untitled_M->extModeInfo,
       &untitled_M->SpecialInfo.mappingInfo);
     rteiSetChecksumsPtr(untitled_M->extModeInfo, untitled_M->Sizes.checksums);
@@ -252,85 +161,42 @@ void untitled_initialize(void)
     dtInfo.PTransTable = &rtPTransTable;
   }
 
-  /* Start for RateTransition generated from: '<Root>/Manual Switch1' */
-  untitled_B.TmpRTBAtManualSwitch1Inport1 =
-    untitled_P.TmpRTBAtManualSwitch1Inport1_In;
-
-  /* InitializeConditions for RateTransition generated from: '<Root>/Manual Switch1' */
-  untitled_DW.TmpRTBAtManualSwitch1Inport1_Bu =
-    untitled_P.TmpRTBAtManualSwitch1Inport1_In;
-
-  /* Start for MATLABSystem: '<Root>/Digital Write' */
-  untitled_DW.obj_i.matlabCodegenIsDeleted = false;
-  untitled_DW.obj_i.isInitialized = 1;
-  untitled_DW.obj_i.MW_DIGITALIO_HANDLE = MW_digitalIO_open(57, 1);
-  untitled_DW.obj_i.isSetupComplete = true;
-
-  /* Start for MATLABSystem: '<Root>/Digital Write1' */
-  untitled_DW.obj_n.matlabCodegenIsDeleted = false;
-  untitled_DW.obj_n.isInitialized = 1;
-  untitled_DW.obj_n.MW_DIGITALIO_HANDLE = MW_digitalIO_open(49, 1);
-  untitled_DW.obj_n.isSetupComplete = true;
-
-  /* Start for MATLABSystem: '<Root>/Digital Write2' */
-  untitled_DW.obj_j.matlabCodegenIsDeleted = false;
-  untitled_DW.obj_j.isInitialized = 1;
-  untitled_DW.obj_j.MW_DIGITALIO_HANDLE = MW_digitalIO_open(97, 1);
-  untitled_DW.obj_j.isSetupComplete = true;
-
-  /* Start for MATLABSystem: '<Root>/Digital Write3' */
+  /* Start for MATLABSystem: '<Root>/MPU9250' */
+  untitled_DW.obj.isInitialized = 0;
+  untitled_DW.obj.i2cObjmpu.DefaultMaximumBusSpeedInHz = 400000.0;
+  untitled_DW.obj.i2cObjmpu.isInitialized = 0;
+  untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted = false;
+  untitled_DW.obj.i2cObjak8963.DefaultMaximumBusSpeedInHz = 400000.0;
+  untitled_DW.obj.i2cObjak8963.isInitialized = 0;
+  untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted = false;
   untitled_DW.obj.matlabCodegenIsDeleted = false;
-  untitled_DW.obj.isInitialized = 1;
-  untitled_DW.obj.MW_DIGITALIO_HANDLE = MW_digitalIO_open(98, 1);
-  untitled_DW.obj.isSetupComplete = true;
+  untitled_DW.obj.SampleTime = untitled_P.MPU9250_SampleTime;
+  untitled_SystemCore_setup(&untitled_DW.obj);
 }
 
 /* Model terminate function */
 void untitled_terminate(void)
 {
-  /* Terminate for MATLABSystem: '<Root>/Digital Write' */
-  if (!untitled_DW.obj_i.matlabCodegenIsDeleted) {
-    untitled_DW.obj_i.matlabCodegenIsDeleted = true;
-    if ((untitled_DW.obj_i.isInitialized == 1) &&
-        untitled_DW.obj_i.isSetupComplete) {
-      MW_digitalIO_close(untitled_DW.obj_i.MW_DIGITALIO_HANDLE);
-    }
-  }
-
-  /* End of Terminate for MATLABSystem: '<Root>/Digital Write' */
-
-  /* Terminate for MATLABSystem: '<Root>/Digital Write1' */
-  if (!untitled_DW.obj_n.matlabCodegenIsDeleted) {
-    untitled_DW.obj_n.matlabCodegenIsDeleted = true;
-    if ((untitled_DW.obj_n.isInitialized == 1) &&
-        untitled_DW.obj_n.isSetupComplete) {
-      MW_digitalIO_close(untitled_DW.obj_n.MW_DIGITALIO_HANDLE);
-    }
-  }
-
-  /* End of Terminate for MATLABSystem: '<Root>/Digital Write1' */
-
-  /* Terminate for MATLABSystem: '<Root>/Digital Write2' */
-  if (!untitled_DW.obj_j.matlabCodegenIsDeleted) {
-    untitled_DW.obj_j.matlabCodegenIsDeleted = true;
-    if ((untitled_DW.obj_j.isInitialized == 1) &&
-        untitled_DW.obj_j.isSetupComplete) {
-      MW_digitalIO_close(untitled_DW.obj_j.MW_DIGITALIO_HANDLE);
-    }
-  }
-
-  /* End of Terminate for MATLABSystem: '<Root>/Digital Write2' */
-
-  /* Terminate for MATLABSystem: '<Root>/Digital Write3' */
+  /* Terminate for MATLABSystem: '<Root>/MPU9250' */
   if (!untitled_DW.obj.matlabCodegenIsDeleted) {
     untitled_DW.obj.matlabCodegenIsDeleted = true;
-    if ((untitled_DW.obj.isInitialized == 1) && untitled_DW.obj.isSetupComplete)
-    {
-      MW_digitalIO_close(untitled_DW.obj.MW_DIGITALIO_HANDLE);
+  }
+
+  if (!untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted) {
+    untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted = true;
+    if (untitled_DW.obj.i2cObjak8963.isInitialized == 1) {
+      untitled_DW.obj.i2cObjak8963.isInitialized = 2;
     }
   }
 
-  /* End of Terminate for MATLABSystem: '<Root>/Digital Write3' */
+  if (!untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted) {
+    untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted = true;
+    if (untitled_DW.obj.i2cObjmpu.isInitialized == 1) {
+      untitled_DW.obj.i2cObjmpu.isInitialized = 2;
+    }
+  }
+
+  /* End of Terminate for MATLABSystem: '<Root>/MPU9250' */
 }
 
 /*

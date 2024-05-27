@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.16
+ * Model version                  : 1.18
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 23 21:22:54 2024
+ * C/C++ source code generated on : Mon May 27 17:16:40 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -24,13 +24,26 @@
 #include "zero_crossing_types.h"
 #include "Controller_implementation_types.h"
 #include "Controller_implementation.h"
+#include "rtw_continuous.h"
+#include "rtw_solver.h"
 
 /* Private macros used by the generated code to access rtModel */
+#ifndef rtmIsMajorTimeStep
+#define rtmIsMajorTimeStep(rtm)        (((rtm)->Timing.simTimeStep) == MAJOR_TIME_STEP)
+#endif
+
+#ifndef rtmIsMinorTimeStep
+#define rtmIsMinorTimeStep(rtm)        (((rtm)->Timing.simTimeStep) == MINOR_TIME_STEP)
+#endif
+
 #ifndef rtmSetTFinal
 #define rtmSetTFinal(rtm, val)         ((rtm)->Timing.tFinal = (val))
 #endif
 
-extern real_T rt_atan2d_snf(real_T u0, real_T u1);
+#ifndef rtmSetTPtr
+#define rtmSetTPtr(rtm, val)           ((rtm)->Timing.t = (val))
+#endif
+
 extern real_T rt_roundd_snf(real_T u);
 extern void sMultiWord2sMultiWordSat(const uint32_T u1[], int32_T n1, uint32_T
   y[], int32_T n);

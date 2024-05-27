@@ -5,7 +5,7 @@
     ;%***********************
     
         nTotData      = 0; %add to this count as we go
-        nTotSects     = 2;
+        nTotSects     = 1;
         sectIdxOffset = 0;
 
         ;%
@@ -28,58 +28,15 @@
         ;%
         ;% Auto data (untitled_P)
         ;%
-            section.nData     = 9;
-            section.data(9)  = dumData; %prealloc
-
-                    ;% untitled_P.PulseGenerator1_Amp
-                    section.data(1).logicalSrcIdx = 0;
-                    section.data(1).dtTransOffset = 0;
-
-                    ;% untitled_P.PulseGenerator1_Period
-                    section.data(2).logicalSrcIdx = 1;
-                    section.data(2).dtTransOffset = 1;
-
-                    ;% untitled_P.PulseGenerator1_Duty
-                    section.data(3).logicalSrcIdx = 2;
-                    section.data(3).dtTransOffset = 2;
-
-                    ;% untitled_P.PulseGenerator1_PhaseDelay
-                    section.data(4).logicalSrcIdx = 3;
-                    section.data(4).dtTransOffset = 3;
-
-                    ;% untitled_P.TmpRTBAtManualSwitch1Inport1_In
-                    section.data(5).logicalSrcIdx = 4;
-                    section.data(5).dtTransOffset = 4;
-
-                    ;% untitled_P.PulseGenerator2_Amp
-                    section.data(6).logicalSrcIdx = 5;
-                    section.data(6).dtTransOffset = 5;
-
-                    ;% untitled_P.PulseGenerator2_Period
-                    section.data(7).logicalSrcIdx = 6;
-                    section.data(7).dtTransOffset = 6;
-
-                    ;% untitled_P.PulseGenerator2_Duty
-                    section.data(8).logicalSrcIdx = 7;
-                    section.data(8).dtTransOffset = 7;
-
-                    ;% untitled_P.PulseGenerator2_PhaseDelay
-                    section.data(9).logicalSrcIdx = 8;
-                    section.data(9).dtTransOffset = 8;
-
-            nTotData = nTotData + section.nData;
-            paramMap.sections(1) = section;
-            clear section
-
             section.nData     = 1;
             section.data(1)  = dumData; %prealloc
 
-                    ;% untitled_P.ManualSwitch1_CurrentSetting
-                    section.data(1).logicalSrcIdx = 9;
+                    ;% untitled_P.MPU9250_SampleTime
+                    section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
 
             nTotData = nTotData + section.nData;
-            paramMap.sections(2) = section;
+            paramMap.sections(1) = section;
             clear section
 
 
@@ -123,12 +80,20 @@
         ;%
         ;% Auto data (untitled_B)
         ;%
-            section.nData     = 1;
-            section.data(1)  = dumData; %prealloc
+            section.nData     = 3;
+            section.data(3)  = dumData; %prealloc
 
-                    ;% untitled_B.TmpRTBAtManualSwitch1Inport1
+                    ;% untitled_B.MPU9250_o1
                     section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
+
+                    ;% untitled_B.MPU9250_o2
+                    section.data(2).logicalSrcIdx = 1;
+                    section.data(2).dtTransOffset = 3;
+
+                    ;% untitled_B.MPU9250_o3
+                    section.data(3).logicalSrcIdx = 2;
+                    section.data(3).dtTransOffset = 6;
 
             nTotData = nTotData + section.nData;
             sigMap.sections(1) = section;
@@ -152,7 +117,7 @@
     ;%*******************
     
         nTotData      = 0; %add to this count as we go
-        nTotSects     = 3;
+        nTotSects     = 2;
         sectIdxOffset = 1;
 
         ;%
@@ -175,53 +140,34 @@
         ;%
         ;% Auto data (untitled_DW)
         ;%
-            section.nData     = 4;
-            section.data(4)  = dumData; %prealloc
+            section.nData     = 1;
+            section.data(1)  = dumData; %prealloc
 
                     ;% untitled_DW.obj
                     section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
 
-                    ;% untitled_DW.obj_j
-                    section.data(2).logicalSrcIdx = 1;
-                    section.data(2).dtTransOffset = 1;
-
-                    ;% untitled_DW.obj_n
-                    section.data(3).logicalSrcIdx = 2;
-                    section.data(3).dtTransOffset = 2;
-
-                    ;% untitled_DW.obj_i
-                    section.data(4).logicalSrcIdx = 3;
-                    section.data(4).dtTransOffset = 3;
-
             nTotData = nTotData + section.nData;
             dworkMap.sections(1) = section;
             clear section
 
-            section.nData     = 1;
-            section.data(1)  = dumData; %prealloc
+            section.nData     = 3;
+            section.data(3)  = dumData; %prealloc
 
-                    ;% untitled_DW.TmpRTBAtManualSwitch1Inport1_Bu
-                    section.data(1).logicalSrcIdx = 4;
+                    ;% untitled_DW.Scope_PWORK.LoggedData
+                    section.data(1).logicalSrcIdx = 1;
                     section.data(1).dtTransOffset = 0;
+
+                    ;% untitled_DW.Scope1_PWORK.LoggedData
+                    section.data(2).logicalSrcIdx = 2;
+                    section.data(2).dtTransOffset = 1;
+
+                    ;% untitled_DW.Scope2_PWORK.LoggedData
+                    section.data(3).logicalSrcIdx = 3;
+                    section.data(3).dtTransOffset = 2;
 
             nTotData = nTotData + section.nData;
             dworkMap.sections(2) = section;
-            clear section
-
-            section.nData     = 2;
-            section.data(2)  = dumData; %prealloc
-
-                    ;% untitled_DW.clockTickCounter
-                    section.data(1).logicalSrcIdx = 5;
-                    section.data(1).dtTransOffset = 0;
-
-                    ;% untitled_DW.clockTickCounter_g
-                    section.data(2).logicalSrcIdx = 6;
-                    section.data(2).dtTransOffset = 1;
-
-            nTotData = nTotData + section.nData;
-            dworkMap.sections(3) = section;
             clear section
 
 
@@ -250,8 +196,8 @@
     ;%
 
 
-    targMap.checksum0 = 1799495404;
-    targMap.checksum1 = 2151791646;
-    targMap.checksum2 = 1065890362;
-    targMap.checksum3 = 321331878;
+    targMap.checksum0 = 848338050;
+    targMap.checksum1 = 1712540774;
+    targMap.checksum2 = 2252353920;
+    targMap.checksum3 = 1093627579;
 
