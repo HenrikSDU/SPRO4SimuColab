@@ -19,10 +19,7 @@ C_r = [1 0 0 0 0 0 0 0;
        0 1 0 0 0 0 0 0;
        0 0 1 0 0 0 0 0;
        0 0 0 1 0 0 0 0;
-       0 0 0 0 0 1 0 0;
-       0 0 0 0 0 0 1 0;
-       0 0 0 0 0 0 0 1;      
-       ];
+      ];
 D_r = zeros(7,4);
 
 C_r_r = [1 0 0 0 0 0 0 0;
@@ -34,11 +31,11 @@ C_r_r = [1 0 0 0 0 0 0 0;
        0 0 0 0 0 0 1 0;
        0 0 0 0 0 0 0 1;      
        ];
-sys_reduced = ss(A_r, B_r, C_r, D_r);
+%sys_reduced = ss(A_r, B_r, C_r, D_r);
 
-if 8 == rank(obsv(A_r,C_r))
-    disp('System is observable!')
-end
+%if 8 == rank(obsv(A_r,C_r))
+ %   disp('System is observable!')
+%end
 
 
 x0_r = [0;0;0;0;0;0;0;0;];%initial condition
@@ -80,14 +77,14 @@ K_LQR_reduced = lqr(A_r, B_r, Q_reduced, R_reduced, 0);
 
 
 
-sys_LQR_reduced_contr = ss(A_r - B_r * K_LQR_reduced, B_r, C_r, D_r);
+%sys_LQR_reduced_contr = ss(A_r - B_r * K_LQR_reduced, B_r, C_r, D_r);
 
-C_red = ctrb(A_r,B_r);
-if rank(C_red) == 8
-    fprintf("\nSystem is reachable and controlable!")
-else
-    fprintf("\nSystem is not reachable!")
-end
+%C_red = ctrb(A_r,B_r);
+%if rank(C_red) == 8
+ %   fprintf("\nSystem is reachable and controlable!")
+%else
+ %   fprintf("\nSystem is not reachable!")
+%end
 
 %% Check robustness
 Lo = sys_reduced * K_LQR_reduced;
@@ -97,11 +94,9 @@ Lo = sys_reduced * K_LQR_reduced;
 C_y = [1 0 0 0 0 0 0 0;
        0 1 0 0 0 0 0 0;
        0 0 1 0 0 0 0 0;
-       0 0 0 0 0 1 0 0;
-       0 0 0 0 0 0 1 0;
-       0 0 0 0 0 0 0 1;      
+       0 0 0 1 0 0 0 0  
        ];
 observ = obsv(A_r,C_y);
-rank(observ);
+rank(observ)
 %Dont remove YAW, we gotta figure out how to measure yaw
 
