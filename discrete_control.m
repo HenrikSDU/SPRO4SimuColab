@@ -2,10 +2,10 @@
 % sample time Ts
 Ts = 0.01;
 
-discrete_sys_reduced = c2d(sys_reduced,Ts);
+discrete_sys_reduced = c2d(sys_reduced,Ts)
 [A_r_d,B_r_d,C_r_d,D_r_d] = ssdata(discrete_sys_reduced);
 
-
+all = exp(A_r*Ts)
 K_D_LQR_reduced = lqrd(A_r, B_r, Q_reduced, R_reduced, Ts);
 K_DD_LQR_reduced_ = lqrd(A_r, B_r, Q_reduced, R_reduced, Ts);
 
