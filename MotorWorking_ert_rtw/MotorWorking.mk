@@ -2,7 +2,7 @@
 ## Makefile generated for component 'MotorWorking'. 
 ## 
 ## Makefile     : MotorWorking.mk
-## Generated on : Mon May 27 14:39:14 2024
+## Generated on : Mon May 27 19:13:39 2024
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/MotorWorking.elf
 ## Product type : executable
 ## 
@@ -166,11 +166,11 @@ INCLUDES = $(INCLUDES_BUILDINFO)
 ###########################################################################
 
 DEFINES_ = -D_roboticscape_in_use_ -D_RTT_SERVOMOTOR_INUSE_ -D__MW_TARGET_USE_HARDWARE_RESOURCES_H__
-DEFINES_BUILD_ARGS = -DCLASSIC_INTERFACE=0 -DALLOCATIONFCN=0 -DTERMFCN=1 -DONESTEPFCN=1 -DMAT_FILE=0 -DMULTI_INSTANCE_CODE=0 -DEXT_MODE=1 -DINTEGER_CODE=0 -DMT=0
+DEFINES_BUILD_ARGS = -DCLASSIC_INTERFACE=0 -DALLOCATIONFCN=0 -DTERMFCN=1 -DONESTEPFCN=1 -DMAT_FILE=0 -DMULTI_INSTANCE_CODE=0 -DEXT_MODE=1 -DINTEGER_CODE=0 -DMT=1
 DEFINES_CUSTOM = 
 DEFINES_OPTS = -DON_TARGET_WAIT_FOR_START=1 -DTID01EQ=1
 DEFINES_SKIPFORSIL = -DARM_PROJECT -D_USE_TARGET_UDP_ -D_RUNONTARGETHARDWARE_BUILD_ -DSTACK_SIZE=64 -DRT
-DEFINES_STANDARD = -DMODEL=MotorWorking -DNUMST=2 -DNCSTATES=0 -DHAVESTDIO -DMODEL_HAS_DYNAMICALLY_LOADED_SFCNS=0
+DEFINES_STANDARD = -DMODEL=MotorWorking -DNUMST=3 -DNCSTATES=0 -DHAVESTDIO -DMODEL_HAS_DYNAMICALLY_LOADED_SFCNS=0
 
 DEFINES = $(DEFINES_) $(DEFINES_BUILD_ARGS) $(DEFINES_CUSTOM) $(DEFINES_OPTS) $(DEFINES_SKIPFORSIL) $(DEFINES_STANDARD)
 
@@ -178,7 +178,7 @@ DEFINES = $(DEFINES_) $(DEFINES_BUILD_ARGS) $(DEFINES_CUSTOM) $(DEFINES_OPTS) $(
 ## SOURCE FILES
 ###########################################################################
 
-SRCS = MotorWorking.c MotorWorking_data.c ext_svr.c updown.c ext_work.c rtiostream_utils.c MW_bbblue_init.c linuxinitialize.c rtiostream_interface.c rtiostream_tcpip.c
+SRCS = MW_I2C.c MW_MPU9250.c MotorWorking.c MotorWorking_data.c rtGetInf.c rtGetNaN.c rt_nonfinite.c rt_zcfcn.c ext_svr.c updown.c ext_work.c rtiostream_utils.c MW_bbblue_init.c linuxinitialize.c rtiostream_interface.c rtiostream_tcpip.c
 
 MAIN_SRC = ert_main.c
 
@@ -188,7 +188,7 @@ ALL_SRCS = $(SRCS) $(MAIN_SRC)
 ## OBJECTS
 ###########################################################################
 
-OBJS = MotorWorking.c.o MotorWorking_data.c.o ext_svr.c.o updown.c.o ext_work.c.o rtiostream_utils.c.o MW_bbblue_init.c.o linuxinitialize.c.o rtiostream_interface.c.o rtiostream_tcpip.c.o
+OBJS = MW_I2C.c.o MW_MPU9250.c.o MotorWorking.c.o MotorWorking_data.c.o rtGetInf.c.o rtGetNaN.c.o rt_nonfinite.c.o rt_zcfcn.c.o ext_svr.c.o updown.c.o ext_work.c.o rtiostream_utils.c.o MW_bbblue_init.c.o linuxinitialize.c.o rtiostream_interface.c.o rtiostream_tcpip.c.o
 
 MAIN_OBJ = ert_main.c.o
 
@@ -447,6 +447,26 @@ $(PRODUCT) : $(OBJS) $(PREBUILT_OBJS) $(LIBS) $(MAIN_OBJ)
 	$(CPP) $(CPPFLAGS) -o "$@" "$<"
 
 
+%.c.o : %.c
+	$(CC) $(CFLAGS) -o "$@" "$<"
+
+
+%.s.o : %.s
+	$(AS) $(ASFLAGS) -o "$@" "$<"
+
+
+%.cpp.o : %.cpp
+	$(CPP) $(CPPFLAGS) -o "$@" "$<"
+
+
+MW_I2C.c.o : MW_I2C.c
+	$(CC) $(CFLAGS) -o "$@" "$<"
+
+
+MW_MPU9250.c.o : MW_MPU9250.c
+	$(CC) $(CFLAGS) -o "$@" "$<"
+
+
 ert_main.c.o : ert_main.c
 	$(CC) $(CFLAGS) -o "$@" "$<"
 
@@ -456,6 +476,22 @@ MotorWorking.c.o : MotorWorking.c
 
 
 MotorWorking_data.c.o : MotorWorking_data.c
+	$(CC) $(CFLAGS) -o "$@" "$<"
+
+
+rtGetInf.c.o : rtGetInf.c
+	$(CC) $(CFLAGS) -o "$@" "$<"
+
+
+rtGetNaN.c.o : rtGetNaN.c
+	$(CC) $(CFLAGS) -o "$@" "$<"
+
+
+rt_nonfinite.c.o : rt_nonfinite.c
+	$(CC) $(CFLAGS) -o "$@" "$<"
+
+
+rt_zcfcn.c.o : rt_zcfcn.c
 	$(CC) $(CFLAGS) -o "$@" "$<"
 
 

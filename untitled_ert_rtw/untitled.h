@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Mon May 27 15:07:44 2024
+ * C/C++ source code generated on : Tue May 28 20:24:51 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -24,10 +24,11 @@
 #include "rtwtypes.h"
 #include "rtw_extmode.h"
 #include "sysran_types.h"
+#include "rtw_continuous.h"
+#include "rtw_solver.h"
 #include "dt_info.h"
 #include "ext_work.h"
-#include "MW_I2C.h"
-#include "MW_MPU9250.h"
+#include "MW_bbblue_driver.h"
 #endif                                 /* untitled_COMMON_INCLUDES_ */
 
 #include "untitled_types.h"
@@ -52,6 +53,10 @@
 #define rtmSetErrorStatus(rtm, val)    ((rtm)->errorStatus = (val))
 #endif
 
+#ifndef rtmStepTask
+#define rtmStepTask(rtm, idx)          ((rtm)->Timing.TaskCounters.TID[(idx)] == 0)
+#endif
+
 #ifndef rtmGetStopRequested
 #define rtmGetStopRequested(rtm)       ((rtm)->Timing.stopRequestedFlag)
 #endif
@@ -65,7 +70,7 @@
 #endif
 
 #ifndef rtmGetT
-#define rtmGetT(rtm)                   ((rtm)->Timing.taskTime0)
+#define rtmGetT(rtm)                   (rtmGetTPtr((rtm))[0])
 #endif
 
 #ifndef rtmGetTFinal
@@ -73,36 +78,32 @@
 #endif
 
 #ifndef rtmGetTPtr
-#define rtmGetTPtr(rtm)                (&(rtm)->Timing.taskTime0)
+#define rtmGetTPtr(rtm)                ((rtm)->Timing.t)
 #endif
 
-/* Block signals (default storage) */
-typedef struct {
-  real_T MPU9250_o1[3];                /* '<Root>/MPU9250' */
-  real_T MPU9250_o2[3];                /* '<Root>/MPU9250' */
-  real_T MPU9250_o3[3];                /* '<Root>/MPU9250' */
-} B_untitled_T;
+#ifndef rtmTaskCounter
+#define rtmTaskCounter(rtm, idx)       ((rtm)->Timing.TaskCounters.TID[(idx)])
+#endif
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  beagleboneblue_bbblueMPU9250__T obj; /* '<Root>/MPU9250' */
-  struct {
-    void *LoggedData;
-  } Scope_PWORK;                       /* '<Root>/Scope' */
-
-  struct {
-    void *LoggedData;
-  } Scope1_PWORK;                      /* '<Root>/Scope1' */
-
-  struct {
-    void *LoggedData;
-  } Scope2_PWORK;                      /* '<Root>/Scope2' */
+  beagleboneblue_bbblueServo_un_T obj; /* '<Root>/Motor 4' */
+  beagleboneblue_bbblueServo_un_T obj_n;/* '<Root>/Motor 3' */
+  beagleboneblue_bbblueServo_un_T obj_i;/* '<Root>/Motor 2' */
+  beagleboneblue_bbblueServo_un_T obj_ib;/* '<Root>/Motor 1' */
+  real_T RateTransition_Buffer[4];     /* '<Root>/Rate Transition' */
 } DW_untitled_T;
 
 /* Parameters (default storage) */
 struct P_untitled_T_ {
-  real_T MPU9250_SampleTime;           /* Expression: 0.1
-                                        * Referenced by: '<Root>/MPU9250'
+  real_T CompareToConstant1_const;   /* Mask Parameter: CompareToConstant1_const
+                                      * Referenced by: '<S1>/Constant'
+                                      */
+  real_T Constant_Value[4];            /* Expression: [50;50;50;50]
+                                        * Referenced by: '<Root>/Constant'
+                                        */
+  uint8_T Initial1_Value[4];           /* Computed Parameter: Initial1_Value
+                                        * Referenced by: '<Root>/Initial1'
                                         */
 };
 
@@ -110,6 +111,7 @@ struct P_untitled_T_ {
 struct tag_RTM_untitled_T {
   const char_T *errorStatus;
   RTWExtModeInfo *extModeInfo;
+  RTWSolverInfo solverInfo;
 
   /*
    * Sizes:
@@ -136,26 +138,40 @@ struct tag_RTM_untitled_T {
    * the timing information for the model.
    */
   struct {
-    time_T taskTime0;
     uint32_T clockTick0;
     time_T stepSize0;
+    uint32_T clockTick1;
+    uint32_T clockTick2;
+    struct {
+      uint8_T TID[3];
+    } TaskCounters;
+
+    struct {
+      boolean_T TID1_2;
+    } RateInteraction;
+
     time_T tFinal;
+    SimTimeStep simTimeStep;
     boolean_T stopRequestedFlag;
+    time_T *t;
+    time_T tArray[3];
   } Timing;
 };
 
 /* Block parameters (default storage) */
 extern P_untitled_T untitled_P;
 
-/* Block signals (default storage) */
-extern B_untitled_T untitled_B;
-
 /* Block states (default storage) */
 extern DW_untitled_T untitled_DW;
 
+/* External function called from main */
+extern void untitled_SetEventsForThisBaseStep(boolean_T *eventFlags);
+
 /* Model entry point functions */
 extern void untitled_initialize(void);
-extern void untitled_step(void);
+extern void untitled_step0(void);
+extern void untitled_step2(void);
+extern void untitled_step(int_T tid);
 extern void untitled_terminate(void);
 
 /* Real-time Model object */
@@ -178,6 +194,7 @@ extern volatile boolean_T runModel;
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'untitled'
+ * '<S1>'   : 'untitled/Compare To Constant1'
  */
 #endif                                 /* untitled_h_ */
 

@@ -11,7 +11,7 @@
 
 
 % Constants & Other Parameters
-battery_voltage = 25;
+battery_voltage = 23;
 
 %%%% Calculation of lift & drag coefficient based on experimental data
 

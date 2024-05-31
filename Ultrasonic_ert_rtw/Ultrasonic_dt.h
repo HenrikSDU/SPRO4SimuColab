@@ -7,9 +7,9 @@
  *
  * Code generation for model "Ultrasonic".
  *
- * Model version              : 1.4
+ * Model version              : 1.6
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Thu May 23 18:11:38 2024
+ * C source code generated on : Thu May 30 19:52:24 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -77,9 +77,9 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&Ultrasonic_B.Sum), 0, 0, 1 },
+  { (char_T *)(&Ultrasonic_B.PulseGenerator), 0, 0, 1 },
 
-  { (char_T *)(&Ultrasonic_B.Multiply), 16, 0, 1 },
+  { (char_T *)(&Ultrasonic_B.In), 16, 0, 1 },
 
   { (char_T *)(&Ultrasonic_B.echo), 8, 0, 1 }
   ,
@@ -88,31 +88,35 @@ static DataTypeTransition rtBTransitions[] = {
 
   { (char_T *)(&Ultrasonic_DW.obj_g), 18, 0, 1 },
 
-  { (char_T *)(&Ultrasonic_DW.UnitDelay_DSTATE), 0, 0, 1 },
-
   { (char_T *)(&Ultrasonic_DW.Scope_PWORK.LoggedData[0]), 11, 0, 3 },
+
+  { (char_T *)(&Ultrasonic_DW.clockTickCounter), 6, 0, 1 },
+
+  { (char_T *)(&Ultrasonic_DW.TmpLatchAtSampleandHoldInport1_), 16, 0, 1 },
 
   { (char_T *)(&Ultrasonic_DW.DiscreteTimeIntegrator_DSTATE), 15, 0, 1 },
 
-  { (char_T *)(&Ultrasonic_DW.DiscreteTimeIntegrator_PrevRese), 2, 0, 1 }
+  { (char_T *)(&Ultrasonic_DW.DiscreteTimeIntegrator_PrevRese), 2, 0, 2 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  9U,
+  10U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&Ultrasonic_P.DigitalRead_SampleTime), 0, 0, 3 },
+  { (char_T *)(&Ultrasonic_P.DigitalRead_SampleTime), 0, 0, 5 },
+
+  { (char_T *)(&Ultrasonic_P._Y0), 16, 0, 2 },
 
   { (char_T *)(&Ultrasonic_P.DiscreteTimeIntegrator_IC), 15, 0, 2 }
 };
 
 /* data type transition table for Parameters structure */
 static DataTypeTransitionTable rtPTransTable = {
-  2U,
+  3U,
   rtPTransitions
 };
 

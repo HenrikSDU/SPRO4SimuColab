@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.2
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Mon May 27 17:09:21 2024
+ * C/C++ source code generated on : Mon May 27 19:13:32 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -21,60 +21,82 @@
 
 /* Block parameters (default storage) */
 P_MotorWorking_T MotorWorking_P = {
+  /* Variable: Ts
+   * Referenced by:
+   *   '<S2>/Barometer'
+   *   '<S2>/MPU9250'
+   */
+  0.01,
+
   /* Mask Parameter: CompareToConstant1_const
    * Referenced by: '<S1>/Constant'
    */
   5.0,
 
-  /* Expression: 50
-   * Referenced by: '<Root>/Constant'
+  /* Expression: 1.0
+   * Referenced by: '<S4>/Moving Average'
    */
-  50.0,
+  1.0,
+
+  /* Expression: initCond
+   * Referenced by: '<S8>/ '
+   */
+  1.0E+8,
+
+  /* Expression: 1.054388803297024
+   * Referenced by: '<Root>/Gain'
+   */
+  1.0543888032970239,
+
+  /* Expression: pi/180
+   * Referenced by: '<S3>/Gain1'
+   */
+  0.017453292519943295,
+
+  /* Expression: 0
+   * Referenced by: '<S2>/Constant'
+   */
+  0.0,
+
+  /* Expression: 0
+   * Referenced by:
+   */
+  0.0,
 
   /* Expression: 5
-   * Referenced by: '<Root>/Sine Wave'
+   * Referenced by: '<S4>/Step3'
    */
   5.0,
 
   /* Expression: 0
-   * Referenced by: '<Root>/Sine Wave'
+   * Referenced by: '<S4>/Step3'
    */
   0.0,
 
   /* Expression: 1
-   * Referenced by: '<Root>/Sine Wave'
+   * Referenced by: '<S4>/Step3'
    */
   1.0,
 
-  /* Expression: 0
-   * Referenced by: '<Root>/Sine Wave'
+  /* Expression: 68
+   * Referenced by: '<Root>/Constant'
    */
-  0.0,
+  68.0,
 
-  /* Computed Parameter: SineWave_Hsin
-   * Referenced by: '<Root>/Sine Wave'
+  /* Computed Parameter: TmpRTBAtSwitch1Inport1_InitialC
+   * Referenced by:
    */
-  0.01999866669333308,
-
-  /* Computed Parameter: SineWave_HCos
-   * Referenced by: '<Root>/Sine Wave'
-   */
-  0.99980000666657776,
-
-  /* Computed Parameter: SineWave_PSin
-   * Referenced by: '<Root>/Sine Wave'
-   */
-  -0.01999866669333308,
-
-  /* Computed Parameter: SineWave_PCos
-   * Referenced by: '<Root>/Sine Wave'
-   */
-  0.99980000666657776,
+  0U,
 
   /* Computed Parameter: Initial1_Value
    * Referenced by: '<Root>/Initial1'
    */
-  40U
+  40U,
+
+  /* Computed Parameter: ManualSwitch_CurrentSetting
+   * Referenced by: '<Root>/Manual Switch'
+   */
+  1U
 };
 
 /*

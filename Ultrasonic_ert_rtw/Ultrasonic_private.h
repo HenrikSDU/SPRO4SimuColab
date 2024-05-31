@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Ultrasonic'.
  *
- * Model version                  : 1.4
+ * Model version                  : 1.6
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 23 18:11:38 2024
+ * C/C++ source code generated on : Thu May 30 19:52:24 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -21,6 +21,7 @@
 #define Ultrasonic_private_h_
 #include "rtwtypes.h"
 #include "multiword_types.h"
+#include "zero_crossing_types.h"
 #include "Ultrasonic_types.h"
 
 /* Private macros used by the generated code to access rtModel */

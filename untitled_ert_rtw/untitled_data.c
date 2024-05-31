@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Mon May 27 15:07:44 2024
+ * C/C++ source code generated on : Tue May 28 20:24:51 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -21,10 +21,20 @@
 
 /* Block parameters (default storage) */
 P_untitled_T untitled_P = {
-  /* Expression: 0.1
-   * Referenced by: '<Root>/MPU9250'
+  /* Mask Parameter: CompareToConstant1_const
+   * Referenced by: '<S1>/Constant'
    */
-  0.1
+  1.0,
+
+  /* Expression: [50;50;50;50]
+   * Referenced by: '<Root>/Constant'
+   */
+  { 50.0, 50.0, 50.0, 50.0 },
+
+  /* Computed Parameter: Initial1_Value
+   * Referenced by: '<Root>/Initial1'
+   */
+  { 40U, 40U, 40U, 40U }
 };
 
 /*

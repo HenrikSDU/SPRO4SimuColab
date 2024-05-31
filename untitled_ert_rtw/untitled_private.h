@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Mon May 27 15:07:44 2024
+ * C/C++ source code generated on : Tue May 28 20:24:51 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -22,10 +22,24 @@
 #include "rtwtypes.h"
 #include "multiword_types.h"
 #include "untitled_types.h"
+#include "rtw_continuous.h"
+#include "rtw_solver.h"
 
 /* Private macros used by the generated code to access rtModel */
+#ifndef rtmIsMajorTimeStep
+#define rtmIsMajorTimeStep(rtm)        (((rtm)->Timing.simTimeStep) == MAJOR_TIME_STEP)
+#endif
+
+#ifndef rtmIsMinorTimeStep
+#define rtmIsMinorTimeStep(rtm)        (((rtm)->Timing.simTimeStep) == MINOR_TIME_STEP)
+#endif
+
 #ifndef rtmSetTFinal
 #define rtmSetTFinal(rtm, val)         ((rtm)->Timing.tFinal = (val))
+#endif
+
+#ifndef rtmSetTPtr
+#define rtmSetTPtr(rtm, val)           ((rtm)->Timing.t = (val))
 #endif
 #endif                                 /* untitled_private_h_ */
 

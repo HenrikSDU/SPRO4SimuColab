@@ -18,4 +18,13 @@ Ki_D_lqi_reduced_a = K_lqi_reduced_a(:,9:12);
 disp("Discrete Success!")
 
 %% Printing
+C_red = ctrb(A_r_d,B_r_d);
+if rank(C_red) == 8
+    fprintf("\nSystem is controlable!")
+else
+    fprintf("\nSystem is not reachable!")
+end
 
+reach_mat = obsv(transpose(A_r_d),transpose(B_r_d));
+
+rank(reach_mat)

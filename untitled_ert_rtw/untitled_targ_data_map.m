@@ -5,7 +5,7 @@
     ;%***********************
     
         nTotData      = 0; %add to this count as we go
-        nTotSects     = 1;
+        nTotSects     = 2;
         sectIdxOffset = 0;
 
         ;%
@@ -28,15 +28,30 @@
         ;%
         ;% Auto data (untitled_P)
         ;%
-            section.nData     = 1;
-            section.data(1)  = dumData; %prealloc
+            section.nData     = 2;
+            section.data(2)  = dumData; %prealloc
 
-                    ;% untitled_P.MPU9250_SampleTime
+                    ;% untitled_P.CompareToConstant1_const
                     section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
 
+                    ;% untitled_P.Constant_Value
+                    section.data(2).logicalSrcIdx = 1;
+                    section.data(2).dtTransOffset = 1;
+
             nTotData = nTotData + section.nData;
             paramMap.sections(1) = section;
+            clear section
+
+            section.nData     = 1;
+            section.data(1)  = dumData; %prealloc
+
+                    ;% untitled_P.Initial1_Value
+                    section.data(1).logicalSrcIdx = 2;
+                    section.data(1).dtTransOffset = 0;
+
+            nTotData = nTotData + section.nData;
+            paramMap.sections(2) = section;
             clear section
 
 
@@ -57,7 +72,7 @@
     ;%**************************
     
         nTotData      = 0; %add to this count as we go
-        nTotSects     = 1;
+        nTotSects     = 0;
         sectIdxOffset = 0;
 
         ;%
@@ -74,31 +89,11 @@
         ;%
         sigMap.nSections           = nTotSects;
         sigMap.sectIdxOffset       = sectIdxOffset;
-            sigMap.sections(nTotSects) = dumSection; %prealloc
         sigMap.nTotData            = -1;
 
         ;%
         ;% Auto data (untitled_B)
         ;%
-            section.nData     = 3;
-            section.data(3)  = dumData; %prealloc
-
-                    ;% untitled_B.MPU9250_o1
-                    section.data(1).logicalSrcIdx = 0;
-                    section.data(1).dtTransOffset = 0;
-
-                    ;% untitled_B.MPU9250_o2
-                    section.data(2).logicalSrcIdx = 1;
-                    section.data(2).dtTransOffset = 3;
-
-                    ;% untitled_B.MPU9250_o3
-                    section.data(3).logicalSrcIdx = 2;
-                    section.data(3).dtTransOffset = 6;
-
-            nTotData = nTotData + section.nData;
-            sigMap.sections(1) = section;
-            clear section
-
 
             ;%
             ;% Non-auto Data (signal)
@@ -118,7 +113,7 @@
     
         nTotData      = 0; %add to this count as we go
         nTotSects     = 2;
-        sectIdxOffset = 1;
+        sectIdxOffset = 0;
 
         ;%
         ;% Define dummy sections & preallocate arrays
@@ -140,31 +135,35 @@
         ;%
         ;% Auto data (untitled_DW)
         ;%
-            section.nData     = 1;
-            section.data(1)  = dumData; %prealloc
+            section.nData     = 4;
+            section.data(4)  = dumData; %prealloc
 
                     ;% untitled_DW.obj
                     section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
 
+                    ;% untitled_DW.obj_n
+                    section.data(2).logicalSrcIdx = 1;
+                    section.data(2).dtTransOffset = 1;
+
+                    ;% untitled_DW.obj_i
+                    section.data(3).logicalSrcIdx = 2;
+                    section.data(3).dtTransOffset = 2;
+
+                    ;% untitled_DW.obj_ib
+                    section.data(4).logicalSrcIdx = 3;
+                    section.data(4).dtTransOffset = 3;
+
             nTotData = nTotData + section.nData;
             dworkMap.sections(1) = section;
             clear section
 
-            section.nData     = 3;
-            section.data(3)  = dumData; %prealloc
+            section.nData     = 1;
+            section.data(1)  = dumData; %prealloc
 
-                    ;% untitled_DW.Scope_PWORK.LoggedData
-                    section.data(1).logicalSrcIdx = 1;
+                    ;% untitled_DW.RateTransition_Buffer
+                    section.data(1).logicalSrcIdx = 4;
                     section.data(1).dtTransOffset = 0;
-
-                    ;% untitled_DW.Scope1_PWORK.LoggedData
-                    section.data(2).logicalSrcIdx = 2;
-                    section.data(2).dtTransOffset = 1;
-
-                    ;% untitled_DW.Scope2_PWORK.LoggedData
-                    section.data(3).logicalSrcIdx = 3;
-                    section.data(3).dtTransOffset = 2;
 
             nTotData = nTotData + section.nData;
             dworkMap.sections(2) = section;
@@ -196,8 +195,8 @@
     ;%
 
 
-    targMap.checksum0 = 848338050;
-    targMap.checksum1 = 1712540774;
-    targMap.checksum2 = 2252353920;
-    targMap.checksum3 = 1093627579;
+    targMap.checksum0 = 2135034586;
+    targMap.checksum1 = 3574773840;
+    targMap.checksum2 = 1159205704;
+    targMap.checksum3 = 1046543997;
 

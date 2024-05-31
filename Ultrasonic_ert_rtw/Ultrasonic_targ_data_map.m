@@ -5,7 +5,7 @@
     ;%***********************
     
         nTotData      = 0; %add to this count as we go
-        nTotSects     = 2;
+        nTotSects     = 3;
         sectIdxOffset = 0;
 
         ;%
@@ -28,20 +28,28 @@
         ;%
         ;% Auto data (Ultrasonic_P)
         ;%
-            section.nData     = 3;
-            section.data(3)  = dumData; %prealloc
+            section.nData     = 5;
+            section.data(5)  = dumData; %prealloc
 
                     ;% Ultrasonic_P.DigitalRead_SampleTime
                     section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
 
-                    ;% Ultrasonic_P.Constant_Value
+                    ;% Ultrasonic_P.PulseGenerator_Amp
                     section.data(2).logicalSrcIdx = 1;
                     section.data(2).dtTransOffset = 1;
 
-                    ;% Ultrasonic_P.UnitDelay_InitialCondition
+                    ;% Ultrasonic_P.PulseGenerator_Period
                     section.data(3).logicalSrcIdx = 2;
                     section.data(3).dtTransOffset = 2;
+
+                    ;% Ultrasonic_P.PulseGenerator_Duty
+                    section.data(4).logicalSrcIdx = 3;
+                    section.data(4).dtTransOffset = 3;
+
+                    ;% Ultrasonic_P.PulseGenerator_PhaseDelay
+                    section.data(5).logicalSrcIdx = 4;
+                    section.data(5).dtTransOffset = 4;
 
             nTotData = nTotData + section.nData;
             paramMap.sections(1) = section;
@@ -50,16 +58,31 @@
             section.nData     = 2;
             section.data(2)  = dumData; %prealloc
 
-                    ;% Ultrasonic_P.DiscreteTimeIntegrator_IC
-                    section.data(1).logicalSrcIdx = 3;
+                    ;% Ultrasonic_P._Y0
+                    section.data(1).logicalSrcIdx = 5;
                     section.data(1).dtTransOffset = 0;
 
-                    ;% Ultrasonic_P.Multiply_Gain
-                    section.data(2).logicalSrcIdx = 4;
+                    ;% Ultrasonic_P.TmpLatchAtSampleandHoldInport1_
+                    section.data(2).logicalSrcIdx = 6;
                     section.data(2).dtTransOffset = 1;
 
             nTotData = nTotData + section.nData;
             paramMap.sections(2) = section;
+            clear section
+
+            section.nData     = 2;
+            section.data(2)  = dumData; %prealloc
+
+                    ;% Ultrasonic_P.DiscreteTimeIntegrator_IC
+                    section.data(1).logicalSrcIdx = 7;
+                    section.data(1).dtTransOffset = 0;
+
+                    ;% Ultrasonic_P.Multiply_Gain
+                    section.data(2).logicalSrcIdx = 8;
+                    section.data(2).dtTransOffset = 1;
+
+            nTotData = nTotData + section.nData;
+            paramMap.sections(3) = section;
             clear section
 
 
@@ -106,7 +129,7 @@
             section.nData     = 1;
             section.data(1)  = dumData; %prealloc
 
-                    ;% Ultrasonic_B.Sum
+                    ;% Ultrasonic_B.PulseGenerator
                     section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
 
@@ -117,8 +140,8 @@
             section.nData     = 1;
             section.data(1)  = dumData; %prealloc
 
-                    ;% Ultrasonic_B.Multiply
-                    section.data(1).logicalSrcIdx = 1;
+                    ;% Ultrasonic_B.In
+                    section.data(1).logicalSrcIdx = 2;
                     section.data(1).dtTransOffset = 0;
 
             nTotData = nTotData + section.nData;
@@ -129,7 +152,7 @@
             section.data(1)  = dumData; %prealloc
 
                     ;% Ultrasonic_B.echo
-                    section.data(1).logicalSrcIdx = 2;
+                    section.data(1).logicalSrcIdx = 3;
                     section.data(1).dtTransOffset = 0;
 
             nTotData = nTotData + section.nData;
@@ -154,7 +177,7 @@
     ;%*******************
     
         nTotData      = 0; %add to this count as we go
-        nTotSects     = 6;
+        nTotSects     = 7;
         sectIdxOffset = 3;
 
         ;%
@@ -202,7 +225,7 @@
             section.nData     = 1;
             section.data(1)  = dumData; %prealloc
 
-                    ;% Ultrasonic_DW.UnitDelay_DSTATE
+                    ;% Ultrasonic_DW.Scope_PWORK.LoggedData
                     section.data(1).logicalSrcIdx = 2;
                     section.data(1).dtTransOffset = 0;
 
@@ -213,7 +236,7 @@
             section.nData     = 1;
             section.data(1)  = dumData; %prealloc
 
-                    ;% Ultrasonic_DW.Scope_PWORK.LoggedData
+                    ;% Ultrasonic_DW.clockTickCounter
                     section.data(1).logicalSrcIdx = 3;
                     section.data(1).dtTransOffset = 0;
 
@@ -224,7 +247,7 @@
             section.nData     = 1;
             section.data(1)  = dumData; %prealloc
 
-                    ;% Ultrasonic_DW.DiscreteTimeIntegrator_DSTATE
+                    ;% Ultrasonic_DW.TmpLatchAtSampleandHoldInport1_
                     section.data(1).logicalSrcIdx = 4;
                     section.data(1).dtTransOffset = 0;
 
@@ -235,12 +258,27 @@
             section.nData     = 1;
             section.data(1)  = dumData; %prealloc
 
-                    ;% Ultrasonic_DW.DiscreteTimeIntegrator_PrevRese
+                    ;% Ultrasonic_DW.DiscreteTimeIntegrator_DSTATE
                     section.data(1).logicalSrcIdx = 5;
                     section.data(1).dtTransOffset = 0;
 
             nTotData = nTotData + section.nData;
             dworkMap.sections(6) = section;
+            clear section
+
+            section.nData     = 2;
+            section.data(2)  = dumData; %prealloc
+
+                    ;% Ultrasonic_DW.DiscreteTimeIntegrator_PrevRese
+                    section.data(1).logicalSrcIdx = 6;
+                    section.data(1).dtTransOffset = 0;
+
+                    ;% Ultrasonic_DW.SampleandHold_SubsysRanBC
+                    section.data(2).logicalSrcIdx = 7;
+                    section.data(2).dtTransOffset = 1;
+
+            nTotData = nTotData + section.nData;
+            dworkMap.sections(7) = section;
             clear section
 
 
@@ -269,8 +307,8 @@
     ;%
 
 
-    targMap.checksum0 = 3694572734;
-    targMap.checksum1 = 2127255463;
-    targMap.checksum2 = 4189412061;
-    targMap.checksum3 = 1528743913;
+    targMap.checksum0 = 484970812;
+    targMap.checksum1 = 1040237286;
+    targMap.checksum2 = 119748894;
+    targMap.checksum3 = 1985701622;
 

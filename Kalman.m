@@ -78,15 +78,31 @@ mean_value = mean(data_GyroYaw);
 squared_diff = (data_GyroYaw - mean_value).^2;
 variance_GyroYaw = sum(squared_diff) / length(data_GyroYaw);
 disp(['The variance of the data points is: ' num2str(variance_GyroYaw)]);
-
-
-%figure;
-%histogram(data_pitchAngle)
-%figure;
-%histogram(data_rollAngle)
-%figure;
-%histogram(data_Gyro)
-
+%% Plotting
+figure;
+histogram(data_Height)
+title('Histogram Height')
+figure;
+histogram(data_pitchAngle)
+title('Histogram Pitch Angle')
+%%
+figure;
+histogram(data_rollAngle)
+title('Histogram Roll Angle')
+%%
+figure;
+histogram(data_YawAngle)
+title('Histogram Yaw Angle')
+figure;
+histogram(data_GyroRoll)
+title('Histogram Roll Rate')
+%%
+figure;
+histogram(data_GyroPitch)
+title('Histogram Pitch Rate')
+%%
+histogram(data_GyroYaw)
+title('Histogram Yaw Rate')
 % Define the noise variances for each sensor
 %sigma_gyro = variance_Gyro;  % Gyro sensor noise variance
 %sigma_baro = variance_Bar1;  % Barometer sensor noise variance
@@ -94,13 +110,96 @@ disp(['The variance of the data points is: ' num2str(variance_GyroYaw)]);
 %sigma_acc1 = variance_rollAngle;  % Accel1 sensor noise variance
 %sigma_acc2 = variance_pitchAngle;  % Accel2 sensor noise variance
 %sigma_acc3 = 0;  % Accel3 sensor noise variance
+%%
+
 
 %% 
 % Construct the R matrix
 %R = diag([1,sigma_acc1,sigma_acc2, 1,sigma_baro,sigma_mag]);
 R_kalman = diag([variance_Height,variance_pitchAngle , variance_rollAngle, variance_Yaw, variance_GyroRoll, variance_GyroPitch, variance_GyroYaw]);
 Q_kalman = diag([0,0,0,0,0.0000000001,0.0000000001,0.00000000001,0.00000000001]);
-Q_kalman_d = diag([0,0,0,0,0.000000001,0.000000001,0.000000001,0.000000001]);
+Q_kalman_d = diag([0,0,0,0,0.000000000001,0.00000000001,0.00000000001,0.00000000001]);
+Q_kalman_d2 = diag([0,0,0,0,0.00000000001,0.0000000001,0.00000000001,0.00000000001]);
+Q_kalman_3 = diag([0,0,0,0,0.0000001,0.0000001,0.00000001,0.0000001]);
+Q_kalman_d_lqi = diag([0,0,0,0,0.00001,0.00001,0.00001,0.00001]);
 % Display the R matrix
 disp(R_kalman);
 %disp(Q_kalman);
+fprintf("done")
+%% Actual variances
+accel1_min = -1.243e+01;
+accel1_max = 1.051e+01;
+accel2_min = -9.247e+00;
+accel2_max = 1.107e+01;
+
+angr_1_min = -3.723e+00;
+angr_1_max = 2.014e+00;
+angr_2_min = -2.625e+00;
+angr_2_max = 2.197e+00;
+
+angr_3_min = -1.953e+00;
+angr_3_max = 3.052e+00;
+
+var_angr_1 = clc_var(angr_1_min, angr_1_max);
+var_angr_2 = clc_var(angr_2_min, angr_2_max);
+var_angr_3 = clc_var(angr_3_min, angr_3_max);
+
+ang_r_min = -1.127e+00;
+ang_r_max = 9.491e-01;
+var_r = clc_var(ang_r_min,ang_r_max);
+
+ang_p_min = -1.249e+00;
+ang_p_max = 9.917e-01;
+var_p = clc_var(ang_p_min,ang_p_max);
+
+var_ya = clc_var(-pi,pi);
+
+
+R_kalman_a = diag([0.001 var_p var_r 0.001 var_angr_1 var_angr_2 0.001]);
+
+function var = clc_var(min,max)
+    
+    dif = abs(max - min);
+    sig = dif / 3;
+    var = sig^2;
+
+end
+
+
+%% Kalman Filter ref1
+
+var_alt = 0.001;
+var_rp = 0.000005;  
+var_yaw = 0.0005;
+var_rpy_rate = 0.0000025;
+pn = 0.00000001; % process noise, some will be 0!
+Q_k = diag([0.000001 0.000001 pn pn pn pn pn pn]); % 8 since we have 8 state variables
+R_k = diag([var_alt var_rp var_rp var_yaw var_rpy_rate var_rpy_rate var_rpy_rate]); % 7 since we have 7 outputs
+
+
+%% Kalman Filter v2
+roll_pp = 1.783e00;
+pitch_pp = 2.195;
+yaw_pp = 6.280;
+roll_dot_pp = 7.670e-02;
+pitch_dot_pp = 1.108e-01;
+yaw_dot_pp = 7.244e-02;
+z_pp = 3.16800;
+
+var_roll_pp = clc_varpp(pitch_pp) * 1.1; % Note pitch is here
+var_pitch_pp = clc_varpp(pitch_pp) * 1.1;
+var_yaw_pp = clc_varpp(yaw_pp) * 1.1;
+var_roll_dot_pp = clc_varpp(roll_dot_pp);
+var_pitch_dot_pp = clc_varpp(pitch_dot_pp);
+var_yaw_dot_pp = clc_varpp(yaw_dot_pp);
+var_z_pp = clc_varpp(z_pp);
+
+R_kalman_pp = diag([var_z_pp var_roll_pp var_pitch_pp var_yaw_pp var_roll_dot_pp var_pitch_dot_pp var_yaw_dot_pp]);
+
+function var = clc_varpp(pp)
+    
+    dif = pp;
+    sig = dif / 6;
+    var = sig^2;
+
+end

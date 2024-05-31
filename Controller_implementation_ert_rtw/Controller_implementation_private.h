@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.18
+ * Model version                  : 1.21
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Mon May 27 17:16:40 2024
+ * C/C++ source code generated on : Thu May 30 19:42:55 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -45,6 +45,7 @@
 #endif
 
 extern real_T rt_roundd_snf(real_T u);
+extern real_T rt_atan2d_snf(real_T u0, real_T u1);
 extern void sMultiWord2sMultiWordSat(const uint32_T u1[], int32_T n1, uint32_T
   y[], int32_T n);
 extern void MultiWordSub(const uint32_T u1[], const uint32_T u2[], uint32_T y[],

@@ -104,27 +104,27 @@ controlability = ctrb(A_e_r_a,B_e_r_a);
 
 rank(controlability)
 
-Q_lqi_reduced_a = diag([1/(0.1)^2, 1/(Max_r_r)^2, 1/(Max_p_r)^2, ...
+Q_lqi_reduced_a = diag([1/(0.05)^2, 1/(Max_r_r)^2, 1/(Max_p_r)^2, ...
                     1/(Max_ya_r)^2, 1/(Max_z_dot_r)^2, 1/(Max_r_dot_r)^2, ...
-                    1/(Max_p_dot_r^2), 1/(Max_ya_dot_r)^2, 1/(0.2)^2,1/0.02^2, ...
-                    1/0.02^2,1/0.2^2]);
+                    1/(Max_p_dot_r^2), 1/(Max_ya_dot_r)^2, 1/(0.02)^2,1/0.0002^2, ...
+                    1/0.0002^2,1/0.02^2]);
 R_lqi_reduced_a = [1/(Max_U_r)^2 0 0 0;
-                 0 1/(0.2)^2 0 0;
-                 0 0 1/(0.2)^2 0;
-                 0 0 0 1/(0.2)^2;];
+                 0 1/(0.0032)^2 0 0;
+                 0 0 1/(0.0032)^2 0;
+                 0 0 0 1/(0.0032)^2;];
 
 [K_lqi_reduced_a,~,~] = lqr(sys_lqi_reduced_a,Q_lqi_reduced_a,R_lqi_reduced_a);
 
 % Verify by finding the poles of the closed loop system
 sys_lqi_controlled_a = ss(A_e_r_a - B_e_r_a * K_lqi_reduced_a, B_e_r_a, C_e_r_a, 0);
 
-%figure; % Create a new figure window
-%pzmap(sys_lqi_controlled_a)
-%title('Closed loop poles & zeros LQI Controlled System'); 
+figure; % Create a new figure window
+pzmap(sys_lqi_controlled_a)
+title('Closed loop poles & zeros LQI Controlled System'); 
 
-%figure; % Create a new figure window
-%step(sys_lqi_controlled_a,10); 
-%title('Step Response of LQI Controlled System'); 
+figure; % Create a new figure window
+step(sys_lqi_controlled_a,20); 
+title('Step Response of LQI Controlled System'); 
 
 Kx_lqi_reduced_a = K_lqi_reduced_a(:,1:8);
 Ki_lqi_reduced_a = K_lqi_reduced_a(:,9:12);

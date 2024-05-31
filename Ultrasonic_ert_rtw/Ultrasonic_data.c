@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Ultrasonic'.
  *
- * Model version                  : 1.4
+ * Model version                  : 1.6
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 23 18:11:38 2024
+ * C/C++ source code generated on : Thu May 30 19:52:24 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -21,30 +21,50 @@
 
 /* Block parameters (default storage) */
 P_Ultrasonic_T Ultrasonic_P = {
-  /* Expression: 0.0001
+  /* Expression: 0.001
    * Referenced by: '<Root>/Digital Read'
    */
-  0.0001,
+  0.001,
 
   /* Expression: 1
-   * Referenced by: '<S1>/Constant'
+   * Referenced by: '<Root>/Pulse Generator'
+   */
+  1.0,
+
+  /* Computed Parameter: PulseGenerator_Period
+   * Referenced by: '<Root>/Pulse Generator'
+   */
+  10.0,
+
+  /* Computed Parameter: PulseGenerator_Duty
+   * Referenced by: '<Root>/Pulse Generator'
    */
   1.0,
 
   /* Expression: 0
-   * Referenced by: '<S1>/Unit Delay'
+   * Referenced by: '<Root>/Pulse Generator'
    */
   0.0,
 
+  /* Computed Parameter: _Y0
+   * Referenced by: '<S1>/ '
+   */
+  0U,
+
+  /* Computed Parameter: TmpLatchAtSampleandHoldInport1_
+   * Referenced by:
+   */
+  0U,
+
   /* Computed Parameter: DiscreteTimeIntegrator_IC
-   * Referenced by: '<S2>/Discrete-Time Integrator'
+   * Referenced by: '<Root>/Discrete-Time Integrator'
    */
   0U,
 
   /* Computed Parameter: Multiply_Gain
-   * Referenced by: '<S2>/Multiply'
+   * Referenced by: '<Root>/Multiply'
    */
-  170U
+  172U
 };
 
 /*

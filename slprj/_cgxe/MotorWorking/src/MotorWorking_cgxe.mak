@@ -6,7 +6,7 @@ CPU = AMD64
 
 MODEL  = MotorWorking
 TARGET = cgxe
-MODULE_SRCS 	= m_bg50hRmc6UAsemHLG3AoeE.c m_dYZZzNbePGHHoKucqxRynD.c m_mGg5kldJFMUqqcMFYTCXk.c m_vhCIMhSDxW7vJ4zd5fVmYF.c
+MODULE_SRCS 	= m_dYZZzNbePGHHoKucqxRynD.c m_mGg5kldJFMUqqcMFYTCXk.c m_vhCIMhSDxW7vJ4zd5fVmYF.c m_mbrvObo7hU5hfZxNeR1UkC.c
 MODEL_SRC	= MotorWorking_cgxe.c
 MODEL_REG = MotorWorking_cgxe_registry.c
 MAKEFILE    = MotorWorking_cgxe.mak

@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.0
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Mon May 27 15:07:44 2024
+ * C/C++ source code generated on : Tue May 28 20:24:51 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -18,13 +18,9 @@
  */
 
 #include "untitled.h"
-#include "untitled_types.h"
 #include "rtwtypes.h"
 #include "untitled_private.h"
 #include "untitled_dt.h"
-
-/* Block signals (default storage) */
-B_untitled_T untitled_B;
 
 /* Block states (default storage) */
 DW_untitled_T untitled_DW;
@@ -32,73 +28,95 @@ DW_untitled_T untitled_DW;
 /* Real-time model */
 static RT_MODEL_untitled_T untitled_M_;
 RT_MODEL_untitled_T *const untitled_M = &untitled_M_;
+static void rate_monotonic_scheduler(void);
 
-/* Forward declaration for local functions */
-static void untitled_SystemCore_setup(beagleboneblue_bbblueMPU9250__T *obj);
-static void untitled_SystemCore_setup(beagleboneblue_bbblueMPU9250__T *obj)
+/*
+ * Set which subrates need to run this base step (base rate always runs).
+ * This function must be called prior to calling the model step function
+ * in order to remember which rates need to run this base step.  The
+ * buffering of events allows for overlapping preemption.
+ */
+void untitled_SetEventsForThisBaseStep(boolean_T *eventFlags)
 {
-  /* Start for MATLABSystem: '<Root>/MPU9250' */
-  obj->isInitialized = 1;
-  MW_IMU_DMP_isAccel_Calibrated();
-  MW_IMU_DMP_isGyro_Calibrated();
-  MW_IMU_DMP_isMag_Calibrated();
-
-  /* Start for MATLABSystem: '<Root>/MPU9250' */
-  obj->i2cObjmpu.MW_I2C_HANDLE = MW_I2C_Open(2, MW_I2C_MASTER);
-  obj->i2cObjmpu.BusSpeed = 100000U;
-  MW_I2C_SetBusSpeed(obj->i2cObjmpu.MW_I2C_HANDLE, obj->i2cObjmpu.BusSpeed);
-  obj->i2cObjak8963.MW_I2C_HANDLE = MW_I2C_Open(2, MW_I2C_MASTER);
-  obj->i2cObjak8963.BusSpeed = 100000U;
-  MW_I2C_SetBusSpeed(obj->i2cObjak8963.MW_I2C_HANDLE, obj->i2cObjak8963.BusSpeed);
-  MW_Init_IMU_DMP(200);
-  obj->TunablePropsChanged = false;
+  /* Task runs when its counter is zero, computed via rtmStepTask macro */
+  eventFlags[2] = ((boolean_T)rtmStepTask(untitled_M, 2));
 }
 
-/* Model step function */
-void untitled_step(void)
+/*
+ *         This function updates active task flag for each subrate
+ *         and rate transition flags for tasks that exchange data.
+ *         The function assumes rate-monotonic multitasking scheduler.
+ *         The function must be called at model base rate so that
+ *         the generated code self-manages all its subrates and rate
+ *         transition flags.
+ */
+static void rate_monotonic_scheduler(void)
 {
-  real_T mdata[3];
+  /* To ensure a deterministic data transfer between two rates,
+   * data is transferred at the priority of a fast task and the frequency
+   * of the slow task.  The following flags indicate when the data transfer
+   * happens.  That is, a rate interaction flag is set true when both rates
+   * will run, and false otherwise.
+   */
 
-  /* MATLABSystem: '<Root>/MPU9250' */
-  if (untitled_DW.obj.SampleTime != untitled_P.MPU9250_SampleTime) {
-    untitled_DW.obj.SampleTime = untitled_P.MPU9250_SampleTime;
+  /* tid 1 shares data with slower tid rate: 2 */
+  if (untitled_M->Timing.TaskCounters.TID[1] == 0) {
+    untitled_M->Timing.RateInteraction.TID1_2 =
+      (untitled_M->Timing.TaskCounters.TID[2] == 0);
   }
 
-  if (untitled_DW.obj.TunablePropsChanged) {
-    untitled_DW.obj.TunablePropsChanged = false;
+  /* Compute which subrates run during the next base time step.  Subrates
+   * are an integer multiple of the base rate counter.  Therefore, the subtask
+   * counter is reset when it reaches its limit (zero means run).
+   */
+  (untitled_M->Timing.TaskCounters.TID[2])++;
+  if ((untitled_M->Timing.TaskCounters.TID[2]) > 1) {/* Sample time: [0.02s, 0.0s] */
+    untitled_M->Timing.TaskCounters.TID[2] = 0;
+  }
+}
+
+/* Model step function for TID0 */
+void untitled_step0(void)              /* Sample time: [0.0s, 0.0s] */
+{
+  {                                    /* Sample time: [0.0s, 0.0s] */
+    rate_monotonic_scheduler();
   }
 
-  MW_Read_Accel(&untitled_B.MPU9250_o1[0]);
+  /* RateTransition: '<Root>/Rate Transition' */
+  if (untitled_M->Timing.RateInteraction.TID1_2) {
+    /* Switch: '<Root>/Switch1' incorporates:
+     *  Clock: '<Root>/Clock1'
+     *  Constant: '<Root>/Constant'
+     *  Constant: '<Root>/Initial1'
+     *  Constant: '<S1>/Constant'
+     *  RelationalOperator: '<S1>/Compare'
+     */
+    if (untitled_M->Timing.t[0] <= untitled_P.CompareToConstant1_const) {
+      untitled_DW.RateTransition_Buffer[0] = untitled_P.Initial1_Value[0];
+      untitled_DW.RateTransition_Buffer[1] = untitled_P.Initial1_Value[1];
+      untitled_DW.RateTransition_Buffer[2] = untitled_P.Initial1_Value[2];
+      untitled_DW.RateTransition_Buffer[3] = untitled_P.Initial1_Value[3];
+    } else {
+      untitled_DW.RateTransition_Buffer[0] = untitled_P.Constant_Value[0];
+      untitled_DW.RateTransition_Buffer[1] = untitled_P.Constant_Value[1];
+      untitled_DW.RateTransition_Buffer[2] = untitled_P.Constant_Value[2];
+      untitled_DW.RateTransition_Buffer[3] = untitled_P.Constant_Value[3];
+    }
 
-  /* MATLABSystem: '<Root>/MPU9250' */
-  untitled_B.MPU9250_o2[0] = 0.0;
-  untitled_B.MPU9250_o2[1] = 0.0;
-  untitled_B.MPU9250_o2[2] = 0.0;
+    /* End of Switch: '<Root>/Switch1' */
+  }
 
-  /* MATLABSystem: '<Root>/MPU9250' */
-  MW_Read_Gyro(&untitled_B.MPU9250_o2[0]);
-  mdata[0] = 0.0;
-  mdata[1] = 0.0;
-  mdata[2] = 0.0;
-  MW_Read_Mag(&mdata[0]);
-
-  /* MATLABSystem: '<Root>/MPU9250' */
-  untitled_B.MPU9250_o3[0] = mdata[0];
-  untitled_B.MPU9250_o3[1] = mdata[1];
-  untitled_B.MPU9250_o3[2] = mdata[2];
+  /* End of RateTransition: '<Root>/Rate Transition' */
 
   /* External mode */
-  rtExtModeUploadCheckTrigger(1);
-
-  {                                    /* Sample time: [0.1s, 0.0s] */
-    rtExtModeUpload(0, (real_T)untitled_M->Timing.taskTime0);
-  }
+  rtExtModeUploadCheckTrigger(3);
+  rtExtModeUpload(1, (real_T)untitled_M->Timing.t[0]);
 
   /* signal main to stop simulation */
-  {                                    /* Sample time: [0.1s, 0.0s] */
+  {                                    /* Sample time: [0.0s, 0.0s] */
     if ((rtmGetTFinal(untitled_M)!=-1) &&
-        !((rtmGetTFinal(untitled_M)-untitled_M->Timing.taskTime0) >
-          untitled_M->Timing.taskTime0 * (DBL_EPSILON))) {
+        !((rtmGetTFinal(untitled_M)-untitled_M->Timing.t[0]) >
+          untitled_M->Timing.t[0] * (DBL_EPSILON))) {
       rtmSetErrorStatus(untitled_M, "Simulation finished");
     }
 
@@ -107,37 +125,119 @@ void untitled_step(void)
     }
   }
 
-  /* Update absolute time for base rate */
+  /* Update absolute time */
   /* The "clockTick0" counts the number of times the code of this task has
    * been executed. The absolute time is the multiplication of "clockTick0"
    * and "Timing.stepSize0". Size of "clockTick0" ensures timer will not
    * overflow during the application lifespan selected.
    */
-  untitled_M->Timing.taskTime0 =
+  untitled_M->Timing.t[0] =
     ((time_T)(++untitled_M->Timing.clockTick0)) * untitled_M->Timing.stepSize0;
+
+  /* Update absolute time */
+  /* The "clockTick1" counts the number of times the code of this task has
+   * been executed. The resolution of this integer timer is 0.01, which is the step size
+   * of the task. Size of "clockTick1" ensures timer will not overflow during the
+   * application lifespan selected.
+   */
+  untitled_M->Timing.clockTick1++;
+}
+
+/* Model step function for TID2 */
+void untitled_step2(void)              /* Sample time: [0.02s, 0.0s] */
+{
+  /* MATLABSystem: '<Root>/Motor 1' incorporates:
+   *  RateTransition: '<Root>/Rate Transition'
+   */
+  rc_servo_send_pulse_normalized(1, (untitled_DW.RateTransition_Buffer[0] - 90.0)
+    / 60.0);
+
+  /* MATLABSystem: '<Root>/Motor 2' incorporates:
+   *  RateTransition: '<Root>/Rate Transition'
+   */
+  rc_servo_send_pulse_normalized(2, (untitled_DW.RateTransition_Buffer[1] - 90.0)
+    / 60.0);
+
+  /* MATLABSystem: '<Root>/Motor 3' incorporates:
+   *  RateTransition: '<Root>/Rate Transition'
+   */
+  rc_servo_send_pulse_normalized(3, (untitled_DW.RateTransition_Buffer[2] - 90.0)
+    / 60.0);
+
+  /* MATLABSystem: '<Root>/Motor 4' incorporates:
+   *  RateTransition: '<Root>/Rate Transition'
+   */
+  rc_servo_send_pulse_normalized(4, (untitled_DW.RateTransition_Buffer[3] - 90.0)
+    / 60.0);
+  rtExtModeUpload(2, (real_T)((untitled_M->Timing.clockTick2) * 0.02));
+
+  /* Update absolute time */
+  /* The "clockTick2" counts the number of times the code of this task has
+   * been executed. The resolution of this integer timer is 0.02, which is the step size
+   * of the task. Size of "clockTick2" ensures timer will not overflow during the
+   * application lifespan selected.
+   */
+  untitled_M->Timing.clockTick2++;
+}
+
+/* Use this function only if you need to maintain compatibility with an existing static main program. */
+void untitled_step(int_T tid)
+{
+  switch (tid) {
+   case 0 :
+    untitled_step0();
+    break;
+
+   case 2 :
+    untitled_step2();
+    break;
+
+   default :
+    /* do nothing */
+    break;
+  }
 }
 
 /* Model initialize function */
 void untitled_initialize(void)
 {
   /* Registration code */
+  {
+    /* Setup solver object */
+    rtsiSetSimTimeStepPtr(&untitled_M->solverInfo,
+                          &untitled_M->Timing.simTimeStep);
+    rtsiSetTPtr(&untitled_M->solverInfo, &rtmGetTPtr(untitled_M));
+    rtsiSetStepSizePtr(&untitled_M->solverInfo, &untitled_M->Timing.stepSize0);
+    rtsiSetErrorStatusPtr(&untitled_M->solverInfo, (&rtmGetErrorStatus
+      (untitled_M)));
+    rtsiSetRTModelPtr(&untitled_M->solverInfo, untitled_M);
+  }
+
+  rtsiSetSimTimeStep(&untitled_M->solverInfo, MAJOR_TIME_STEP);
+  rtsiSetIsMinorTimeStepWithModeChange(&untitled_M->solverInfo, false);
+  rtsiSetIsContModeFrozen(&untitled_M->solverInfo, false);
+  rtsiSetSolverName(&untitled_M->solverInfo,"FixedStepDiscrete");
+  rtmSetTPtr(untitled_M, &untitled_M->Timing.tArray[0]);
   rtmSetTFinal(untitled_M, -1);
-  untitled_M->Timing.stepSize0 = 0.1;
+  untitled_M->Timing.stepSize0 = 0.01;
 
   /* External mode info */
-  untitled_M->Sizes.checksums[0] = (848338050U);
-  untitled_M->Sizes.checksums[1] = (1712540774U);
-  untitled_M->Sizes.checksums[2] = (2252353920U);
-  untitled_M->Sizes.checksums[3] = (1093627579U);
+  untitled_M->Sizes.checksums[0] = (2135034586U);
+  untitled_M->Sizes.checksums[1] = (3574773840U);
+  untitled_M->Sizes.checksums[2] = (1159205704U);
+  untitled_M->Sizes.checksums[3] = (1046543997U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
     static RTWExtModeInfo rt_ExtModeInfo;
-    static const sysRanDType *systemRan[2];
+    static const sysRanDType *systemRan[5];
     untitled_M->extModeInfo = (&rt_ExtModeInfo);
     rteiSetSubSystemActiveVectorAddresses(&rt_ExtModeInfo, systemRan);
     systemRan[0] = &rtAlwaysEnabled;
     systemRan[1] = &rtAlwaysEnabled;
+    systemRan[2] = &rtAlwaysEnabled;
+    systemRan[3] = &rtAlwaysEnabled;
+    systemRan[4] = &rtAlwaysEnabled;
     rteiSetModelMappingInfoPtr(untitled_M->extModeInfo,
       &untitled_M->SpecialInfo.mappingInfo);
     rteiSetChecksumsPtr(untitled_M->extModeInfo, untitled_M->Sizes.checksums);
@@ -161,42 +261,73 @@ void untitled_initialize(void)
     dtInfo.PTransTable = &rtPTransTable;
   }
 
-  /* Start for MATLABSystem: '<Root>/MPU9250' */
-  untitled_DW.obj.isInitialized = 0;
-  untitled_DW.obj.i2cObjmpu.DefaultMaximumBusSpeedInHz = 400000.0;
-  untitled_DW.obj.i2cObjmpu.isInitialized = 0;
-  untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted = false;
-  untitled_DW.obj.i2cObjak8963.DefaultMaximumBusSpeedInHz = 400000.0;
-  untitled_DW.obj.i2cObjak8963.isInitialized = 0;
-  untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted = false;
+  /* Start for MATLABSystem: '<Root>/Motor 1' */
+  untitled_DW.obj_ib.matlabCodegenIsDeleted = false;
+  untitled_DW.obj_ib.isInitialized = 1;
+  untitled_DW.obj_ib.isSetupComplete = true;
+
+  /* Start for MATLABSystem: '<Root>/Motor 2' */
+  untitled_DW.obj_i.matlabCodegenIsDeleted = false;
+  untitled_DW.obj_i.isInitialized = 1;
+  untitled_DW.obj_i.isSetupComplete = true;
+
+  /* Start for MATLABSystem: '<Root>/Motor 3' */
+  untitled_DW.obj_n.matlabCodegenIsDeleted = false;
+  untitled_DW.obj_n.isInitialized = 1;
+  untitled_DW.obj_n.isSetupComplete = true;
+
+  /* Start for MATLABSystem: '<Root>/Motor 4' */
   untitled_DW.obj.matlabCodegenIsDeleted = false;
-  untitled_DW.obj.SampleTime = untitled_P.MPU9250_SampleTime;
-  untitled_SystemCore_setup(&untitled_DW.obj);
+  untitled_DW.obj.isInitialized = 1;
+  untitled_DW.obj.isSetupComplete = true;
 }
 
 /* Model terminate function */
 void untitled_terminate(void)
 {
-  /* Terminate for MATLABSystem: '<Root>/MPU9250' */
+  /* Terminate for MATLABSystem: '<Root>/Motor 1' */
+  if (!untitled_DW.obj_ib.matlabCodegenIsDeleted) {
+    untitled_DW.obj_ib.matlabCodegenIsDeleted = true;
+    if ((untitled_DW.obj_ib.isInitialized == 1) &&
+        untitled_DW.obj_ib.isSetupComplete) {
+      rc_servo_send_pulse_normalized(1, 0.0);
+    }
+  }
+
+  /* End of Terminate for MATLABSystem: '<Root>/Motor 1' */
+
+  /* Terminate for MATLABSystem: '<Root>/Motor 2' */
+  if (!untitled_DW.obj_i.matlabCodegenIsDeleted) {
+    untitled_DW.obj_i.matlabCodegenIsDeleted = true;
+    if ((untitled_DW.obj_i.isInitialized == 1) &&
+        untitled_DW.obj_i.isSetupComplete) {
+      rc_servo_send_pulse_normalized(2, 0.0);
+    }
+  }
+
+  /* End of Terminate for MATLABSystem: '<Root>/Motor 2' */
+
+  /* Terminate for MATLABSystem: '<Root>/Motor 3' */
+  if (!untitled_DW.obj_n.matlabCodegenIsDeleted) {
+    untitled_DW.obj_n.matlabCodegenIsDeleted = true;
+    if ((untitled_DW.obj_n.isInitialized == 1) &&
+        untitled_DW.obj_n.isSetupComplete) {
+      rc_servo_send_pulse_normalized(3, 0.0);
+    }
+  }
+
+  /* End of Terminate for MATLABSystem: '<Root>/Motor 3' */
+
+  /* Terminate for MATLABSystem: '<Root>/Motor 4' */
   if (!untitled_DW.obj.matlabCodegenIsDeleted) {
     untitled_DW.obj.matlabCodegenIsDeleted = true;
-  }
-
-  if (!untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted) {
-    untitled_DW.obj.i2cObjak8963.matlabCodegenIsDeleted = true;
-    if (untitled_DW.obj.i2cObjak8963.isInitialized == 1) {
-      untitled_DW.obj.i2cObjak8963.isInitialized = 2;
+    if ((untitled_DW.obj.isInitialized == 1) && untitled_DW.obj.isSetupComplete)
+    {
+      rc_servo_send_pulse_normalized(4, 0.0);
     }
   }
 
-  if (!untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted) {
-    untitled_DW.obj.i2cObjmpu.matlabCodegenIsDeleted = true;
-    if (untitled_DW.obj.i2cObjmpu.isInitialized == 1) {
-      untitled_DW.obj.i2cObjmpu.isInitialized = 2;
-    }
-  }
-
-  /* End of Terminate for MATLABSystem: '<Root>/MPU9250' */
+  /* End of Terminate for MATLABSystem: '<Root>/Motor 4' */
 }
 
 /*
