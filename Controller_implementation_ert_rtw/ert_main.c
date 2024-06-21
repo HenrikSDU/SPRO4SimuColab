@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.21
+ * Model version                  : 1.32
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 30 19:42:55 2024
+ * C/C++ source code generated on : Thu Jun 20 18:11:25 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -39,14 +39,14 @@ volatile boolean_T stopRequested = false;
 volatile boolean_T runModel = true;
 sem_t stopSem;
 sem_t baserateTaskSem;
-sem_t subrateTaskSem[1];
-int taskId[1];
+sem_t subrateTaskSem[3];
+int taskId[3];
 pthread_t schedulerThread;
 pthread_t baseRateThread;
 void *threadJoinStatus;
 int terminatingmodel = 0;
-pthread_t subRateThread[1];
-int subratePriority[1];
+pthread_t subRateThread[3];
+int subratePriority[3];
 void *subrateTask(void *arg)
 {
   int tid = *((int *) arg);
@@ -74,6 +74,7 @@ void *subrateTask(void *arg)
 
 void *baseRateTask(void *arg)
 {
+  int_T i;
   runModel = (rtmGetErrorStatus(Controller_implementation_M) == (NULL)) &&
     !rtmGetStopRequested(Controller_implementation_M);
   while (runModel) {
@@ -86,15 +87,19 @@ void *baseRateTask(void *arg)
 
 #endif
 
-    if (rtmStepTask(Controller_implementation_M, 2)
-        ) {
-      sem_post(&subrateTaskSem[0]);
+    for (i = 1
+         ; i <= 3; i++) {
+      if (rtmStepTask(Controller_implementation_M, i + 1)
+          ) {
+        sem_post(&subrateTaskSem[ i - 1
+                 ]);
+      }
     }
 
     /* External mode */
     {
       boolean_T rtmStopReq = false;
-      rtExtModePauseIfNeeded(Controller_implementation_M->extModeInfo, 3,
+      rtExtModePauseIfNeeded(Controller_implementation_M->extModeInfo, 5,
         &rtmStopReq);
       if (rtmStopReq) {
         rtmSetStopRequested(Controller_implementation_M, true);
@@ -109,7 +114,7 @@ void *baseRateTask(void *arg)
     /* External mode */
     {
       boolean_T rtmStopReq = false;
-      rtExtModeOneStep(Controller_implementation_M->extModeInfo, 3, &rtmStopReq);
+      rtExtModeOneStep(Controller_implementation_M->extModeInfo, 5, &rtmStopReq);
       if (rtmStopReq) {
         rtmSetStopRequested(Controller_implementation_M, true);
       }
@@ -145,13 +150,13 @@ void *terminateTask(void *arg)
     int i;
 
     /* Signal all periodic tasks to complete */
-    for (i=0; i<1; i++) {
+    for (i=0; i<3; i++) {
       CHECK_STATUS(sem_post(&subrateTaskSem[i]), 0, "sem_post");
       CHECK_STATUS(sem_destroy(&subrateTaskSem[i]), 0, "sem_destroy");
     }
 
     /* Wait for all periodic tasks to complete */
-    for (i=0; i<1; i++) {
+    for (i=0; i<3; i++) {
       CHECK_STATUS(pthread_join(subRateThread[i], &threadJoinStatus), 0,
                    "pthread_join");
     }
@@ -163,7 +168,7 @@ void *terminateTask(void *arg)
 
   /* Terminate model */
   Controller_implementation_terminate();
-  rtExtModeShutdown(3);
+  rtExtModeShutdown(5);
   sem_post(&stopSem);
   return NULL;
 }
@@ -173,6 +178,8 @@ int main(int argc, char **argv)
   UNUSED(argc);
   UNUSED(argv);
   subratePriority[0] = 39;
+  subratePriority[1] = 38;
+  subratePriority[2] = 37;
   MW_bbblue_init();
   rtmSetErrorStatus(Controller_implementation_M, 0);
   rtExtModeParseArgs(argc, (const char_T **)argv, NULL);
@@ -182,11 +189,11 @@ int main(int argc, char **argv)
 
   /* External mode */
   rtSetTFinalForExtMode(&rtmGetTFinal(Controller_implementation_M));
-  rtExtModeCheckInit(3);
+  rtExtModeCheckInit(5);
 
   {
     boolean_T rtmStopReq = false;
-    rtExtModeWaitForStartPkt(Controller_implementation_M->extModeInfo, 3,
+    rtExtModeWaitForStartPkt(Controller_implementation_M->extModeInfo, 5,
       &rtmStopReq);
     if (rtmStopReq) {
       rtmSetStopRequested(Controller_implementation_M, true);
@@ -196,7 +203,7 @@ int main(int argc, char **argv)
   rtERTExtModeStartMsg();
 
   /* Call RTOS Initialization function */
-  myRTOSInit(0.01, 1);
+  myRTOSInit(0.0001, 3);
 
   /* Wait for stop semaphore */
   sem_wait(&stopSem);

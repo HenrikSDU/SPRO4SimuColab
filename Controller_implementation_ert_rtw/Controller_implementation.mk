@@ -2,7 +2,7 @@
 ## Makefile generated for component 'Controller_implementation'. 
 ## 
 ## Makefile     : Controller_implementation.mk
-## Generated on : Thu May 30 19:43:03 2024
+## Generated on : Thu Jun 20 17:56:18 2024
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/Controller_implementation.elf
 ## Product type : executable
 ## 
@@ -170,7 +170,7 @@ DEFINES_BUILD_ARGS = -DCLASSIC_INTERFACE=0 -DALLOCATIONFCN=0 -DTERMFCN=1 -DONEST
 DEFINES_CUSTOM = 
 DEFINES_OPTS = -DON_TARGET_WAIT_FOR_START=1 -DTID01EQ=1
 DEFINES_SKIPFORSIL = -DARM_PROJECT -D_USE_TARGET_UDP_ -D_RUNONTARGETHARDWARE_BUILD_ -DSTACK_SIZE=64 -DRT
-DEFINES_STANDARD = -DMODEL=Controller_implementation -DNUMST=3 -DNCSTATES=0 -DHAVESTDIO -DMODEL_HAS_DYNAMICALLY_LOADED_SFCNS=0
+DEFINES_STANDARD = -DMODEL=Controller_implementation -DNUMST=5 -DNCSTATES=0 -DHAVESTDIO -DMODEL_HAS_DYNAMICALLY_LOADED_SFCNS=0
 
 DEFINES = $(DEFINES_) $(DEFINES_BUILD_ARGS) $(DEFINES_CUSTOM) $(DEFINES_OPTS) $(DEFINES_SKIPFORSIL) $(DEFINES_STANDARD)
 
@@ -178,7 +178,7 @@ DEFINES = $(DEFINES_) $(DEFINES_BUILD_ARGS) $(DEFINES_CUSTOM) $(DEFINES_OPTS) $(
 ## SOURCE FILES
 ###########################################################################
 
-SRCS = MW_I2C.c MW_MPU9250.c Controller_implementation.c Controller_implementation_data.c rtGetInf.c rtGetNaN.c rt_nonfinite.c rt_zcfcn.c ext_svr.c updown.c ext_work.c rtiostream_utils.c MW_bbblue_init.c linuxinitialize.c rtiostream_interface.c rtiostream_tcpip.c
+SRCS = MW_I2C.c MW_digitalIO.c MW_MPU9250.c Controller_implementation.c Controller_implementation_data.c rtGetInf.c rtGetNaN.c rt_nonfinite.c rt_zcfcn.c ext_svr.c updown.c ext_work.c rtiostream_utils.c MW_bbblue_init.c linuxinitialize.c rtiostream_interface.c rtiostream_tcpip.c
 
 MAIN_SRC = ert_main.c
 
@@ -188,7 +188,7 @@ ALL_SRCS = $(SRCS) $(MAIN_SRC)
 ## OBJECTS
 ###########################################################################
 
-OBJS = MW_I2C.c.o MW_MPU9250.c.o Controller_implementation.c.o Controller_implementation_data.c.o rtGetInf.c.o rtGetNaN.c.o rt_nonfinite.c.o rt_zcfcn.c.o ext_svr.c.o updown.c.o ext_work.c.o rtiostream_utils.c.o MW_bbblue_init.c.o linuxinitialize.c.o rtiostream_interface.c.o rtiostream_tcpip.c.o
+OBJS = MW_I2C.c.o MW_digitalIO.c.o MW_MPU9250.c.o Controller_implementation.c.o Controller_implementation_data.c.o rtGetInf.c.o rtGetNaN.c.o rt_nonfinite.c.o rt_zcfcn.c.o ext_svr.c.o updown.c.o ext_work.c.o rtiostream_utils.c.o MW_bbblue_init.c.o linuxinitialize.c.o rtiostream_interface.c.o rtiostream_tcpip.c.o
 
 MAIN_OBJ = ert_main.c.o
 
@@ -460,6 +460,10 @@ $(PRODUCT) : $(OBJS) $(PREBUILT_OBJS) $(LIBS) $(MAIN_OBJ)
 
 
 MW_I2C.c.o : MW_I2C.c
+	$(CC) $(CFLAGS) -o "$@" "$<"
+
+
+MW_digitalIO.c.o : MW_digitalIO.c
 	$(CC) $(CFLAGS) -o "$@" "$<"
 
 

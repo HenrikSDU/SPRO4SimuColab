@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.21
+ * Model version                  : 1.32
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 30 19:42:55 2024
+ * C/C++ source code generated on : Thu Jun 20 18:11:25 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -40,7 +40,7 @@ typedef struct tag_VIgeb4UfEy1UvclkadFbY beagleboneblue_bbblueServo_Co_T;
 
 #endif                             /* typedef_beagleboneblue_bbblueServo_Co_T */
 
-/* Custom Type definition for MATLABSystem: '<S5>/MPU9250' */
+/* Custom Type definition for MATLABSystem: '<S73>/Digital Write' */
 #include "MW_SVD.h"
 #ifndef struct_tag_oH2PxaXVLCzd6lwdaSR6p
 #define struct_tag_oH2PxaXVLCzd6lwdaSR6p
@@ -95,6 +95,27 @@ struct tag_AVxjDeyQkunEdpGYBzp3BE
 typedef struct tag_AVxjDeyQkunEdpGYBzp3BE beagleboneblue_bbblueBaromete_T;
 
 #endif                             /* typedef_beagleboneblue_bbblueBaromete_T */
+
+#ifndef struct_tag_1EBWQ6hhKs9Y37qjpZj8aH
+#define struct_tag_1EBWQ6hhKs9Y37qjpZj8aH
+
+struct tag_1EBWQ6hhKs9Y37qjpZj8aH
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  boolean_T isSetupComplete;
+  MW_Handle_Type MW_DIGITALIO_HANDLE;
+  real_T SampleTime;
+};
+
+#endif                                 /* struct_tag_1EBWQ6hhKs9Y37qjpZj8aH */
+
+#ifndef typedef_beagleboneblue_bbblueDigitalR_T
+#define typedef_beagleboneblue_bbblueDigitalR_T
+
+typedef struct tag_1EBWQ6hhKs9Y37qjpZj8aH beagleboneblue_bbblueDigitalR_T;
+
+#endif                             /* typedef_beagleboneblue_bbblueDigitalR_T */
 
 #ifndef struct_tag_oH2PxaXVLCzd6lwdaSR6p
 #define struct_tag_oH2PxaXVLCzd6lwdaSR6p
@@ -182,6 +203,26 @@ struct tag_xm5q3dGCROLmOPhUk992jB
 typedef struct tag_xm5q3dGCROLmOPhUk992jB h_dsp_internal_ExponentialMov_T;
 
 #endif                             /* typedef_h_dsp_internal_ExponentialMov_T */
+
+#ifndef struct_tag_xLdvsTzAcwQ23cLj0I6KhF
+#define struct_tag_xLdvsTzAcwQ23cLj0I6KhF
+
+struct tag_xLdvsTzAcwQ23cLj0I6KhF
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  boolean_T isSetupComplete;
+  MW_Handle_Type MW_DIGITALIO_HANDLE;
+};
+
+#endif                                 /* struct_tag_xLdvsTzAcwQ23cLj0I6KhF */
+
+#ifndef typedef_beagleboneblue_bbblueDigitalW_T
+#define typedef_beagleboneblue_bbblueDigitalW_T
+
+typedef struct tag_xLdvsTzAcwQ23cLj0I6KhF beagleboneblue_bbblueDigitalW_T;
+
+#endif                             /* typedef_beagleboneblue_bbblueDigitalW_T */
 
 #ifndef struct_tag_BlgwLpgj2bjudmbmVKWwDE
 #define struct_tag_BlgwLpgj2bjudmbmVKWwDE

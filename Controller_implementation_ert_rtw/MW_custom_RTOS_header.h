@@ -1,8 +1,8 @@
 #ifndef _MW_CUSTOM_RTOS_HEADER_H_
 #define _MW_CUSTOM_RTOS_HEADER_H_
 #define MW_BASERATE_PRIORITY           40
-#define MW_BASERATE_PERIOD             0.01
-#define MW_NUMBER_SUBRATES             1
+#define MW_BASERATE_PERIOD             0.0001
+#define MW_NUMBER_SUBRATES             3
 #define MW_NUMBER_APERIODIC_TASKS      0
 #define MW_IS_CONCURRENT               0
 #define MW_NUMBER_TIMER_DRIVEN_TASKS   0
