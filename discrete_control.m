@@ -4,7 +4,6 @@ Ts = 0.01;
 
 discrete_sys_reduced = c2d(sys_reduced,Ts);
 [A_r_d,B_r_d,C_r_d,D_r_d] = ssdata(discrete_sys_reduced);
-
 discrete_sys_reduced_lqi = c2d(sys_lqi_controlled_a,Ts);
 [A_r_e_d,B_r_e_d,C_r_e_d,D_r_e_d] = ssdata(discrete_sys_reduced_lqi);
 pzmap(discrete_sys_reduced_lqi)
