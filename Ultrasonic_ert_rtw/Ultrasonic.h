@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.6
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 30 19:52:24 2024
+ * C/C++ source code generated on : Thu Jun 20 17:33:09 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -79,7 +79,8 @@
 /* Block signals (default storage) */
 typedef struct {
   real_T PulseGenerator;               /* '<Root>/Pulse Generator' */
-  uint16_T In;                         /* '<S1>/In' */
+  real_T yk;                           /* '<S4>/sum1' */
+  uint16_T In;                         /* '<S3>/In' */
   boolean_T echo;                      /* '<Root>/Digital Read' */
 } B_Ultrasonic_T;
 
@@ -87,30 +88,26 @@ typedef struct {
 typedef struct {
   beagleboneblue_bbblueDigitalR_T obj; /* '<Root>/Digital Read' */
   beagleboneblue_bbblueDigitalW_T obj_g;/* '<Root>/Digital Write' */
+  real_T Delay_x_DSTATE;               /* '<S4>/Delay_x' */
   struct {
     void *LoggedData[3];
   } Scope_PWORK;                       /* '<Root>/Scope' */
 
   int32_T clockTickCounter;            /* '<Root>/Pulse Generator' */
   uint16_T TmpLatchAtSampleandHoldInport1_;/* synthesized block */
-  uint8_T DiscreteTimeIntegrator_DSTATE;/* '<Root>/Discrete-Time Integrator' */
-  int8_T DiscreteTimeIntegrator_PrevRese;/* '<Root>/Discrete-Time Integrator' */
-  int8_T SampleandHold_SubsysRanBC;    /* '<Root>/Sample and Hold' */
+  uint8_T DiscreteTimeIntegrator_DSTATE;/* '<S1>/Discrete-Time Integrator' */
+  int8_T DiscreteTimeIntegrator_PrevRese;/* '<S1>/Discrete-Time Integrator' */
+  int8_T SampleandHold_SubsysRanBC;    /* '<S1>/Sample and Hold' */
 } DW_Ultrasonic_T;
 
 /* Zero-crossing (trigger) state */
 typedef struct {
-  ZCSigState SampleandHold_Trig_ZCE;   /* '<Root>/Sample and Hold' */
+  ZCSigState SampleandHold_Trig_ZCE;   /* '<S1>/Sample and Hold' */
 } PrevZCX_Ultrasonic_T;
-
-/* External outputs (root outports fed by signals with default storage) */
-typedef struct {
-  uint16_T Out1;                       /* '<Root>/Out1' */
-} ExtY_Ultrasonic_T;
 
 /* Parameters (default storage) */
 struct P_Ultrasonic_T_ {
-  real_T DigitalRead_SampleTime;       /* Expression: 0.001
+  real_T DigitalRead_SampleTime;       /* Expression: 0.0001
                                         * Referenced by: '<Root>/Digital Read'
                                         */
   real_T PulseGenerator_Amp;           /* Expression: 1
@@ -125,8 +122,23 @@ struct P_Ultrasonic_T_ {
   real_T PulseGenerator_PhaseDelay;    /* Expression: 0
                                         * Referenced by: '<Root>/Pulse Generator'
                                         */
+  real_T D_Gain;                       /* Expression: sps.D
+                                        * Referenced by: '<S4>/D'
+                                        */
+  real_T Delay_x_InitialCondition;     /* Expression: sps.x0
+                                        * Referenced by: '<S4>/Delay_x'
+                                        */
+  real_T C_Gain;                       /* Expression: sps.C
+                                        * Referenced by: '<S4>/C'
+                                        */
+  real_T A_Gain;                       /* Expression: sps.A
+                                        * Referenced by: '<S4>/A'
+                                        */
+  real_T B_Gain;                       /* Expression: sps.B
+                                        * Referenced by: '<S4>/B'
+                                        */
   uint16_T _Y0;                        /* Computed Parameter: _Y0
-                                        * Referenced by: '<S1>/ '
+                                        * Referenced by: '<S3>/ '
                                         */
   uint16_T TmpLatchAtSampleandHoldInport1_;
                           /* Computed Parameter: TmpLatchAtSampleandHoldInport1_
@@ -134,10 +146,10 @@ struct P_Ultrasonic_T_ {
                            */
   uint8_T DiscreteTimeIntegrator_IC;
                                 /* Computed Parameter: DiscreteTimeIntegrator_IC
-                                 * Referenced by: '<Root>/Discrete-Time Integrator'
+                                 * Referenced by: '<S1>/Discrete-Time Integrator'
                                  */
   uint8_T Multiply_Gain;               /* Computed Parameter: Multiply_Gain
-                                        * Referenced by: '<Root>/Multiply'
+                                        * Referenced by: '<S1>/Multiply'
                                         */
 };
 
@@ -196,9 +208,6 @@ extern DW_Ultrasonic_T Ultrasonic_DW;
 /* Zero-crossing (trigger) state */
 extern PrevZCX_Ultrasonic_T Ultrasonic_PrevZCX;
 
-/* External outputs (root outports fed by signals with default storage) */
-extern ExtY_Ultrasonic_T Ultrasonic_Y;
-
 /* Model entry point functions */
 extern void Ultrasonic_initialize(void);
 extern void Ultrasonic_step(void);
@@ -224,7 +233,10 @@ extern volatile boolean_T runModel;
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'Ultrasonic'
- * '<S1>'   : 'Ultrasonic/Sample and Hold'
+ * '<S1>'   : 'Ultrasonic/Subsystem'
+ * '<S2>'   : 'Ultrasonic/Subsystem/First-Order Filter'
+ * '<S3>'   : 'Ultrasonic/Subsystem/Sample and Hold'
+ * '<S4>'   : 'Ultrasonic/Subsystem/First-Order Filter/Model'
  */
 #endif                                 /* Ultrasonic_h_ */
 

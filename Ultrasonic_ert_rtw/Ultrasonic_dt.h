@@ -9,7 +9,7 @@
  *
  * Model version              : 1.6
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C source code generated on : Thu May 30 19:52:24 2024
+ * C source code generated on : Thu Jun 20 17:33:09 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -77,7 +77,7 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&Ultrasonic_B.PulseGenerator), 0, 0, 1 },
+  { (char_T *)(&Ultrasonic_B.PulseGenerator), 0, 0, 2 },
 
   { (char_T *)(&Ultrasonic_B.In), 16, 0, 1 },
 
@@ -87,6 +87,8 @@ static DataTypeTransition rtBTransitions[] = {
   { (char_T *)(&Ultrasonic_DW.obj), 17, 0, 1 },
 
   { (char_T *)(&Ultrasonic_DW.obj_g), 18, 0, 1 },
+
+  { (char_T *)(&Ultrasonic_DW.Delay_x_DSTATE), 0, 0, 1 },
 
   { (char_T *)(&Ultrasonic_DW.Scope_PWORK.LoggedData[0]), 11, 0, 3 },
 
@@ -101,13 +103,13 @@ static DataTypeTransition rtBTransitions[] = {
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  10U,
+  11U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&Ultrasonic_P.DigitalRead_SampleTime), 0, 0, 5 },
+  { (char_T *)(&Ultrasonic_P.DigitalRead_SampleTime), 0, 0, 10 },
 
   { (char_T *)(&Ultrasonic_P._Y0), 16, 0, 2 },
 

@@ -2,7 +2,7 @@
 ## Makefile generated for component 'Ultrasonic'. 
 ## 
 ## Makefile     : Ultrasonic.mk
-## Generated on : Thu May 30 19:49:47 2024
+## Generated on : Thu Jun 20 17:33:14 2024
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/Ultrasonic.elf
 ## Product type : executable
 ## 

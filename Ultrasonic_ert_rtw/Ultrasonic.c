@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.6
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 30 19:52:24 2024
+ * C/C++ source code generated on : Thu Jun 20 17:33:09 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -32,9 +32,6 @@ DW_Ultrasonic_T Ultrasonic_DW;
 /* Previous zero-crossings (trigger) states */
 PrevZCX_Ultrasonic_T Ultrasonic_PrevZCX;
 
-/* External outputs (root outports fed by signals with default storage) */
-ExtY_Ultrasonic_T Ultrasonic_Y;
-
 /* Real-time model */
 static RT_MODEL_Ultrasonic_T Ultrasonic_M_;
 RT_MODEL_Ultrasonic_T *const Ultrasonic_M = &Ultrasonic_M_;
@@ -52,7 +49,7 @@ static void rate_scheduler(void)
    * counter is reset when it reaches its limit (zero means run).
    */
   (Ultrasonic_M->Timing.TaskCounters.TID[1])++;
-  if ((Ultrasonic_M->Timing.TaskCounters.TID[1]) > 9) {/* Sample time: [0.001s, 0.0s] */
+  if ((Ultrasonic_M->Timing.TaskCounters.TID[1]) > 99) {/* Sample time: [0.01s, 0.0s] */
     Ultrasonic_M->Timing.TaskCounters.TID[1] = 0;
   }
 }
@@ -60,38 +57,10 @@ static void rate_scheduler(void)
 /* Model step function */
 void Ultrasonic_step(void)
 {
+  boolean_T tmp;
+
   /* Reset subsysRan breadcrumbs */
   srClearBC(Ultrasonic_DW.SampleandHold_SubsysRanBC);
-  if (Ultrasonic_M->Timing.TaskCounters.TID[1] == 0) {
-    /* MATLABSystem: '<Root>/Digital Read' */
-    if (Ultrasonic_DW.obj.SampleTime != Ultrasonic_P.DigitalRead_SampleTime) {
-      Ultrasonic_DW.obj.SampleTime = Ultrasonic_P.DigitalRead_SampleTime;
-    }
-
-    /* MATLABSystem: '<Root>/Digital Read' */
-    Ultrasonic_B.echo = MW_digitalIO_read(Ultrasonic_DW.obj.MW_DIGITALIO_HANDLE);
-
-    /* Outputs for Triggered SubSystem: '<Root>/Sample and Hold' incorporates:
-     *  TriggerPort: '<S1>/Trigger'
-     */
-    if ((!Ultrasonic_B.echo) && (Ultrasonic_PrevZCX.SampleandHold_Trig_ZCE !=
-         ZERO_ZCSIG)) {
-      /* SignalConversion generated from: '<S1>/In' incorporates:
-       *  Memory generated from: '<Root>/Sample and Hold'
-       */
-      Ultrasonic_B.In = Ultrasonic_DW.TmpLatchAtSampleandHoldInport1_;
-      Ultrasonic_DW.SampleandHold_SubsysRanBC = 4;
-    }
-
-    Ultrasonic_PrevZCX.SampleandHold_Trig_ZCE = Ultrasonic_B.echo;
-
-    /* End of Outputs for SubSystem: '<Root>/Sample and Hold' */
-
-    /* Outport: '<Root>/Out1' incorporates:
-     *  SignalConversion generated from: '<S1>/In'
-     */
-    Ultrasonic_Y.Out1 = Ultrasonic_B.In;
-  }
 
   /* DiscretePulseGenerator: '<Root>/Pulse Generator' */
   Ultrasonic_B.PulseGenerator = (Ultrasonic_DW.clockTickCounter <
@@ -110,23 +79,68 @@ void Ultrasonic_step(void)
   MW_digitalIO_write(Ultrasonic_DW.obj_g.MW_DIGITALIO_HANDLE,
                      Ultrasonic_B.PulseGenerator != 0.0);
 
-  /* DiscreteIntegrator: '<Root>/Discrete-Time Integrator' */
-  if ((!Ultrasonic_B.echo) && (Ultrasonic_DW.DiscreteTimeIntegrator_PrevRese ==
-       1)) {
+  /* MATLABSystem: '<Root>/Digital Read' */
+  if (Ultrasonic_DW.obj.SampleTime != Ultrasonic_P.DigitalRead_SampleTime) {
+    Ultrasonic_DW.obj.SampleTime = Ultrasonic_P.DigitalRead_SampleTime;
+  }
+
+  /* MATLABSystem: '<Root>/Digital Read' */
+  Ultrasonic_B.echo = MW_digitalIO_read(Ultrasonic_DW.obj.MW_DIGITALIO_HANDLE);
+
+  /* Outputs for Triggered SubSystem: '<S1>/Sample and Hold' incorporates:
+   *  TriggerPort: '<S3>/Trigger'
+   */
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  tmp = !Ultrasonic_B.echo;
+  if (tmp && (Ultrasonic_PrevZCX.SampleandHold_Trig_ZCE != ZERO_ZCSIG)) {
+    /* SignalConversion generated from: '<S3>/In' incorporates:
+     *  Memory generated from: '<S1>/Sample and Hold'
+     */
+    Ultrasonic_B.In = Ultrasonic_DW.TmpLatchAtSampleandHoldInport1_;
+    Ultrasonic_DW.SampleandHold_SubsysRanBC = 4;
+  }
+
+  Ultrasonic_PrevZCX.SampleandHold_Trig_ZCE = Ultrasonic_B.echo;
+
+  /* End of Outputs for SubSystem: '<S1>/Sample and Hold' */
+  if (Ultrasonic_M->Timing.TaskCounters.TID[1] == 0) {
+    /* Sum: '<S4>/sum1' incorporates:
+     *  DataTypeConversion: '<S1>/Data Type Conversion'
+     *  Gain: '<S4>/C'
+     *  Gain: '<S4>/D'
+     *  SignalConversion generated from: '<S3>/In'
+     *  UnitDelay: '<S4>/Delay_x'
+     */
+    Ultrasonic_B.yk = (real_T)Ultrasonic_B.In * 0.0001 * Ultrasonic_P.D_Gain +
+      Ultrasonic_P.C_Gain * Ultrasonic_DW.Delay_x_DSTATE;
+  }
+
+  if (Ultrasonic_M->Timing.TaskCounters.TID[1] == 0) {
+    /* Sum: '<S4>/A*x(k) + B*u(k)' incorporates:
+     *  DataTypeConversion: '<S1>/Data Type Conversion'
+     *  Gain: '<S4>/A'
+     *  Gain: '<S4>/B'
+     *  SignalConversion generated from: '<S3>/In'
+     *  UnitDelay: '<S4>/Delay_x'
+     */
+    Ultrasonic_DW.Delay_x_DSTATE = (real_T)Ultrasonic_B.In * 0.0001 *
+      Ultrasonic_P.B_Gain + Ultrasonic_P.A_Gain * Ultrasonic_DW.Delay_x_DSTATE;
+  }
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  if (tmp && (Ultrasonic_DW.DiscreteTimeIntegrator_PrevRese == 1)) {
     Ultrasonic_DW.DiscreteTimeIntegrator_DSTATE =
       Ultrasonic_P.DiscreteTimeIntegrator_IC;
   }
 
-  if (Ultrasonic_M->Timing.TaskCounters.TID[1] == 0) {
-    /* Update for Memory generated from: '<Root>/Sample and Hold' incorporates:
-     *  DiscreteIntegrator: '<Root>/Discrete-Time Integrator'
-     *  Gain: '<Root>/Multiply'
-     */
-    Ultrasonic_DW.TmpLatchAtSampleandHoldInport1_ = (uint16_T)((uint32_T)
-      Ultrasonic_P.Multiply_Gain * Ultrasonic_DW.DiscreteTimeIntegrator_DSTATE);
-  }
+  /* Update for Memory generated from: '<S1>/Sample and Hold' incorporates:
+   *  DiscreteIntegrator: '<S1>/Discrete-Time Integrator'
+   *  Gain: '<S1>/Multiply'
+   */
+  Ultrasonic_DW.TmpLatchAtSampleandHoldInport1_ = (uint16_T)((uint32_T)
+    Ultrasonic_P.Multiply_Gain * Ultrasonic_DW.DiscreteTimeIntegrator_DSTATE);
 
-  /* Update for DiscreteIntegrator: '<Root>/Discrete-Time Integrator' */
+  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
   Ultrasonic_DW.DiscreteTimeIntegrator_DSTATE = (uint8_T)((uint32_T)
     Ultrasonic_DW.DiscreteTimeIntegrator_DSTATE + Ultrasonic_B.echo);
   Ultrasonic_DW.DiscreteTimeIntegrator_PrevRese = (int8_T)Ultrasonic_B.echo;
@@ -138,8 +152,8 @@ void Ultrasonic_step(void)
     rtExtModeUpload(0, (real_T)Ultrasonic_M->Timing.taskTime0);
   }
 
-  if (Ultrasonic_M->Timing.TaskCounters.TID[1] == 0) {/* Sample time: [0.001s, 0.0s] */
-    rtExtModeUpload(1, (real_T)((Ultrasonic_M->Timing.clockTick1) * 0.001));
+  if (Ultrasonic_M->Timing.TaskCounters.TID[1] == 0) {/* Sample time: [0.01s, 0.0s] */
+    rtExtModeUpload(1, (real_T)((Ultrasonic_M->Timing.clockTick1) * 0.01));
   }
 
   /* signal main to stop simulation */
@@ -165,9 +179,9 @@ void Ultrasonic_step(void)
     ((time_T)(++Ultrasonic_M->Timing.clockTick0)) *
     Ultrasonic_M->Timing.stepSize0;
   if (Ultrasonic_M->Timing.TaskCounters.TID[1] == 0) {
-    /* Update absolute timer for sample time: [0.001s, 0.0s] */
+    /* Update absolute timer for sample time: [0.01s, 0.0s] */
     /* The "clockTick1" counts the number of times the code of this task has
-     * been executed. The resolution of this integer timer is 0.001, which is the step size
+     * been executed. The resolution of this integer timer is 0.01, which is the step size
      * of the task. Size of "clockTick1" ensures timer will not overflow during the
      * application lifespan selected.
      */
@@ -185,10 +199,10 @@ void Ultrasonic_initialize(void)
   Ultrasonic_M->Timing.stepSize0 = 0.0001;
 
   /* External mode info */
-  Ultrasonic_M->Sizes.checksums[0] = (484970812U);
-  Ultrasonic_M->Sizes.checksums[1] = (1040237286U);
-  Ultrasonic_M->Sizes.checksums[2] = (119748894U);
-  Ultrasonic_M->Sizes.checksums[3] = (1985701622U);
+  Ultrasonic_M->Sizes.checksums[0] = (1123481065U);
+  Ultrasonic_M->Sizes.checksums[1] = (2799127792U);
+  Ultrasonic_M->Sizes.checksums[2] = (3716092593U);
+  Ultrasonic_M->Sizes.checksums[3] = (2374761215U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -223,51 +237,43 @@ void Ultrasonic_initialize(void)
     dtInfo.PTransTable = &rtPTransTable;
   }
 
-  /* InitializeConditions for Memory generated from: '<Root>/Sample and Hold' */
+  /* InitializeConditions for Memory generated from: '<S1>/Sample and Hold' */
   Ultrasonic_DW.TmpLatchAtSampleandHoldInport1_ =
     Ultrasonic_P.TmpLatchAtSampleandHoldInport1_;
 
-  /* InitializeConditions for DiscreteIntegrator: '<Root>/Discrete-Time Integrator' */
+  /* InitializeConditions for UnitDelay: '<S4>/Delay_x' */
+  Ultrasonic_DW.Delay_x_DSTATE = Ultrasonic_P.Delay_x_InitialCondition;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
   Ultrasonic_DW.DiscreteTimeIntegrator_DSTATE =
     Ultrasonic_P.DiscreteTimeIntegrator_IC;
   Ultrasonic_DW.DiscreteTimeIntegrator_PrevRese = 2;
 
-  /* SystemInitialize for Triggered SubSystem: '<Root>/Sample and Hold' */
-  /* SystemInitialize for SignalConversion generated from: '<S1>/In' incorporates:
-   *  Outport: '<S1>/ '
+  /* SystemInitialize for Triggered SubSystem: '<S1>/Sample and Hold' */
+  /* SystemInitialize for SignalConversion generated from: '<S3>/In' incorporates:
+   *  Outport: '<S3>/ '
    */
   Ultrasonic_B.In = Ultrasonic_P._Y0;
 
-  /* End of SystemInitialize for SubSystem: '<Root>/Sample and Hold' */
+  /* End of SystemInitialize for SubSystem: '<S1>/Sample and Hold' */
+
+  /* Start for MATLABSystem: '<Root>/Digital Write' */
+  Ultrasonic_DW.obj_g.matlabCodegenIsDeleted = false;
+  Ultrasonic_DW.obj_g.isInitialized = 1;
+  Ultrasonic_DW.obj_g.MW_DIGITALIO_HANDLE = MW_digitalIO_open(98, 1);
+  Ultrasonic_DW.obj_g.isSetupComplete = true;
 
   /* Start for MATLABSystem: '<Root>/Digital Read' */
   Ultrasonic_DW.obj.matlabCodegenIsDeleted = false;
   Ultrasonic_DW.obj.SampleTime = Ultrasonic_P.DigitalRead_SampleTime;
   Ultrasonic_DW.obj.isInitialized = 1;
-  Ultrasonic_DW.obj.MW_DIGITALIO_HANDLE = MW_digitalIO_open(57, 0);
+  Ultrasonic_DW.obj.MW_DIGITALIO_HANDLE = MW_digitalIO_open(97, 0);
   Ultrasonic_DW.obj.isSetupComplete = true;
-
-  /* Start for MATLABSystem: '<Root>/Digital Write' */
-  Ultrasonic_DW.obj_g.matlabCodegenIsDeleted = false;
-  Ultrasonic_DW.obj_g.isInitialized = 1;
-  Ultrasonic_DW.obj_g.MW_DIGITALIO_HANDLE = MW_digitalIO_open(49, 1);
-  Ultrasonic_DW.obj_g.isSetupComplete = true;
 }
 
 /* Model terminate function */
 void Ultrasonic_terminate(void)
 {
-  /* Terminate for MATLABSystem: '<Root>/Digital Read' */
-  if (!Ultrasonic_DW.obj.matlabCodegenIsDeleted) {
-    Ultrasonic_DW.obj.matlabCodegenIsDeleted = true;
-    if ((Ultrasonic_DW.obj.isInitialized == 1) &&
-        Ultrasonic_DW.obj.isSetupComplete) {
-      MW_digitalIO_close(Ultrasonic_DW.obj.MW_DIGITALIO_HANDLE);
-    }
-  }
-
-  /* End of Terminate for MATLABSystem: '<Root>/Digital Read' */
-
   /* Terminate for MATLABSystem: '<Root>/Digital Write' */
   if (!Ultrasonic_DW.obj_g.matlabCodegenIsDeleted) {
     Ultrasonic_DW.obj_g.matlabCodegenIsDeleted = true;
@@ -278,6 +284,17 @@ void Ultrasonic_terminate(void)
   }
 
   /* End of Terminate for MATLABSystem: '<Root>/Digital Write' */
+
+  /* Terminate for MATLABSystem: '<Root>/Digital Read' */
+  if (!Ultrasonic_DW.obj.matlabCodegenIsDeleted) {
+    Ultrasonic_DW.obj.matlabCodegenIsDeleted = true;
+    if ((Ultrasonic_DW.obj.isInitialized == 1) &&
+        Ultrasonic_DW.obj.isSetupComplete) {
+      MW_digitalIO_close(Ultrasonic_DW.obj.MW_DIGITALIO_HANDLE);
+    }
+  }
+
+  /* End of Terminate for MATLABSystem: '<Root>/Digital Read' */
 }
 
 /*
