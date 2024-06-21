@@ -116,7 +116,8 @@ title('Histogram Yaw Rate')
 %% 
 % Construct the R matrix
 %R = diag([1,sigma_acc1,sigma_acc2, 1,sigma_baro,sigma_mag]);
-R_kalman = diag([variance_Height,variance_pitchAngle , variance_rollAngle, variance_Yaw, variance_GyroRoll, variance_GyroPitch, variance_GyroYaw]);
+R_kalman = diag([0.00000001,variance_pitchAngle , variance_rollAngle, variance_Yaw, variance_GyroRoll, variance_GyroPitch, variance_GyroYaw]);
+%R_kalman = diag([variance_Height,variance_pitchAngle , variance_rollAngle, variance_Yaw, variance_GyroRoll, variance_GyroPitch, variance_GyroYaw]);
 Q_kalman = diag([0,0,0,0,0.0000000001,0.0000000001,0.00000000001,0.00000000001]);
 Q_kalman_d = diag([0,0,0,0,0.000000000001,0.00000000001,0.00000000001,0.00000000001]);
 Q_kalman_d2 = diag([0,0,0,0,0.00000000001,0.0000000001,0.00000000001,0.00000000001]);

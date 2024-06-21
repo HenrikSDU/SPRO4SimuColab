@@ -43,37 +43,37 @@ end
 
 x0_r = [0;0;0;0;0;0;0;0;];%initial condition
 %%
-Max_z_r = 0.05; % Max distance allowed on z _axis (m)
+Max_z_r = 0.1; % Max distance allowed on z _axis (m)
 Max_r_r = 2 *(pi/180); % Max roll allowed (°)
 Max_p_r = 2 *(pi/180); % Max pitch allowed (°)
 Max_ya_r = 2 *(pi/180); % Max yaw allowed (°)
  
 
 Max_z_dot_r = 0.03; % Maximum allowed velocity on the z - axis (m/s)
-Max_r_dot_r = 0.1; % Maximum allowed roll rate (rad/s)
-Max_p_dot_r = 0.1; % Maximum allowed picth rate (rad/s)
+Max_r_dot_r = 0.01; % Maximum allowed roll rate (rad/s)
+Max_p_dot_r = 0.01; % Maximum allowed picth rate (rad/s)
 Max_ya_dot_r = 0.1; % Maximum allowed yaw rate (rad/s)
  
 Max_Mx_r = 0.0032; % Max moment on x - axis kgm^2
 Max_My_r = 0.0032; % Max moment on y - axis kgm^2
 Max_Mz_r = 0.0032;  % Max moment on z - axis kgm^2
 
-Max_U_r = 4 * 0.2 * 9.81; % Maximum thrust - maximum allowable current to esc is 60A ==> 15A per motor
+Max_U_r = 0.5 * 4 * 0.2 * 9.81; % Maximum thrust - maximum allowable current to esc is 60A ==> 15A per motor
               % motor with less that 15A has 581g of thrust at 13.28A
               % (581*4)/1000 to get kg
 
 
-Q_reduced = [0.9/(Max_z_r)^2 0 0 0 0 0 0 0;
-             0 10/(Max_r_r)^2 0 0 0 0 0 0;
-             0 0 10/(Max_p_r)^2 0 0 0 0 0;
-             0 0 0 15/(Max_ya_r)^2 0 0 0 0;
-             0 0 0 0 0.5/(Max_z_dot_r)^2 0 0 0;
-             0 0 0 0 0 10/(Max_r_dot_r)^2 0 0;
-             0 0 0 0 0 0 10/(Max_p_dot_r^2) 0;
-             0 0 0 0 0 0 0 10/(Max_ya_dot_r)^2;];
-R_reduced = [20/(Max_U_r)^2 0 0 0;
+Q_reduced = [1/(Max_z_r)^2 0 0 0 0 0 0 0;
+             0 1/(Max_r_r)^2 0 0 0 0 0 0;
+             0 0 1/(Max_p_r)^2 0 0 0 0 0;
+             0 0 0 1/(Max_ya_r)^2 0 0 0 0;
+             0 0 0 0 1/(Max_z_dot_r)^2 0 0 0;
+             0 0 0 0 0 1/(Max_r_dot_r)^2 0 0;
+             0 0 0 0 0 0 1/(Max_p_dot_r^2) 0;
+             0 0 0 0 0 0 0 1/(Max_ya_dot_r)^2;];
+R_reduced = [1/(Max_U_r)^2 0 0 0;
              0 1/(Max_Mx_r)^2 0 0;
-             0 0 0.1/(Max_My_r)^2 0;
+             0 0 1/(Max_My_r)^2 0;
              0 0 0 1/(Max_Mz_r)^2;];
 
 K_LQR_reduced = lqr(A_r, B_r, Q_reduced, R_reduced, 0);

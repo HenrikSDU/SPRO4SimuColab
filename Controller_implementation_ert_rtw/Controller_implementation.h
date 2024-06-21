@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.21
+ * Model version                  : 1.32
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 30 19:42:55 2024
+ * C/C++ source code generated on : Thu Jun 20 18:11:25 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -30,6 +30,7 @@
 #include "ext_work.h"
 #include "MW_bbblue_driver.h"
 #include "MW_I2C.h"
+#include "MW_digitalIO.h"
 #include "MW_MPU9250.h"
 #endif                          /* Controller_implementation_COMMON_INCLUDES_ */
 
@@ -95,10 +96,10 @@
 
 /* Block signals (default storage) */
 typedef struct {
+  real_T TmpRTBAtEnabledSubsystemInp[56];
+  real_T TmpRTBAtEnabledSubsystemI_g[56];
+  real_T Bkuk[8];                      /* '<S29>/B[k]*u[k]' */
   real_T Add[8];                       /* '<S29>/Add' */
-  real_T dv[7];
-  real_T req_rotorspeed[4];
-  real_T DersiredMotorThrusts[4];      /* '<S64>/Gain' */
   uint8_T b_output[24];
   real_T rtb_MPU9250_o1_m[3];
   real_T mdata[3];
@@ -115,24 +116,23 @@ typedef struct {
   int96m_T r10;
   int96m_T r11;
   int96m_T r12;
-  real_T sensor;                       /* '<S67>/Add' */
-  real_T Switch;                       /* '<S67>/Switch' */
-  real_T Gain;                         /* '<S68>/Gain' */
+  real_T RateTransition;               /* '<S5>/Rate Transition' */
+  real_T Gain;                         /* '<S67>/Gain' */
   real_T Gain1[3];                     /* '<S66>/Gain1' */
   real_T Reshapexhat[8];               /* '<S7>/Reshapexhat' */
   real_T Gain_f[4];                    /* '<S2>/Gain' */
   real_T PWMlimit[4];                  /* '<S3>/PWM limit' */
   real_T Sum[4];                       /* '<S6>/Sum' */
   real_T U[4];                         /* '<S6>/MATLAB Function' */
+  real_T req_rotorspeed[4];
+  real_T DersiredMotorThrusts[4];      /* '<S64>/Gain' */
   real_T roll;                         /* '<S5>/roll ' */
   real_T pitch;                        /* '<S5>/pitch' */
-  real_T In;                           /* '<S75>/In' */
-  real_T In_c;                         /* '<S73>/In' */
-  real_T In_ca[7];                     /* '<S8>/In' */
+  real_T In;                           /* '<S72>/In' */
+  real_T In_c[7];                      /* '<S8>/In' */
   real_T Product2[8];                  /* '<S62>/Product2' */
   real_T Product3[8];                  /* '<S60>/Product3' */
-  real_T Bkuk[8];                      /* '<S29>/B[k]*u[k]' */
-  real_T d;
+  real_T dv[7];
   real_T max_possible_rot_speed;
   real_T pwLocal;
   real_T lambda;
@@ -187,20 +187,29 @@ typedef struct {
   uint64m_T r42;
   uint64m_T r43;
   uint64m_T r44;
+  uint16_T In_d;                       /* '<S75>/In' */
+  boolean_T DigitalRead;               /* '<S5>/Digital Read' */
 } B_Controller_implementation_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  dsp_simulink_MovingAverage_Co_T obj; /* '<S68>/Moving Average' */
-  dsp_simulink_MovingAverage_Co_T obj_m;/* '<S67>/Moving Average' */
+  dsp_simulink_MovingAverage_Co_T obj; /* '<S67>/Moving Average' */
   beagleboneblue_bbblueBaromete_T obj_j;/* '<S5>/Barometer' */
   beagleboneblue_bbblueMPU9250__T obj_n;/* '<S5>/MPU9250' */
-  beagleboneblue_bbblueServo_Co_T obj_b;/* '<S3>/Motor 4' */
+  beagleboneblue_bbblueDigitalR_T obj_b;/* '<S5>/Digital Read' */
+  beagleboneblue_bbblueServo_Co_T obj_bh;/* '<S3>/Motor 4' */
   beagleboneblue_bbblueServo_Co_T obj_h;/* '<S3>/Motor 3' */
   beagleboneblue_bbblueServo_Co_T obj_p;/* '<S3>/Motor 2' */
   beagleboneblue_bbblueServo_Co_T obj_k;/* '<S3>/Motor 1' */
+  beagleboneblue_bbblueDigitalW_T obj_d;/* '<S73>/Digital Write' */
+  real_T Delay_x_DSTATE;               /* '<S76>/Delay_x' */
   real_T MemoryX_DSTATE[8];            /* '<S7>/MemoryX' */
-  real_T RateTransition_Buffer[4];     /* '<S3>/Rate Transition' */
+  volatile real_T TmpRTBAtMeasurementUpdateInport[56];/* synthesized block */
+  volatile real_T TmpRTBAtEnabledSubsystemInport2[56];/* synthesized block */
+  volatile real_T TmpRTBAtMeasurementUpdateInpo_p[56];/* synthesized block */
+  volatile real_T TmpRTBAtEnabledSubsystemInport1[56];/* synthesized block */
+  real_T RateTransition_Buffer;        /* '<S5>/Rate Transition' */
+  real_T RateTransition_Buffer_c[4];   /* '<S3>/Rate Transition' */
   struct {
     void *LoggedData[8];
   } Scope_PWORK;                       /* '<Root>/Scope' */
@@ -225,15 +234,21 @@ typedef struct {
     void *LoggedData[7];
   } Scope1_PWORK;                      /* '<Root>/Scope1' */
 
-  struct {
-    void *LoggedData[3];
-  } Scope1_PWORK_m;                    /* '<S67>/Scope1' */
-
-  int8_T SampleandHold_SubsysRanBC;    /* '<S68>/Sample and Hold' */
-  int8_T SampleandHold3_SubsysRanBC;   /* '<S67>/Sample and Hold3' */
+  int32_T clockTickCounter;            /* '<S73>/Pulse Generator' */
+  uint16_T TmpLatchAtSampleandHoldInport1_;/* synthesized block */
+  uint16_T RateTransition1_Buffer;     /* '<S73>/Rate Transition1' */
+  uint8_T DiscreteTimeIntegrator_DSTATE;/* '<S73>/Discrete-Time Integrator' */
+  volatile int8_T TmpRTBAtMeasurementUpdateInpo_j;/* synthesized block */
+  volatile int8_T TmpRTBAtEnabledSubsystemInpor_n;/* synthesized block */
+  volatile int8_T TmpRTBAtMeasurementUpdateInp_pv;/* synthesized block */
+  volatile int8_T TmpRTBAtEnabledSubsystemInpor_l;/* synthesized block */
+  int8_T DiscreteTimeIntegrator_PrevRese;/* '<S73>/Discrete-Time Integrator' */
+  int8_T SampleandHold_SubsysRanBC;    /* '<S73>/Sample and Hold' */
+  int8_T SampleandHold_SubsysRanBC_p;  /* '<S67>/Sample and Hold' */
   int8_T SampleandHold_SubsysRanBC_k;  /* '<S1>/Sample and Hold' */
   int8_T EnabledSubsystem_SubsysRanBC; /* '<S36>/Enabled Subsystem' */
   int8_T MeasurementUpdate_SubsysRanBC;/* '<S29>/MeasurementUpdate' */
+  boolean_T RateTransition2_Buffer;    /* '<S3>/Rate Transition2' */
   boolean_T icLoad;                    /* '<S7>/MemoryX' */
   boolean_T EnabledSubsystem_MODE;     /* '<S36>/Enabled Subsystem' */
   boolean_T MeasurementUpdate_MODE;    /* '<S29>/MeasurementUpdate' */
@@ -241,8 +256,8 @@ typedef struct {
 
 /* Zero-crossing (trigger) state */
 typedef struct {
-  ZCSigState SampleandHold_Trig_ZCE;   /* '<S68>/Sample and Hold' */
-  ZCSigState SampleandHold3_Trig_ZCE;  /* '<S67>/Sample and Hold3' */
+  ZCSigState SampleandHold_Trig_ZCE;   /* '<S73>/Sample and Hold' */
+  ZCSigState SampleandHold_Trig_ZCE_e; /* '<S67>/Sample and Hold' */
   ZCSigState SampleandHold_Trig_ZCE_i; /* '<S1>/Sample and Hold' */
 } PrevZCX_Controller_implementa_T;
 
@@ -251,7 +266,7 @@ struct P_Controller_implementation_T_ {
   real_T KV_rating;                    /* Variable: KV_rating
                                         * Referenced by:
                                         *   '<S64>/Constant1'
-                                        *   '<S76>/Constant'
+                                        *   '<S77>/Constant'
                                         */
   real_T K_D_LQR_reduced[32];          /* Variable: K_D_LQR_reduced
                                         * Referenced by: '<S2>/Gain'
@@ -267,22 +282,19 @@ struct P_Controller_implementation_T_ {
   real_T battery_voltage;              /* Variable: battery_voltage
                                         * Referenced by:
                                         *   '<S64>/Constant'
-                                        *   '<S76>/Battery Voltage'
+                                        *   '<S77>/Battery Voltage'
                                         */
   real_T dis;                          /* Variable: dis
                                         * Referenced by: '<S6>/Constant'
                                         */
   real_T drag_co;                      /* Variable: drag_co
-                                        * Referenced by: '<S76>/Gain1'
+                                        * Referenced by: '<S77>/Gain1'
                                         */
   real_T lift_co;                      /* Variable: lift_co
                                         * Referenced by:
                                         *   '<S64>/Constant2'
-                                        *   '<S76>/Gain'
+                                        *   '<S77>/Gain'
                                         */
-  real_T CompareToConstant_const;     /* Mask Parameter: CompareToConstant_const
-                                       * Referenced by: '<S72>/Constant'
-                                       */
   real_T CompareToConstant1_const;   /* Mask Parameter: CompareToConstant1_const
                                       * Referenced by: '<S63>/Constant'
                                       */
@@ -295,23 +307,17 @@ struct P_Controller_implementation_T_ {
   real_T _Y0;                          /* Expression: initCond
                                         * Referenced by: '<S8>/ '
                                         */
-  real_T MovingAverage_ForgettingFactor;/* Expression: 1.0
+  real_T DigitalRead_SampleTime;       /* Expression: 0.0001
+                                        * Referenced by: '<S5>/Digital Read'
+                                        */
+  real_T MovingAverage_ForgettingFactor;/* Expression: 1
                                          * Referenced by: '<S67>/Moving Average'
                                          */
-  real_T _Y0_j;                        /* Expression: initCond
-                                        * Referenced by: '<S73>/ '
-                                        */
-  real_T MovingAverage_ForgettingFacto_c;/* Expression: 1
-                                          * Referenced by: '<S68>/Moving Average'
-                                          */
   real_T _Y0_l;                        /* Expression: initCond
-                                        * Referenced by: '<S75>/ '
+                                        * Referenced by: '<S72>/ '
                                         */
-  real_T A_Value[64];                  /* Expression: pInitialization.A
-                                        * Referenced by: '<S7>/A'
-                                        */
-  real_T KalmanGainM_Value[56];        /* Expression: pInitialization.M
-                                        * Referenced by: '<S9>/KalmanGainM'
+  real_T CovarianceZ_Value[64];        /* Expression: pInitialization.Z
+                                        * Referenced by: '<S9>/CovarianceZ'
                                         */
   real_T C_Value[56];                  /* Expression: pInitialization.C
                                         * Referenced by: '<S7>/C'
@@ -319,40 +325,61 @@ struct P_Controller_implementation_T_ {
   real_T KalmanGainL_Value[56];        /* Expression: pInitialization.L
                                         * Referenced by: '<S9>/KalmanGainL'
                                         */
+  real_T KalmanGainM_Value[56];        /* Expression: pInitialization.M
+                                        * Referenced by: '<S9>/KalmanGainM'
+                                        */
+  real_T PulseGenerator_Amp;           /* Expression: 1
+                                        * Referenced by: '<S73>/Pulse Generator'
+                                        */
+  real_T PulseGenerator_Period;     /* Computed Parameter: PulseGenerator_Period
+                                     * Referenced by: '<S73>/Pulse Generator'
+                                     */
+  real_T PulseGenerator_Duty;         /* Computed Parameter: PulseGenerator_Duty
+                                       * Referenced by: '<S73>/Pulse Generator'
+                                       */
+  real_T PulseGenerator_PhaseDelay;    /* Expression: 0
+                                        * Referenced by: '<S73>/Pulse Generator'
+                                        */
+  real_T Delay_x_InitialCondition;     /* Expression: sps.x0
+                                        * Referenced by: '<S76>/Delay_x'
+                                        */
+  real_T C_Gain;                       /* Expression: sps.C
+                                        * Referenced by: '<S76>/C'
+                                        */
+  real_T D_Gain;                       /* Expression: sps.D
+                                        * Referenced by: '<S76>/D'
+                                        */
+  real_T B_Gain;                       /* Expression: sps.B
+                                        * Referenced by: '<S76>/B'
+                                        */
+  real_T A_Gain;                       /* Expression: sps.A
+                                        * Referenced by: '<S76>/A'
+                                        */
+  real_T A_Value[64];                  /* Expression: pInitialization.A
+                                        * Referenced by: '<S7>/A'
+                                        */
   real_T B_Value[32];                  /* Expression: pInitialization.B
                                         * Referenced by: '<S7>/B'
                                         */
   real_T D_Value[28];                  /* Expression: pInitialization.D
                                         * Referenced by: '<S7>/D'
                                         */
-  real_T Constant_Value;               /* Expression: 0
-                                        * Referenced by: '<S67>/Constant'
-                                        */
-  real_T Step3_Time;                   /* Expression: 5
-                                        * Referenced by: '<S67>/Step3'
-                                        */
-  real_T Step3_Y0;                     /* Expression: 0
-                                        * Referenced by: '<S67>/Step3'
-                                        */
-  real_T Step3_YFinal;                 /* Expression: 1
-                                        * Referenced by: '<S67>/Step3'
-                                        */
   real_T Step_Time;                    /* Expression: 0.1
-                                        * Referenced by: '<S68>/Step'
+                                        * Referenced by: '<S67>/Step'
                                         */
   real_T Step_Y0;                      /* Expression: 0
-                                        * Referenced by: '<S68>/Step'
+                                        * Referenced by: '<S67>/Step'
                                         */
   real_T Step_YFinal;                  /* Expression: 1
-                                        * Referenced by: '<S68>/Step'
+                                        * Referenced by: '<S67>/Step'
                                         */
   real_T Gain_Gain;                    /* Expression: -1
-                                        * Referenced by: '<S68>/Gain'
+                                        * Referenced by: '<S67>/Gain'
                                         */
   real_T Gain1_Gain;                   /* Expression: pi/180
                                         * Referenced by: '<S66>/Gain1'
                                         */
-  real_T Constant_Value_a[8];          /* Expression: [0;0;0;0;0;0;0;0;]
+  real_T Constant_Value[8];            /* Expression: [0.2;0;0;0;0;0;0;0;]
                                         * Referenced by: '<S4>/Constant'
                                         */
   real_T Step_Time_a;                  /* Expression: 0.02
@@ -374,19 +401,30 @@ struct P_Controller_implementation_T_ {
                                         * Referenced by: '<S3>/PWM limit'
                                         */
   real_T SignConvention_Gain[4];       /* Expression: [1;-1;1;-1]
-                                        * Referenced by: '<S76>/Sign Convention'
+                                        * Referenced by: '<S77>/Sign Convention'
                                         */
-  real_T Constant1_Value[4];           /* Expression: [-m*g;0;0;0]
+  real_T Constant1_Value[4];           /* Expression: [-m*g*0;0;0;0]
                                         * Referenced by: '<S6>/Constant1'
                                         */
-  real_T CovarianceZ_Value[64];        /* Expression: pInitialization.Z
-                                        * Referenced by: '<S9>/CovarianceZ'
+  uint16_T _Y0_b;                      /* Computed Parameter: _Y0_b
+                                        * Referenced by: '<S75>/ '
+                                        */
+  uint16_T TmpLatchAtSampleandHoldInport1_;
+                          /* Computed Parameter: TmpLatchAtSampleandHoldInport1_
+                           * Referenced by:
+                           */
+  boolean_T isSqrtUsed_Value;          /* Expression: pInitialization.isSqrtUsed
+                                        * Referenced by: '<S58>/isSqrtUsed'
                                         */
   boolean_T Enable_Value;              /* Expression: true()
                                         * Referenced by: '<S7>/Enable'
                                         */
-  boolean_T isSqrtUsed_Value;          /* Expression: pInitialization.isSqrtUsed
-                                        * Referenced by: '<S58>/isSqrtUsed'
+  uint8_T DiscreteTimeIntegrator_IC;
+                                /* Computed Parameter: DiscreteTimeIntegrator_IC
+                                 * Referenced by: '<S73>/Discrete-Time Integrator'
+                                 */
+  uint8_T Gain_Gain_d;                 /* Computed Parameter: Gain_Gain_d
+                                        * Referenced by: '<S73>/Gain'
                                         */
   uint8_T Initial1_Value[4];           /* Computed Parameter: Initial1_Value
                                         * Referenced by: '<S3>/Initial1'
@@ -428,19 +466,24 @@ struct tag_RTM_Controller_implementa_T {
     time_T stepSize0;
     uint32_T clockTick1;
     uint32_T clockTick2;
+    uint32_T clockTick3;
+    uint32_T clockTick4;
     struct {
-      uint8_T TID[3];
+      uint16_T TID[5];
     } TaskCounters;
 
     struct {
       boolean_T TID1_2;
+      boolean_T TID1_3;
+      boolean_T TID2_3;
+      boolean_T TID3_4;
     } RateInteraction;
 
     time_T tFinal;
     SimTimeStep simTimeStep;
     boolean_T stopRequestedFlag;
     time_T *t;
-    time_T tArray[3];
+    time_T tArray[5];
   } Timing;
 };
 
@@ -464,6 +507,8 @@ extern void Controller_implementation_SetEventsForThisBaseStep(boolean_T
 extern void Controller_implementation_initialize(void);
 extern void Controller_implementation_step0(void);
 extern void Controller_implementation_step2(void);
+extern void Controller_implementation_step3(void);
+extern void Controller_implementation_step4(void);
 extern void Controller_implementation_step(int_T tid);
 extern void Controller_implementation_terminate(void);
 
@@ -475,7 +520,6 @@ extern volatile boolean_T runModel;
 /*-
  * These blocks were eliminated from the model due to optimizations:
  *
- * Block '<Root>/Constant1' : Unused code path elimination
  * Block '<S52>/Data Type Duplicate' : Unused code path elimination
  * Block '<S53>/Data Type Duplicate' : Unused code path elimination
  * Block '<S54>/Conversion' : Unused code path elimination
@@ -514,7 +558,11 @@ extern volatile boolean_T runModel;
  * Block '<S7>/Reshapeu' : Reshape block reduction
  * Block '<S7>/Reshapey' : Reshape block reduction
  * Block '<S1>/Rate Transition' : Eliminated since input and output rates are identical
- * Block '<Root>/Rate Transition' : Eliminated since input and output rates are identical
+ * Block '<S1>/Rate Transition1' : Eliminated since input and output rates are identical
+ * Block '<S1>/Rate Transition2' : Eliminated since input and output rates are identical
+ * Block '<S3>/Rate Transition1' : Eliminated since input and output rates are identical
+ * Block '<S67>/Rate Transition' : Eliminated since input and output rates are identical
+ * Block '<Root>/Zero-Order Hold' : Eliminated since input and output rates are identical
  */
 
 /*-
@@ -598,18 +646,19 @@ extern volatile boolean_T runModel;
  * '<S64>'  : 'Controller_implementation/Motor Control/Motor Mixing Algorithm'
  * '<S65>'  : 'Controller_implementation/Motor Control/Motor Mixing Algorithm/Calculate PWM'
  * '<S66>'  : 'Controller_implementation/Sensor Readings/Degrees to Radians'
- * '<S67>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude'
- * '<S68>'  : 'Controller_implementation/Sensor Readings/Yaw Offset'
+ * '<S67>'  : 'Controller_implementation/Sensor Readings/Yaw Offset'
+ * '<S68>'  : 'Controller_implementation/Sensor Readings/altitude cal'
  * '<S69>'  : 'Controller_implementation/Sensor Readings/pitch'
  * '<S70>'  : 'Controller_implementation/Sensor Readings/roll '
  * '<S71>'  : 'Controller_implementation/Sensor Readings/yaw'
- * '<S72>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude/Compare To Constant'
- * '<S73>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude/Sample and Hold3'
- * '<S74>'  : 'Controller_implementation/Sensor Readings/Pressure to altitude/height'
- * '<S75>'  : 'Controller_implementation/Sensor Readings/Yaw Offset/Sample and Hold'
- * '<S76>'  : 'Controller_implementation/System U estimator/Actuators'
- * '<S77>'  : 'Controller_implementation/System U estimator/MATLAB Function'
- * '<S78>'  : 'Controller_implementation/System U estimator/Actuators/MATLAB Function'
+ * '<S72>'  : 'Controller_implementation/Sensor Readings/Yaw Offset/Sample and Hold'
+ * '<S73>'  : 'Controller_implementation/Sensor Readings/altitude cal/altitude calc'
+ * '<S74>'  : 'Controller_implementation/Sensor Readings/altitude cal/altitude calc/First-Order Filter'
+ * '<S75>'  : 'Controller_implementation/Sensor Readings/altitude cal/altitude calc/Sample and Hold'
+ * '<S76>'  : 'Controller_implementation/Sensor Readings/altitude cal/altitude calc/First-Order Filter/Model'
+ * '<S77>'  : 'Controller_implementation/System U estimator/Actuators'
+ * '<S78>'  : 'Controller_implementation/System U estimator/MATLAB Function'
+ * '<S79>'  : 'Controller_implementation/System U estimator/Actuators/MATLAB Function'
  */
 #endif                                 /* Controller_implementation_h_ */
 

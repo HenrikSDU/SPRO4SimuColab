@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Controller_implementation'.
  *
- * Model version                  : 1.21
+ * Model version                  : 1.32
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Thu May 30 19:42:55 2024
+ * C/C++ source code generated on : Thu Jun 20 18:11:25 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
